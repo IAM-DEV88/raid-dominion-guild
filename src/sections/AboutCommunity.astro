@@ -1,0 +1,64 @@
+---
+import ImageComponent from "@/components/ImageComponent.astro";
+---
+
+<section
+  class="mt-8 bg-txtbg1 flex flex-col flex-wrap lg:flex-row shadow-3xl border-y-2 border-primary py-2 px-2"
+>
+  <div class="w-full text-center py-2">
+    <ImageComponent classes="max-h-[200px] drop-shadow-4xl w- mx-auto" imageName="raid_addon.png" />
+    <span
+      class="text-[1.5rem] uppercase text-normal border-b-2 border-primary px-4 mb-1 md:font-medium mt-2"
+      >Jugadores en la comunidad</span
+    >
+    <div class="text-center w-full max-w-md mx-auto">
+      <input list="player-list" id="player-select" class="w-full p-2 border border-primary rounded" placeholder="Buscar o seleccionar un jugador">
+      <datalist id="player-list"></datalist>
+    </div>
+  </div>
+  <div class="flex flex-wrap flex-1 flex-col md:flex-row gap-x-10 py-2 mx-2 gap-2 justify-center items-center">
+    
+    <div id="player-info" class="w-full max-w-md hidden">
+      <!-- La información del jugador se insertará aquí dinámicamente -->
+    </div>
+  </div>
+</section>
+
+<script>
+  const playerSelect = document.getElementById('player-select');
+  const playerList = document.getElementById('player-list');
+  const playerInfo = document.getElementById('player-info');
+
+  // Cargar los datos de players.json
+  fetch('players.json')
+    .then(response => response.json())
+    .then(players => {
+      players.forEach(player => {
+        const option = document.createElement('option');
+        option.value = player.name;
+        playerList.appendChild(option);
+      });
+
+      playerSelect.addEventListener('change', (e) => {
+        const selectedName = e.target.value;
+        const player = players.find(p => p.name === selectedName);
+        
+        if (player) {
+          playerInfo.innerHTML = `
+            <div class="animate-blurred-fade-in flex flex-row justify-center items-center w-full border-y-2 border-primary text-normal text-center py-2 shadow-3xl px-2 bg-txtbg min-h-[90px]">
+              <div class="grow text-bold text-[1.5rem]">${player.name}</div>
+              <div class="flex flex-col">
+                <img src="/gallery/${player.rank.toLowerCase().replace(" ", "_")}.png" alt="${player.rank}" class="max-h-[40px]">
+                <div>${player.rank}</div>
+              </div>
+            </div>
+          `;
+          playerInfo.classList.remove('hidden');
+        } else {
+          playerInfo.innerHTML = '';
+          playerInfo.classList.add('hidden');
+        }
+      });
+    })
+    .catch(error => console.error('Error al cargar los jugadores:', error));
+</script>

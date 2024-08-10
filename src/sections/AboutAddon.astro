@@ -1,0 +1,65 @@
+---
+import ImageComponent from "@/components/ImageComponent.astro";
+import AddonGallery from "@/components/AddonGallery.astro";
+---
+
+<section
+  id="about_addon"
+  class="overflow-hidden bg-txtbg1 flex flex-col flex-wrap lg:flex-row shadow-3xl border-y-2 border-primary py-2 px-2"
+>
+  <div class="w-full text-center py-2">
+    <ImageComponent classes="max-h-[50px] mx-auto" imageName="logo.png" />
+    <span
+      class="text-[1.5rem] uppercase text-normal border-b-2 border-primary px-4 mb-1 md:font-medium mt-2"
+      >¿Que es Raid Dominion Tools?</span
+    >
+  </div>
+  <div
+    class="border-y-2 border-primary text-sm text-black py-2 shadow-3xl px-2 bg-normal"
+  >
+    <p>
+      RaidDominion Tools <span class="font-bold"
+        >es un addon para World of Warcraft 3.3.5a</span
+      > creado por el maestro de hermandad <span class="font-bold"
+        >que facilita a los lideres de banda la gestion, el control y la
+        comunicacion de roles, buffs y habilidades</span
+      >.
+    </p>
+    <AddonGallery />
+    <h3 class="uppercase py-2 font-bold">Características Clave</h3>
+    <ul>
+      <li class="pb-2">
+        <span class="font-bold">Gestion de banda</span>: configuracion rapida de
+        modo de banda y modo de botin. Comprobaciones de check y pull segun
+        requiera el lider de banda.
+      </li>
+      <li class="pb-2">
+        <span class="font-bold">Asignación de Roles</span>: control eficiente de
+        roles como tanques, healers, BUFFs y otros roles importantes en la
+        banda.
+      </li>
+      <li class="pb-2">
+        <span class="font-bold">Marcado de roles principales</span>: asigna un
+        icono a cada jugador asignado como tanque o healer para apoyo visual.
+      </li>
+      <li class="pb-2">
+        <span class="font-bold">Comunicacion eficiente</span>: susurra a los
+        jugadores con roles asignados o alerta a la banda lo que se requiera en
+        cada momento.
+      </li>
+      <li class="pb-2">
+        <span class="font-bold">Compacto y fácil de Usar</span>: Interfaz
+        intuitiva adaptada a nuestras necesidades, la mayor funcionalidad en el
+        menor espacio.
+      </li>
+    </ul>
+  </div>
+  <a
+    target="_blank"
+    rel="noopener"
+    href="https://github.com/IAM-DEV88/RaidDominion/archive/refs/heads/main.zip"
+    class="text-[1.2rem] px-4 py-1 uppercase text-normal text-bold hover:scale-125 bg-txtbg1 border-y-2 border-normal transition inline-block shadow-3xl mx-auto my-2 mt-4 hover:text-primary"
+  >
+    Descargar Addon
+  </a>
+</section>

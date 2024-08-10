@@ -1,0 +1,10 @@
+---
+export interface Props {
+  imageName: string;
+  classes?: string;
+}
+
+const { imageName, classes = "" } = Astro.props;
+---
+
+<img src={`/gallery/${imageName}`} class={classes} alt={imageName} />

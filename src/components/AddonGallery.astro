@@ -1,0 +1,66 @@
+---
+const images = ["addon (1)", "addon (2)", "addon (3)", "addon (4)", "addon (5)", "addon (6)"]; // Nombres de las imágenes
+---
+
+<div class="relative dsm:max-w-[200px] max-w-[280px] lg:max-w-[560px] mx-auto overflow-hidden" id="sliderContainer">
+  <div id="slider" class="flex transition-transform duration-500">
+    {images.map((image, index) => (
+      <div class="flex-shrink-0 w-[280px] lg:w-[560px] h-[280px] flex items-center justify-center">
+        <img 
+          src={`/gallery/${image}.png`} 
+          alt={`Image ${index + 1}`} 
+          class="max-w-full max-h-full object-contain" 
+          data-index={index}
+        />
+      </div>
+    ))}
+  </div>
+  <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 z-10"> &lt; </button>
+  <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-2 z-10"> &gt; </button>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const images = JSON.parse(`["addon (1)", "addon (2)", "addon (3)", "addon (4)", "addon (5)", "addon (6)"]`);
+    const slider = document.getElementById('slider');
+    const sliderContainer = document.getElementById('sliderContainer');
+    const prevButton = document.getElementById('prev');
+    const nextButton = document.getElementById('next');
+
+    let currentIndex = 0;
+
+    const updateSlider = () => {
+      const slideWidth = window.innerWidth >= 1024 ? 560 : 280; // 1024px es el breakpoint para 'lg' en Tailwind por defecto
+      slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+    };
+
+    const preloadImages = () => {
+      return Promise.all(images.map((image, index) => {
+        return new Promise((resolve) => {
+          const img = slider.children[index].querySelector('img');
+          if (img.complete) {
+            resolve();
+          } else {
+            img.onload = () => resolve();
+          }
+        });
+      }));
+    };
+
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+      updateSlider();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+
+    preloadImages().then(() => {
+      updateSlider();
+    });
+  });
+</script>

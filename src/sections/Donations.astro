@@ -1,0 +1,54 @@
+---
+import ImageComponent from "@/components/ImageComponent.astro";
+
+// Ejemplo de array con nombres, servicios, y enlaces
+const accounts = [
+    {
+        name: "Paypal",
+        service: "Paypal",
+        link: "https://paypal.me/iamdev88"
+    },
+    {
+        name: "Nequi",
+        service: "Nequi",
+        qr: true
+    },
+    {
+        name: "Pago electrónico",
+        service: "PSE",
+    }
+]
+---
+
+<section
+  class="mt-8 bg-txtbg1 flex flex-col flex-wrap lg:flex-row shadow-3xl border-y-2 border-primary py-2 px-2"
+>
+  <div class="w-full text-center py-2">
+    <span
+      class="text-[1.5rem] uppercase text-normal border-b-2 border-primary px-4 mb-1 md:font-medium mt-2"
+      >Invite un café</span
+    >
+  </div>
+  <div class="flex flex-wrap flex-1 flex-col md:flex-row gap-x-10 py-2 mx-2 gap-2 justify-center items-center">
+    {accounts.map(account => (
+      <div class="hover:scale-110 transition flex flex-row flex-wrap justify-center items-center w-[100%] md:w-[28%] min-h-[90px] border-y-2 border-primary text-normal text-center py-2 shadow-3xl px-2 bg-txtbg">
+        <div class="grow text-bold text-[1.5rem]">
+          {account.link ? (
+            <a href={account.link} target="_blank" rel="noopener noreferrer">
+              {account.name}
+            </a>
+          ) : (
+            account.name
+          )}
+          {account.qr && (
+            <ImageComponent classes="max-w-[200px] mx-auto" imageName={account.service.toLowerCase().replace(" ", "_") + "qr.jpeg"} />
+          )}
+        </div>
+        <div class="flex flex-col">
+          <ImageComponent classes="max-w-[40px]" imageName={account.service.toLowerCase().replace(" ", "_") + ".png"} />
+          <div>{account.service}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

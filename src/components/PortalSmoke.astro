@@ -1,0 +1,139 @@
+<div id="smoke-bkg" class="fixed top-0 h-full w-full inset-0 z-[-1]"></div>
+<!-- animate-blurred-fade-in -->
+<script>
+  import * as THREE from "three";
+
+const $bkg = document.getElementById("smoke-bkg");
+let w = window.innerWidth;
+let h = window.innerHeight;
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(75, w / h, 1, 1000);
+camera.position.z = 500;
+scene.add(camera);
+
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(w, h);
+renderer.setClearColor(0x000000, 0);
+
+$bkg?.appendChild(renderer.domElement);
+
+const smokeParticles: THREE.Mesh[] = [];
+const loader = new THREE.TextureLoader();
+loader.crossOrigin = "";
+
+loader.load("/smoke.webp", (texture) => {
+  const smokeGeo = new THREE.PlaneGeometry(1000, 1000);
+  const NUM_OF_PARTICLES = 10;
+
+  for (let p = 0; p < NUM_OF_PARTICLES; p++) {
+    const smokeMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      opacity: 0,
+      color: 0x0088bc,
+    });
+
+    const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
+
+    particle.position.set(
+      Math.random() * 400 - 100,
+      Math.random() * 400 - 100,
+      Math.random() * 400 - 100
+    );
+    particle.rotation.z = Math.random() * 360;
+
+    particle.userData.pulseOffset = Math.random() * Math.PI * 2;
+    particle.userData.targetOpacity = 0.2; // Inicializar la opacidad objetivo
+    scene.add(particle);
+
+    smokeParticles.push(particle);
+  }
+  
+  // Llamar a handleScroll inicialmente para establecer la opacidad correcta
+  handleScroll();
+});
+
+function resize() {
+  w = window.innerWidth;
+  h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+
+function handleScroll() {
+  const scrollTop = window.scrollY;
+  const fadeOutThreshold = 400;
+  const fadeOutRange = 400;
+
+  smokeParticles.forEach((particle) => {
+    if (scrollTop <= fadeOutThreshold) {
+      particle.userData.targetOpacity = 0.6;
+    } else if (scrollTop > fadeOutThreshold && scrollTop <= fadeOutThreshold + fadeOutRange) {
+      const fadeProgress = (scrollTop - fadeOutThreshold) / fadeOutRange;
+      particle.userData.targetOpacity = 0.2 * (1 - fadeProgress);
+    } else {
+      particle.userData.targetOpacity = 0;
+    }
+  });
+}
+
+function getRandomColor() {
+  const randomNum = Math.random();
+  if (randomNum < 0.25) {
+    return new THREE.Color(0x0088bc); // Azul original
+  } else if (randomNum < 0.5) {
+    return new THREE.Color(0x33bbef); // Azul claro original
+  } else if (randomNum < 0.75) {
+    return new THREE.Color(0x00aaff); // Nuevo tercer color (un tono de azul más brillante)
+  } else {
+    return new THREE.Color(0x000000); // Negro
+  }
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const time = Date.now() * 0.001;
+
+  smokeParticles.forEach((particle) => {
+    particle.rotation.z += Math.random() * 0.003 - 0.006;
+
+    // Interpolar suavemente hacia la opacidad objetivo
+    particle.material.opacity += (particle.userData.targetOpacity - particle.material.opacity) * 0.1;
+
+    // Aplicar el pulso de brillo y color
+    const pulse = Math.sin(time + particle.userData.pulseOffset) * 0.5 + 0.5;
+    particle.material.opacity = particle.material.opacity * (0.5 + pulse * 0.5);
+
+    // Cambiar el color con el ritmo del pulso
+    if (!particle.userData.baseColor) {
+      particle.userData.baseColor = getRandomColor();
+      particle.userData.targetColor = getRandomColor();
+    }
+
+    const colorPulse = (Math.sin(time * 0.5 + particle.userData.pulseOffset) * 0.5 + 0.5);
+    particle.material.color.lerpColors(
+      particle.userData.baseColor,
+      particle.userData.targetColor,
+      colorPulse
+    );
+
+    // Cambiar ocasionalmente el color objetivo
+    if (Math.random() < 0.005) { // 0.5% de probabilidad en cada frame
+      particle.userData.baseColor.copy(particle.userData.targetColor);
+      particle.userData.targetColor = getRandomColor();
+    }
+  });
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener("resize", resize);
+window.addEventListener("scroll", handleScroll);
+
+// Llamar a handleScroll inicialmente para establecer la opacidad correcta
+handleScroll();
+</script>

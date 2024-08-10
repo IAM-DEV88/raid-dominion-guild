@@ -1,0 +1,38 @@
+---
+import YoutubeIcon from "@/components/YoutubeIcon.astro";
+import ImageComponent from "@/components/ImageComponent.astro";
+---
+
+<section class="flex gap-y-10 my-8 flex-col">
+  <div
+    class="animate-blurred-fade-in flex flex-col md:flex-row uppercase gap-x-4"
+  >
+    <article
+      class="overflow-hidden text-primary text-center text-[.8rem] flex flex-1 justify-center flex-col items-center border-y-2 border-primary shadow-3xl bg-txtbg1"
+    >
+      <h5 class="pt-2 md:pt-[10%]">Addon para Raideo</h5>
+      <ImageComponent  classes="drop-shadow-4xl max-h-[200px] w-full mt-auto" imageName="addon.png"></ImageComponent>
+    </article>
+    <article
+      class="flex justify-center grow items-center text-2xl py-20 px-10 md:border-y-2 border-normal shadow-3xl col-span-2 bg-txtbg1"
+    >
+      <a
+        target="_blank"
+        rel="noopener"
+        href="https://www.youtube.com/@IAM-DEV88"
+        class="dsm:text-[.7rem] text-normal px-4 py-1 mt8 hover:scale-125 transition block"
+      >
+        <h5>
+          Tutorial en Youtube
+          <YoutubeIcon />
+        </h5>
+      </a>
+    </article>
+    <article
+      class="overflow-hidden text-primary text-center text-[.8rem] flex flex-1 justify-center flex-col items-center border-y-2 border-primary shadow-3xl bg-txtbg1"
+    >
+      <h5 class="pt-2 md:pt-[10%]">Servidor en discord</h5>
+      <ImageComponent  classes="drop-shadow-4xl max-h-[200px] w-full mt-auto" imageName="dc_server.png"></ImageComponent>
+    </article>
+  </div>
+</section>
