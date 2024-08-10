@@ -1,24 +1,46 @@
 ---
-
 ---
 
 <section
-  class="mt-2 mx-auto flex flex-col justify-center items-center text-center animate-blurred-fade-in"
+  class="mt-10 mx-auto flex flex-col justify-center items-center text-center animate-blurred-fade-in"
 >
-  <h2 class="uppercase text-lg text-secondary md:text-[2rem] font-semibold drop-shadow-4xl">
+  <h2
+    class="uppercase text-lg text-secondary md:text-[2rem] font-semibold drop-shadow-4xl"
+  >
     Raideo semanal <span aria-hidden class="hidden md:inline">&bull;</span><br
       aria-hidden
       class="block md:hidden"
-    /> 19 Hora Server
+    /> Hora Server
   </h2>
-  <h3 class="dsm:text-[1.1rem] uppercase text-2xl font-medium flex flex-col max-w-sm mt-2 mb-6 text-normal drop-shadow-4xl">
-    <span>¡Ya somos mas de 300!</span>
+  <h3
+    id="player-count"
+    class="dsm:text-[1.1rem] uppercase text-2xl font-medium flex flex-col max-w-sm  text-normal drop-shadow-4xl"
+  >
+    <span>¡Ya somos 300!</span>
   </h3>
+
+  
   <a
     href="#about_addon"
-    class="bg-txtbg1 text-normal font-medium px-4 py-1 uppercase text-lg hover:scale-125 transition border-y-2 border-normal inline-block shadow-3xl"
+    class="bg-txtbg1 text-normal font-medium  px-4 py-1 uppercase text-lg hover:scale-125 transition border-y-2 border-normal inline-block shadow-3xl"
   >
     Unirse ahora
   </a>
-
 </section>
+
+<script>
+  fetch("players.json")
+    .then((response) => response.json())
+    .then((players) => {
+      const playerCount = players.length;
+      const playerCountElement: HTMLElement | null =
+        document.getElementById("player-count");
+
+      if (playerCountElement) {
+        playerCountElement.innerHTML = `<span>¡Ya somos ${playerCount}!</span>`;
+      } else {
+        console.error('Elemento con ID "player-count" no encontrado.');
+      }
+    })
+    .catch((error) => console.error("Error al cargar los jugadores:", error));
+</script>
