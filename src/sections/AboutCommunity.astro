@@ -29,36 +29,40 @@ import ImageComponent from "@/components/ImageComponent.astro";
   const playerList = document.getElementById('player-list');
   const playerInfo = document.getElementById('player-info');
 
-  // Cargar los datos de players.json
-  fetch('players.json')
-    .then(response => response.json())
-    .then(players => {
-      players.forEach(player => {
-        const option = document.createElement('option');
-        option.value = player.name;
-        playerList.appendChild(option);
-      });
+  // Verificar que los elementos existen
+  if (playerSelect && playerList && playerInfo) {
+    // Cargar los datos de players.json
+    fetch('players.json')
+      .then(response => response.json())
+      .then((players: {name: string, rank: string}[]) => {
+        players.forEach((player) => {
+          const option = document.createElement('option');
+          option.value = player.name;
+          playerList.appendChild(option);
+        });
 
-      playerSelect.addEventListener('change', (e) => {
-        const selectedName = e.target.value;
-        const player = players.find(p => p.name === selectedName);
-        
-        if (player) {
-          playerInfo.innerHTML = `
-            <div class="animate-blurred-fade-in flex flex-row justify-center items-center w-full border-y-2 border-primary text-normal text-center py-2 shadow-3xl px-2 bg-txtbg min-h-[90px]">
-              <div class="grow text-bold text-[1.5rem]">${player.name}</div>
-              <div class="flex flex-col">
-                <img src="/gallery/${player.rank.toLowerCase().replace(" ", "_")}.png" alt="${player.rank}" class="max-h-[40px]">
-                <div>${player.rank}</div>
+        playerSelect.addEventListener('change', (e) => {
+          const target = e.target as HTMLInputElement;
+          const selectedName = target.value;
+          const player = players.find(p => p.name === selectedName);
+
+          if (player) {
+            playerInfo.innerHTML = `
+              <div class="animate-blurred-fade-in flex flex-row justify-center items-center w-full border-y-2 border-primary text-normal text-center py-2 shadow-3xl px-2 bg-txtbg min-h-[90px]">
+                <div class="grow text-bold text-[1.5rem]">${player.name}</div>
+                <div class="flex flex-col">
+                  <img src="/gallery/${player.rank.toLowerCase().replace(" ", "_")}.png" alt="${player.rank}" class="max-h-[40px]">
+                  <div>${player.rank}</div>
+                </div>
               </div>
-            </div>
-          `;
-          playerInfo.classList.remove('hidden');
-        } else {
-          playerInfo.innerHTML = '';
-          playerInfo.classList.add('hidden');
-        }
-      });
-    })
-    .catch(error => console.error('Error al cargar los jugadores:', error));
+            `;
+            playerInfo.classList.remove('hidden');
+          } else {
+            playerInfo.innerHTML = '';
+            playerInfo.classList.add('hidden');
+          }
+        });
+      })
+      .catch(error => console.error('Error al cargar los jugadores:', error));
+  }
 </script>
