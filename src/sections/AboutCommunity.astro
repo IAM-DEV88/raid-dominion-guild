@@ -25,17 +25,17 @@ import ImageComponent from "@/components/ImageComponent.astro";
 </section>
 
 <script>
-  const playerSelect = document.getElementById('player-select');
-const playerList = document.getElementById('player-list');
-const playerInfo = document.getElementById('player-info');
-const resetButton = document.querySelector('input[type="reset"]');
+ const playerSelect = document.getElementById('player-select') as HTMLInputElement;
+const playerList = document.getElementById('player-list') as HTMLDataListElement;
+const playerInfo = document.getElementById('player-info') as HTMLDivElement;
+const resetButton = document.querySelector('input[type="reset"]') as HTMLInputElement;
 
 // Verificar que los elementos existen
 if (playerSelect && playerList && playerInfo && resetButton) {
   // Cargar los datos de players.json
   fetch('players.json')
     .then(response => response.json())
-    .then((players: {name: string, rank: string}[]) => {
+    .then((players: { name: string, rank: string }[]) => {
       players.forEach((player) => {
         const option = document.createElement('option');
         option.value = player.name;
