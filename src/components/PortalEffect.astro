@@ -22,32 +22,31 @@ const smokeParticles: THREE.Mesh[] = [];
 const loader = new THREE.TextureLoader();
 loader.crossOrigin = "";
 
-const midHeight = h * 40 / 100
 loader.load("/smoke.webp", (texture) => {
-  const smokeGeo = new THREE.PlaneGeometry(midHeight, midHeight);
-  const NUM_OF_PARTICLES = 50;
+  const smokeGeo = new THREE.PlaneGeometry(300, 300);
+  const NUM_OF_PARTICLES = 60;
 
   for (let p = 0; p < NUM_OF_PARTICLES; p++) {
     const smokeMaterial = new THREE.MeshBasicMaterial({
       map: texture,
       transparent: true,
       opacity: 0,
-      color: 0x0088bc,
+      color: 0x000000,
     });
 
     const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
 
     particle.position.set(
-      0,
-      Math.random() * -50,
-      Math.random() * 100 - -100
+    Math.random() * 100 - 50,
+    Math.random() * -20 - 40,
+        0
     );
     particle.rotation.z = Math.random() * 360 - -360;
 
     particle.userData.pulseOffset = Math.random() * 50;
     particle.userData.pulseSpeed = Math.random() * .1 - 1;
-    particle.userData.rotationSpeed = Math.random() * 0.01 - 0.001;
-    particle.userData.targetOpacity = 0.5;
+    particle.userData.rotationSpeed = Math.random() * 0.009 - 0.005;
+    particle.userData.targetOpacity = 0.7;
 
     scene.add(particle);
     smokeParticles.push(particle);
@@ -66,18 +65,18 @@ function resize() {
 function getRandomColor() {
   const randomNum = Math.random();
   if (randomNum < 0.15) {
-    return new THREE.Color(0x1199cd);
-  } else if (randomNum < 0.25) {
-    return new THREE.Color(0x00aaff);
-  } else if (randomNum < 0.5) {
     return new THREE.Color(0x0088bc);
+  } else if (randomNum < 0.25) {
+    return new THREE.Color(0x0077ab);
+  } else if (randomNum < 0.5) {
+    return new THREE.Color(0x006698);
   } else {
     return new THREE.Color(0x000000);
   }
 }
 
 let lastTime = 0;
-const frameInterval = 1000 / 30; // Limitar FPS a 30 en escritorio
+const frameInterval = 1000 / 25; // Limitar FPS a 30 en escritorio
 
 function animate(time:number) {
   if (time - lastTime >= frameInterval) {
