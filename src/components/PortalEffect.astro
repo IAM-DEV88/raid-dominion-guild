@@ -1,7 +1,7 @@
 <div id="smoke-bkg" class="absolute z-[-1]"></div>
 <!-- animate-blurred-fade-in -->
 <script>
-  import * as THREE from "three";
+ import * as THREE from "three";
 
 const $bkg = document.getElementById("smoke-bkg");
 let w = window.innerWidth;
@@ -31,27 +31,29 @@ loader.load("/smoke.webp", (texture) => {
       map: texture,
       transparent: true,
       opacity: 0,
-      color: 0x000000,
+      color: getRandomColor(),
     });
 
     const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-
     particle.position.set(
-    Math.random() * 100 - 50,
-    Math.random() * -20 - 70,
-        0
+      Math.random() * 100 - 50,
+      Math.random() * -20 - 70,
+      0
     );
-    particle.rotation.z = Math.random() * 360 - -360;
-
-    particle.userData.pulseOffset = Math.random() * 50;
-    particle.userData.pulseSpeed = Math.random() * .1 - 1;
-    particle.userData.rotationSpeed = Math.random() * 0.009 - 0.005;
-    particle.userData.targetOpacity = 0.7;
+    particle.rotation.z = Math.random() * -360 - 360;
+    
+    particle.userData = {
+      pulseOffset: Math.random() * 1000 - 900,
+      pulseSpeed: Math.random() * 0.01 - 0.001,
+      rotationSpeed: Math.random() * 0.0005 - 0.0001,
+      targetOpacity: 0.5,
+      baseColor: getRandomColor(),
+      targetColor: getRandomColor(),
+    };
 
     scene.add(particle);
     smokeParticles.push(particle);
   }
-
 });
 
 function resize() {
@@ -64,54 +66,38 @@ function resize() {
 
 function getRandomColor() {
   const randomNum = Math.random();
-  if (randomNum < 0.15) {
-    return new THREE.Color(0x0088bc);
-  } else if (randomNum < 0.25) {
-    return new THREE.Color(0x0077ab);
-  } else if (randomNum < 0.5) {
-    return new THREE.Color(0x006698);
-  } else {
-    return new THREE.Color(0x000000);
-  }
+  if (randomNum < 0.15) return new THREE.Color(0x0088bc);
+  if (randomNum < 0.25) return new THREE.Color(0x0077ab);
+  if (randomNum < 0.5) return new THREE.Color(0x006698);
+  return new THREE.Color(0x000000);
 }
 
 let lastTime = 0;
-const frameInterval = 1000 / 25; // Limitar FPS a 30 en escritorio
 
 function animate(time:number) {
-  if (time - lastTime >= frameInterval) {
+  const deltaTime = time - lastTime;
+  if (deltaTime >= 1000 / 25) {
     lastTime = time;
-    const currentTime = Date.now() * 0.001;
 
     smokeParticles.forEach((particle) => {
-      particle.rotation.z += particle.userData.rotationSpeed;
+      const { material, userData } = particle;
+      particle.rotation.z += userData.rotationSpeed * deltaTime;
 
-      const material = particle.material as THREE.MeshBasicMaterial;
+      material.opacity += (userData.targetOpacity - material.opacity) * 0.05;
 
-      // Interpolación suave hacia la opacidad objetivo
-      material.opacity += (particle.userData.targetOpacity - material.opacity) * 0.05;
+      const pulse = Math.sin(time * userData.pulseSpeed + userData.pulseOffset) * 0.5 + 0.5;
+      material.opacity *= (0.5 + pulse * 0.5);
 
-      // Pulso de opacidad individual
-      const pulse = Math.sin(currentTime * particle.userData.pulseSpeed + particle.userData.pulseOffset) * 0.5 + 0.5;
-      material.opacity = material.opacity * (0.5 + pulse * 0.5);
-
-      // Cambio de color con el ritmo del pulso
-      if (!particle.userData.baseColor) {
-        particle.userData.baseColor = getRandomColor();
-        particle.userData.targetColor = getRandomColor();
-      }
-
-      const colorPulse = Math.sin(currentTime * 0.5 + particle.userData.pulseOffset) * 0.5 + 0.5;
-      material.color.lerpColors(
-        particle.userData.baseColor,
-        particle.userData.targetColor,
-        colorPulse
-      );
-
-      // Cambio ocasional de color
+      
       if (Math.random() < 0.005) {
-        particle.userData.baseColor.copy(particle.userData.targetColor);
-        particle.userData.targetColor = getRandomColor();
+        const colorPulse = Math.sin(time * 0.5 + userData.pulseOffset) * 0.5 + 0.5;
+        material.color.lerpColors(
+          userData.baseColor,
+          userData.targetColor,
+          colorPulse
+        );
+        userData.baseColor.copy(userData.targetColor);
+        userData.targetColor = getRandomColor();
       }
     });
 
@@ -124,4 +110,5 @@ function animate(time:number) {
 animate(0);
 
 window.addEventListener("resize", resize);
+
 </script>
