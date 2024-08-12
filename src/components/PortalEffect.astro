@@ -1,7 +1,7 @@
 <div id="smoke-bkg" class="absolute z-[-1]"></div>
 <!-- animate-blurred-fade-in -->
 <script>
- import * as THREE from "three";
+import * as THREE from "three";
 
 const $bkg = document.getElementById("smoke-bkg");
 let w = window.innerWidth;
@@ -74,7 +74,7 @@ function getRandomColor() {
 
 let lastTime = 0;
 
-function animate(time:number) {
+function animate(time: number) {
   const deltaTime = time - lastTime;
   if (deltaTime >= 1000 / 25) {
     lastTime = time;
@@ -83,21 +83,22 @@ function animate(time:number) {
       const { material, userData } = particle;
       particle.rotation.z += userData.rotationSpeed * deltaTime;
 
-      material.opacity += (userData.targetOpacity - material.opacity) * 0.05;
+      if (material instanceof THREE.MeshBasicMaterial) {
+        material.opacity += (userData.targetOpacity - material.opacity) * 0.05;
 
-      const pulse = Math.sin(time * userData.pulseSpeed + userData.pulseOffset) * 0.5 + 0.5;
-      material.opacity *= (0.5 + pulse * 0.5);
+        const pulse = Math.sin(time * userData.pulseSpeed + userData.pulseOffset) * 0.5 + 0.5;
+        material.opacity *= (0.5 + pulse * 0.5);
 
-      
-      if (Math.random() < 0.005) {
-        const colorPulse = Math.sin(time * 0.5 + userData.pulseOffset) * 0.5 + 0.5;
-        material.color.lerpColors(
-          userData.baseColor,
-          userData.targetColor,
-          colorPulse
-        );
-        userData.baseColor.copy(userData.targetColor);
-        userData.targetColor = getRandomColor();
+        if (Math.random() < 0.005) {
+          const colorPulse = Math.sin(time * 0.5 + userData.pulseOffset) * 0.5 + 0.5;
+          material.color.lerpColors(
+            userData.baseColor,
+            userData.targetColor,
+            colorPulse
+          );
+          userData.baseColor.copy(userData.targetColor);
+          userData.targetColor = getRandomColor();
+        }
       }
     });
 
@@ -110,5 +111,6 @@ function animate(time:number) {
 animate(0);
 
 window.addEventListener("resize", resize);
+
 
 </script>
