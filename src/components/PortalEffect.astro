@@ -24,7 +24,7 @@ loader.crossOrigin = "";
 
 loader.load("/smoke.webp", (texture) => {
   const smokeGeo = new THREE.PlaneGeometry(300, 300);
-  const NUM_OF_PARTICLES = 50;
+  const NUM_OF_PARTICLES = 100;
 
   for (let p = 0; p < NUM_OF_PARTICLES; p++) {
     const smokeMaterial = new THREE.MeshBasicMaterial({
@@ -41,14 +41,14 @@ loader.load("/smoke.webp", (texture) => {
       0
     );
     particle.rotation.z = Math.random() * -360 - 360;
-    
+
     particle.userData = {
       pulseOffset: Math.random() * 1000 - 900,
       pulseSpeed: Math.random() * 0.01 - 0.001,
       rotationSpeed: Math.random() * 0.0005 - 0.0001,
-        direction: Math.random() < 0.5 ? -1 : 1, // -1 para izquierda, 1 para derecha
-        maxDistance: Math.random() * 50 - 1,
-        distance: 0,
+      direction: Math.random() < 0.5 ? -1 : 1, // -1 para izquierda, 1 para derecha
+      maxDistance: Math.random() * 50 - 1,
+      distance: 0,
       targetOpacity: 0.5,
       baseColor: getRandomColor(),
       targetColor: getRandomColor(),
@@ -76,27 +76,30 @@ function getRandomColor() {
 }
 
 let lastTime = 0;
+let isAnimating = true;
 
-function animate(time: number) {
+function animate(time:number) {
+  if (!isAnimating) return;
+
   const deltaTime = time - lastTime;
   if (deltaTime >= 1000 / 25) {
     lastTime = time;
 
     smokeParticles.forEach((particle) => {
       const { material, userData } = particle;
+
+      // Actualización de la posición horizontal de la partícula
+      userData.distance += deltaTime * 0.01 * userData.direction;
+      if (Math.abs(userData.distance) > userData.maxDistance) {
+        userData.direction *= -1; // Cambiar dirección
+        userData.distance = Math.sign(userData.distance) * userData.maxDistance; // Mantener la distancia dentro del rango
+      }
+      particle.position.x = userData.distance;
+
+      // Rotación de la partícula
       particle.rotation.z += userData.rotationSpeed * deltaTime;
 
-      // Mover la partícula horizontalmente
-      userData.distance +=
-          deltaTime * 0.01 * userData.direction;
-        particle.rotation.z += userData.rotationSpeed * deltaTime;
-
-        if (Math.abs(userData.distance) > userData.maxDistance) {
-          userData.direction *= -1; // Cambiar dirección
-        }
-
-        particle.position.x = userData.distance;
-
+      // Actualización de la opacidad y color
       if (material instanceof THREE.MeshBasicMaterial) {
         material.opacity += (userData.targetOpacity - material.opacity) * 0.05;
 
@@ -122,9 +125,23 @@ function animate(time: number) {
   requestAnimationFrame(animate);
 }
 
+// Función para manejar la visibilidad de la página
+function handleVisibilityChange() {
+  if (document.hidden) {
+    isAnimating = false;
+  } else {
+    isAnimating = true;
+    lastTime = performance.now();
+    requestAnimationFrame(animate);
+  }
+}
+
+// Escuchar el evento de cambio de visibilidad de la página
+document.addEventListener("visibilitychange", handleVisibilityChange);
+
+// Llamar a la función de animación inicial
 animate(0);
 
 window.addEventListener("resize", resize);
-
 
 </script>
