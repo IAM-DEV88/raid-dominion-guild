@@ -1,6 +1,6 @@
 ---
 import "@fontsource-variable/jost";
-import SmokeEffect from "../components/SmokeEffect.astro";
+import PortalEffect from "../components/PortalEffect.astro";
 interface Props {
   title: string;
 }
@@ -68,7 +68,7 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <SmokeEffect />
+    <PortalEffect />
     <div class="max-w-6xl px-8 mx-auto">
       <slot />
       <div
