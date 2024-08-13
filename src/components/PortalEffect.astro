@@ -24,7 +24,7 @@ loader.crossOrigin = "";
 
 loader.load("/smoke.webp", (texture) => {
   const smokeGeo = new THREE.PlaneGeometry(300, 300);
-  const NUM_OF_PARTICLES = 60;
+  const NUM_OF_PARTICLES = 50;
 
   for (let p = 0; p < NUM_OF_PARTICLES; p++) {
     const smokeMaterial = new THREE.MeshBasicMaterial({
@@ -36,8 +36,8 @@ loader.load("/smoke.webp", (texture) => {
 
     const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
     particle.position.set(
-      Math.random() * 400 - 200,
-      Math.random() * -100 - 10,
+      Math.random() * 100 - 50,
+      Math.random() * -80 - 10,
       0
     );
     particle.rotation.z = Math.random() * -360 - 360;
@@ -46,7 +46,10 @@ loader.load("/smoke.webp", (texture) => {
       pulseOffset: Math.random() * 1000 - 900,
       pulseSpeed: Math.random() * 0.01 - 0.001,
       rotationSpeed: Math.random() * 0.0005 - 0.0001,
-      targetOpacity: 0.7,
+        direction: Math.random() < 0.5 ? -1 : 1, // -1 para izquierda, 1 para derecha
+        maxDistance: Math.random() * 50 - 1,
+        distance: 0,
+      targetOpacity: 0.5,
       baseColor: getRandomColor(),
       targetColor: getRandomColor(),
     };
@@ -82,6 +85,17 @@ function animate(time: number) {
     smokeParticles.forEach((particle) => {
       const { material, userData } = particle;
       particle.rotation.z += userData.rotationSpeed * deltaTime;
+
+      // Mover la partícula horizontalmente
+      userData.distance +=
+          deltaTime * 0.01 * userData.direction;
+        particle.rotation.z += userData.rotationSpeed * deltaTime;
+
+        if (Math.abs(userData.distance) > userData.maxDistance) {
+          userData.direction *= -1; // Cambiar dirección
+        }
+
+        particle.position.x = userData.distance;
 
       if (material instanceof THREE.MeshBasicMaterial) {
         material.opacity += (userData.targetOpacity - material.opacity) * 0.05;
