@@ -125,6 +125,13 @@ function animate(time:number) {
   requestAnimationFrame(animate);
 }
 
+// Evitar que las partículas se desplacen al hacer scroll
+window.addEventListener("scroll", () => {
+  smokeParticles.forEach((particle) => {
+    particle.position.y = particle.position.y;
+  });
+});
+
 // Función para manejar la visibilidad de la página
 function handleVisibilityChange() {
   if (document.hidden) {
