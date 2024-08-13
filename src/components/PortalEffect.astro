@@ -36,8 +36,8 @@ loader.load("/smoke.webp", (texture) => {
 
     const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
     particle.position.set(
-      Math.random() * 100 - 50,
-      Math.random() * -20 - 70,
+      Math.random() * 400 - 200,
+      Math.random() * -100 - 10,
       0
     );
     particle.rotation.z = Math.random() * -360 - 360;
@@ -46,7 +46,7 @@ loader.load("/smoke.webp", (texture) => {
       pulseOffset: Math.random() * 1000 - 900,
       pulseSpeed: Math.random() * 0.01 - 0.001,
       rotationSpeed: Math.random() * 0.0005 - 0.0001,
-      targetOpacity: 0.5,
+      targetOpacity: 0.7,
       baseColor: getRandomColor(),
       targetColor: getRandomColor(),
     };
@@ -69,7 +69,7 @@ function getRandomColor() {
   if (randomNum < 0.15) return new THREE.Color(0x0088bc);
   if (randomNum < 0.25) return new THREE.Color(0x0077ab);
   if (randomNum < 0.5) return new THREE.Color(0x006698);
-  return new THREE.Color(0x000000);
+  return new THREE.Color(0x111111);
 }
 
 let lastTime = 0;

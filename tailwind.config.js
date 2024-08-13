@@ -13,7 +13,7 @@ export default {
         primary: "rgba(213, 185, 84,.8)",
         enphasis: "rgba(58, 41, 43, .8)",
         secondary: "rgba(0, 0, 0, .8)",
-        txtbg: "rgba(58,41,43,.9)",
+        txtbg: "rgba(0,170,250,.8)",
         txtbg1: "rgba(0,0,0,.6)",
       },
       boxShadow: {

@@ -3,75 +3,285 @@ import ImageComponent from "@/components/ImageComponent.astro";
 ---
 
 <section
-  class=" mt-8 bg-txtbg1 flex flex-col flex-wrap lg:flex-row shadow-3xl border-y-2 border-primary py-2"
+  class="mt-8 bg-txtbg1 flex flex-col flex-wrap lg:flex-row shadow-3xl border-y-2 border-primary py-2"
 >
   <div class="relative w-full text-center py-2 px-2">
     <span
-      class="text-[1.5rem] uppercase text-normal border-b-2 border-primary mb-1 md:font-medium mt-2"
-      >Comunidad Raid Dominion</span
+      class="text-[1.5rem] uppercase text-white border-b-2 border-primary mb-1 md:font-medium mt-2"
     >
-    <ImageComponent classes="md:max-w-[300px] drop-shadow-4xl w-full mx-auto" imageName="raid_addon.png" />
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <div id="player-info" class="w-full max-w-md hidden">
-        <!-- La información del jugador se insertará aquí dinámicamente -->
+      Raid Dominion
+    </span>
+    <div class="flex flex-wrap mt-4">
+      <div class="flex flex-row grow text-center w-100">
+        <input
+          list="player-list"
+          id="player-select"
+          class="w-full px-2 bg-txtbg1 shadow-3xl text-normal"
+          placeholder="Buscar jugador por nombre"
+        />
+        <datalist id="player-list"></datalist>
+        <input
+          class="px-2 text-white bg-txtbg1 shadow-3xl"
+          type="reset"
+          value="X"
+        />
+      </div>
+
+      <div class="flex w-full flex-col sm:flex-row justify-between mt-4">
+        <div class="w-[50%]">
+          <span class="text-white">Filtrar por Rango:</span><br />
+          <select id="rank-filter" class="px-2 bg-txtbg1 shadow-3xl text-white">
+            <option value="">Todos los rangos</option>
+          </select>
+        </div>
+        <div class="w-[50%]">
+          <span class="text-white">Filtrar por Clase:</span><br />
+          <select
+            id="class-filter"
+            class="px-2 bg-txtbg1 shadow-3xl text-white"
+          >
+            <option value="">Todas las clases</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="flex flex-row text-center w-100 mx-2">
-      <input list="player-list" id="player-select" class="w-full p-2 border border-primary rounded" placeholder="Buscar o seleccionar un jugador">
-      <datalist id="player-list"></datalist>
-      <input class="p-2 border border-primary text-normal rounded" type="reset" value="X">
+
+    <div id="player-info" class="w-full max-w-full text-white mt-4">
+      <table id="player-table" class="table-auto w-full">
+        <thead>
+          <tr class="py-2 border-t-2 border-t-primary">
+            <th data-column="class" class="cursor-pointer text-white w-[110px] dsm:max-w-[50px]">Clase</th>
+            <th data-column="name" class="cursor-pointer text-white">Jugador</th>
+            <th data-column="rank" class="cursor-pointer text-white">Rango</th>
+          </tr>
+        </thead>
+        <tbody class="border-y-[1px] border-y-normal">
+          <!-- Las filas se agregarán aquí dinámicamente -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="pagination" class="flex justify-center mt-2 text-white">
+      <!-- Los controles de paginación se insertarán aquí -->
+    </div>
+
+    <div id="indicators" class="text-white mt-2">
+      <!-- Indicadores de la cantidad total de jugadores, por clase y por rango -->
     </div>
   </div>
 </section>
 
 <script>
- const playerSelect = document.getElementById('player-select') as HTMLInputElement;
-const playerList = document.getElementById('player-list') as HTMLDataListElement;
-const playerInfo = document.getElementById('player-info') as HTMLDivElement;
-const resetButton = document.querySelector('input[type="reset"]') as HTMLInputElement;
+  interface Player {
+    name: string;
+    rank: string;
+    class: string;
+  }
 
-// Verificar que los elementos existen
-if (playerSelect && playerList && playerInfo && resetButton) {
-  // Cargar los datos de players.json
-  fetch('players.json')
-    .then(response => response.json())
-    .then((players: { name: string, rank: string }[]) => {
-      players.forEach((player) => {
-        const option = document.createElement('option');
-        option.value = player.name;
-        playerList.appendChild(option);
-      });
+  document.addEventListener("DOMContentLoaded", () => {
+    const playerSelect = document.getElementById("player-select") as HTMLInputElement;
+    const playerTableBody = document.querySelector("#player-table tbody") as HTMLTableSectionElement;
+    const pagination = document.getElementById("pagination") as HTMLDivElement;
+    const resetButton = document.querySelector('input[type="reset"]') as HTMLInputElement;
+    const rankFilter = document.getElementById("rank-filter") as HTMLSelectElement;
+    const classFilter = document.getElementById("class-filter") as HTMLSelectElement;
+    const indicators = document.getElementById("indicators") as HTMLDivElement;
 
-      playerSelect.addEventListener('change', (e) => {
-        const target = e.target as HTMLInputElement;
-        const selectedName = target.value;
-        const player = players.find(p => p.name === selectedName);
+    let players: Player[] = [];
+    let filteredPlayers: Player[] = [];
+    let currentPage = 1;
+    const playersPerPage = 10;
+    let sortBy: keyof Player = "name";
+    let sortOrder: "asc" | "desc" = "asc";
 
-        if (player) {
-          playerInfo.innerHTML = `
-            <div class="animate-blurred-fade-in flex flex-row justify-center items-center min-w-[200px] border-y-2 border-primary text-normal text-center py-2 shadow-3xl px-2 bg-txtbg min-h-[90px]">
-              <div class="grow text-bold text-[1.5rem] mr-2">${player.name}</div>
-              <div class="flex flex-col">
-                <img src="/gallery/${player.rank.toLowerCase().replace(" ", "_")}.png" alt="${player.rank}" class="max-h-[40px]">
-                <div>${player.rank}</div>
-              </div>
-            </div>
-          `;
-          playerInfo.classList.remove('hidden');
+    function renderTable() {
+      if (!playerTableBody) return;
+      playerTableBody.innerHTML = "";
+
+      const sortedPlayers = [...filteredPlayers].sort((a, b) => {
+        if (sortOrder === "asc") {
+          return a[sortBy].localeCompare(b[sortBy]);
         } else {
-          playerInfo.innerHTML = '';
-          playerInfo.classList.add('hidden');
+          return b[sortBy].localeCompare(a[sortBy]);
         }
       });
 
-      resetButton.addEventListener('click', () => {
-        playerSelect.value = '';
-        playerSelect.focus();
-        playerInfo.innerHTML = '';
-        playerInfo.classList.add('hidden');
-      });
-    })
-    .catch(error => console.error('Error al cargar los jugadores:', error));
-}
+      const start = (currentPage - 1) * playersPerPage;
+      const end = start + playersPerPage;
+      const paginatedPlayers = sortedPlayers.slice(start, end);
 
+      paginatedPlayers.forEach((player, index) => {
+        const row = document.createElement("tr");
+        row.className = index % 2 === 0 ? "bg-gray-900" : "bg-gray-700";
+        row.innerHTML = `
+          <td class="text-white flex items-center"><img class="max-w-[25px] drop-shadow-4xl px-1 dsm:pt-1 sm:mx-0 dsm:mx-auto sm:pb-1" src="gallery/class_${player.class}.jpg" alt="${player.class}"><span class="sm:inline hidden pr-4">${player.class}</span></td>
+          <td class="text-white text-left">${player.name}</td>
+          <td class="text-white">${player.rank}</td>
+        `;
+        playerTableBody.appendChild(row);
+      });
+
+      updatePagination();
+      updateIndicators();
+    }
+
+    function updatePagination() {
+      if (!pagination) return;
+      pagination.innerHTML = "";
+
+      const totalPages = Math.ceil(filteredPlayers.length / playersPerPage);
+
+      const createPageLink = (page: number) => {
+        const link = document.createElement("a");
+        link.href = "#";
+        link.classList.add("px-2", "text-white");
+        link.textContent = page.toString();
+        if (page === currentPage) {
+          link.classList.add("font-bold");
+        }
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          currentPage = page;
+          renderTable();
+        });
+        return link;
+      };
+
+      if (currentPage > 1) {
+        const prevLink = createPageLink(currentPage - 1);
+        prevLink.textContent = "<";
+        pagination.appendChild(prevLink);
+      }
+
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - currentPage) < 2) {
+          pagination.appendChild(createPageLink(i));
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+          const ellipsis = document.createElement("span");
+          ellipsis.textContent = "...";
+          ellipsis.classList.add("px-2", "text-white");
+          pagination.appendChild(ellipsis);
+        }
+      }
+
+      if (currentPage < totalPages) {
+        const nextLink = createPageLink(currentPage + 1);
+        nextLink.textContent = ">";
+        pagination.appendChild(nextLink);
+      }
+    }
+
+    function updateIndicators() {
+      if (!indicators) return;
+      const totalPlayers = filteredPlayers.length;
+      const classes = [...new Set(filteredPlayers.map((player) => player.class))];
+      const ranks = [...new Set(filteredPlayers.map((player) => player.rank))];
+
+      const totalByClass = classes.map((c) => ({
+        class: c,
+        count: filteredPlayers.filter((player) => player.class === c).length,
+      }));
+
+      const totalByRank = ranks.map((r) => ({
+        rank: r,
+        count: filteredPlayers.filter((player) => player.rank === r).length,
+      }));
+
+      indicators.innerHTML = `
+        <div class="border-y-2 py-4 mb-4 border-primary">Total Jugadores: ${totalPlayers}</div>
+        <div class="flex flex-wrap justify-center">
+          ${totalByClass
+            .map((c) => `<div class="pr-4">${c.class}: ${c.count}</div>`)
+            .join("")}
+          ${totalByRank
+            .map((r) => `<div class="pr-4">${r.rank}: ${r.count}</div>`)
+            .join("")}
+        </div>
+      `;
+    }
+
+    function filterPlayers() {
+      const selectedRank = rankFilter.value;
+      const selectedClass = classFilter.value;
+
+      filteredPlayers = players.filter((player) => {
+        const rankMatch = selectedRank === "" || player.rank === selectedRank;
+        const classMatch = selectedClass === "" || player.class === selectedClass;
+        const nameMatch = player.name.toLowerCase().includes(playerSelect.value.toLowerCase());
+        return rankMatch && classMatch && nameMatch;
+      });
+
+      currentPage = 1;
+      renderTable();
+    }
+
+    function updateSelectOptions() {
+      const ranks: Record<string, number> = {};
+      const classes: Record<string, number> = {};
+
+      players.forEach((player) => {
+        ranks[player.rank] = (ranks[player.rank] || 0) + 1;
+        classes[player.class] = (classes[player.class] || 0) + 1;
+      });
+
+      const currentRankValue = rankFilter.value;
+      const currentClassValue = classFilter.value;
+
+      rankFilter.innerHTML = `<option value="">Todos los rangos</option>`;
+      Object.entries(ranks).forEach(([rank, count]) => {
+        rankFilter.innerHTML += `<option value="${rank}">${rank}</option>`;
+      });
+
+      classFilter.innerHTML = `<option value="">Todas las clases</option>`;
+      Object.entries(classes).forEach(([className, count]) => {
+        classFilter.innerHTML += `<option value="${className}">${className}</option>`;
+      });
+
+      rankFilter.value = currentRankValue;
+      classFilter.value = currentClassValue;
+    }
+
+    function handleSort(column: keyof Player) {
+      if (sortBy === column) {
+        sortOrder = sortOrder === "asc" ? "desc" : "asc";
+      } else {
+        sortBy = column;
+        sortOrder = "asc";
+      }
+      renderTable();
+    }
+
+    fetch("players.json")
+      .then((response) => response.json())
+      .then((data: Player[]) => {
+        players = data;
+        filteredPlayers = players;
+        updateSelectOptions();
+        renderTable();
+      })
+      .catch((error) => console.error("Error al cargar los jugadores:", error));
+
+    document.querySelectorAll("th").forEach((th) => {
+      th.addEventListener("click", () => {
+        const column = th.getAttribute("data-column") as keyof Player;
+        handleSort(column);
+      });
+    });
+
+    rankFilter.addEventListener("change", filterPlayers);
+    classFilter.addEventListener("change", filterPlayers);
+    playerSelect.addEventListener("input", filterPlayers);
+
+    resetButton.addEventListener("click", () => {
+      playerSelect.value = "";
+      classFilter.value = "";
+      rankFilter.value = "";
+      filteredPlayers = players;
+      currentPage = 1;
+      sortBy = "name";
+      sortOrder = "asc";
+      updateSelectOptions();
+      renderTable();
+    });
+  });
 </script>
