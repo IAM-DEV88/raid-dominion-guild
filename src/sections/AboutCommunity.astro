@@ -228,12 +228,12 @@ import ImageComponent from "@/components/ImageComponent.astro";
       const currentClassValue = classFilter.value;
 
       rankFilter.innerHTML = `<option value="">Todos los rangos</option>`;
-      Object.entries(ranks).forEach(([rank, count]) => {
+      Object.entries(ranks).forEach(([rank]) => {
         rankFilter.innerHTML += `<option value="${rank}">${rank}</option>`;
       });
 
       classFilter.innerHTML = `<option value="">Todas las clases</option>`;
-      Object.entries(classes).forEach(([className, count]) => {
+      Object.entries(classes).forEach(([className]) => {
         classFilter.innerHTML += `<option value="${className}">${className}</option>`;
       });
 
