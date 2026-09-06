@@ -19,6 +19,7 @@ import {
   setGuildBandIntegrationRules,
   setBandIntegration,
   setGuildRules,
+  resolveRules,
 } from '@/lib/api';
 import type { GuildRow } from '@/types/database';
 import type { ContentItem } from '@/types/parser';
@@ -172,7 +173,8 @@ export async function loadBandProposals(g: GuildRow, body: HTMLElement): Promise
     // Reglas de la banda propuesta (SIEMPRE desde el proponente): el GM las
     // TOGGLEA como tags — las activas son las que se publican. Nunca se
     // elimina una regla de la data del proponente (se guarda la selección).
-    const proposed = Array.isArray(bp.rules) ? (bp.rules as ContentItem[]) : [];
+    // Normalizadas por nombre: mismo título = misma regla (primera gana).
+    const proposed = resolveRules(Array.isArray(bp.rules) ? (bp.rules as ContentItem[]) : []);
     // La selección guardada es la AUTORIDAD y nace vacía: el GM ACTIVA cada
     // regla que quiere publicar. Ninguna regla del proponente se publica
     // sola por defecto (ni en pendientes ni en integradas).
@@ -471,7 +473,12 @@ export function renderGuildCard(g: GuildRow, opts: GuildCardOptions): HTMLElemen
   // portal no muestra reglas (el SV no llena reglas al subir).
   void (async () => {
     const rulesRes = await getGuildRules(g.id);
-    if (rulesRes.ok && Array.isArray(rulesRes.items)) guildRules = rulesRes.items;
+    if (rulesRes.ok && Array.isArray(rulesRes.items)) {
+      // Normaliza la selección del maestro contra el catálogo (registry =
+      // fuente más actualizada): mismo nombre = misma regla; el contenido del
+      // SV más reciente gana. Evita duplicados y refresca el contenido.
+      guildRules = resolveRules(rulesRes.items, opts.rulesCatalog);
+    }
     guildRulesReady = true;
     renderReglasTags();
     rebuildReglasSelect();

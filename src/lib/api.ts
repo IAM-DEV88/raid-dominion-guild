@@ -481,6 +481,7 @@ export async function listPublicBands(): Promise<{ ok: boolean; bands?: BandRow[
   // No exponer players[] de bandas que ocultan jugadores al público.
   rows.forEach((b) => {
     if (b.hide_players) b.players = [];
+    sanitizeBandRules(b);
   });
   return { ok: true, bands: rows };
 }
@@ -497,6 +498,7 @@ export async function getPublicBandBySlug(slug: string): Promise<{ ok: boolean; 
   if (res.error) return { ok: false, error: res.error.message };
   const band = res.data as BandRow | null;
   if (band && band.hide_players) band.players = [];
+  if (band) sanitizeBandRules(band);
   return { ok: true, band: band ?? undefined };
 }
 
@@ -540,8 +542,50 @@ export async function setBandRules(bandId: string, rules: ContentItem[]): Promis
   return { ok: true };
 }
 
+// Identidad de una regla para dedupe/update por NOMBRE (regla 20260925):
+// mismo título (o contenido si no hay título) = misma regla. Insensible a
+// mayúsculas. La fuente más actualizada (el SV/registry más reciente) gana.
+export function ruleIdentity(r?: { title?: string | null; content?: string | null } | null): string {
+  return (r?.title ?? r?.content ?? '').trim().toLowerCase();
+}
+
+// Normaliza un listado de reglas: colapsa entradas con la MISMA identidad
+// (primera gana, en el orden de la lista) y, si se pasa el catálogo (fuente
+// más actualizada), el contenido/icono de la entrada se refresca con el del
+// catálogo cuando coincide la identidad. Es "actualizar, no duplicar":
+// elementos con el mismo nombre se actualizan con lo nuevo, jamás se suman.
+export function resolveRules<T extends { title?: string | null; content?: string | null; icon?: string | null }>(
+  items: readonly T[],
+  catalog?: readonly T[]
+): T[] {
+  const byId = new Map<string, T>();
+  (catalog ?? []).forEach((c) => {
+    const id = ruleIdentity(c);
+    if (id && !byId.has(id)) byId.set(id, c);
+  });
+  const out: T[] = [];
+  const seen = new Set<string>();
+  items.forEach((r) => {
+    const id = ruleIdentity(r);
+    if (!id || seen.has(id)) return;
+    seen.add(id);
+    out.push(byId.get(id) ?? r);
+  });
+  return out;
+}
+
+// Sanea rules[] de una fila de banda al leer (público y portal): colapsa
+// reglas con el mismo nombre. No toca la BD: solo normaliza lo que se sirve.
+function sanitizeBandRules(b: { rules: unknown[] | null }): void {
+  if (Array.isArray(b.rules) && b.rules.length > 0) {
+    b.rules = resolveRules(b.rules as ContentItem[]) as unknown[];
+  }
+}
+
 // Catálogo de reglas asignables: unión de raw.rules de los uploads del usuario
 // (más reciente primero). Es el pool que el dashboard ofrece por banda.
+// Dedupe por IDENTIDAD (título): si una regla cambió de contenido en el juego
+// y se re-subió, la versión MÁS RECIENTE (registry) la reemplaza, no se duplica.
 export async function getMyRulesCatalog(): Promise<{ ok: boolean; items?: ContentItem[]; error?: string }> {
   const ups = await listMyUploads();
   if (!ups.ok) return { ok: false, error: ups.error };
@@ -549,8 +593,8 @@ export async function getMyRulesCatalog(): Promise<{ ok: boolean; items?: Conten
   const items: ContentItem[] = [];
   (ups.items ?? []).forEach((u) => {
     (u.rawRules ?? []).forEach((r) => {
-      const key = `${r.title ?? ''}|${r.content ?? ''}`;
-      if (seen.has(key)) return;
+      const key = ruleIdentity(r);
+      if (!key || seen.has(key)) return;
       seen.add(key);
       items.push(r);
     });
@@ -734,6 +778,7 @@ export async function listGuildPortalBands(guildId: string): Promise<{ ok: boole
   // Si la banda oculta jugadores, no exponer players[] al consumidor.
   rows.forEach((b) => {
     if (b.hide_players) b.players = [];
+    sanitizeBandRules(b);
   });
   return { ok: true, bands: rows };
 }
@@ -821,7 +866,11 @@ export async function getGuildRules(guildId: string): Promise<{ ok: boolean; ite
   if (res.error) return { ok: false, error: res.error.message };
   return {
     ok: true,
-    items: Array.isArray(res.data?.config_value) ? (res.data.config_value as ContentItem[]) : undefined,
+    // Normaliza la selección guardada: mismo nombre = misma regla (primera
+    // gana, orden guardado). Un duplicado persistido de antes no se renderiza.
+    items: Array.isArray(res.data?.config_value)
+      ? resolveRules(res.data.config_value as ContentItem[])
+      : undefined,
   };
 }
 

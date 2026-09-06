@@ -9,13 +9,7 @@ import { ruleKey } from '@/lib/ui/dashboard/format';
 import { ui } from '@/lib/ui/design';
 import { toast } from '@/lib/ui/toast';
 import { card, cardTop } from '@/lib/ui/card';
-import {
-  setBandVisibility,
-  setBandHidePlayers,
-  setBandGuild,
-  proposeBandIntegration,
-  setBandRules,
-} from '@/lib/api';
+import { resolveRules, setBandVisibility, setBandHidePlayers, setBandGuild, proposeBandIntegration, setBandRules } from '@/lib/api';
 import type { BandRow, GuildRow } from '@/types/database';
 import type { ContentItem } from '@/types/parser';
 
@@ -25,13 +19,17 @@ export function bandPlayerCount(b: BandRow): number {
 }
 
 export function bandRuleCount(b: BandRow): number {
+  // Cuenta SIN duplicados por nombre (mismo título = misma regla).
   if (!Array.isArray(b.rules)) return 0;
-  return b.rules.length;
+  return resolveRules(b.rules as ContentItem[]).length;
 }
 
-export function bandAssignedRules(b: BandRow): ContentItem[] {
+export function bandAssignedRules(b: BandRow, catalog?: ContentItem[]): ContentItem[] {
   if (!Array.isArray(b.rules)) return [];
-  return b.rules as ContentItem[];
+  // Normaliza lo guardado: mismo nombre = misma regla (primera gana). Con el
+  // catálogo (fuente más actualizada) se refresca el contenido/icono de cada
+  // regla asignada a la versión nueva del SV: se actualiza, no se duplica.
+  return resolveRules(b.rules as ContentItem[], catalog);
 }
 
 export interface BandDetailOptions {
@@ -292,7 +290,7 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
 
   const renderTags = (): void => {
     tagsWrap.innerHTML = '';
-    const assigned = bandAssignedRules(b);
+    const assigned = bandAssignedRules(b, opts.rulesCatalog);
     if (assigned.length === 0) {
       tagsWrap.appendChild(el('p', 'text-[11px] text-gray-500 italic', 'Sin reglas asignadas a esta banda.'));
       return;
@@ -309,7 +307,7 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
         rm.textContent = '×';
         rm.title = 'Quitar regla';
         rm.addEventListener('click', () => {
-          const prev = bandAssignedRules(b).slice();
+const prev = bandAssignedRules(b, opts.rulesCatalog).slice();
           const next = prev.filter((a) => ruleKey(a) !== ruleKey(r));
           if (next.length === prev.length) return;
           b.rules = next as unknown as BandRow['rules'];
@@ -331,7 +329,7 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
   addSelect.className = 'flex-1 min-w-[220px] px-3 py-2 rounded-md bg-gray-950/70 border border-gray-700 text-sm text-gray-200 focus:border-amber-600/60 focus:outline-none';
   const rebuildAddSelect = (): void => {
     addSelect.innerHTML = '';
-    const assigned = bandAssignedRules(b);
+    const assigned = bandAssignedRules(b, opts.rulesCatalog);
     const assignedKeys = new Set(assigned.map(ruleKey));
     const placeholder = document.createElement('option');
     placeholder.value = '';
@@ -358,8 +356,8 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
     if (!key) return;
     const r = opts.rulesCatalog.find((x) => ruleKey(x) === key);
     if (!r) return;
-    const prev = bandAssignedRules(b).slice();
-    const next = bandAssignedRules(b);
+    const prev = bandAssignedRules(b, opts.rulesCatalog).slice();
+    const next = bandAssignedRules(b, opts.rulesCatalog);
     if (!next.some((a) => ruleKey(a) === key)) next.push(r);
     b.rules = next as unknown as BandRow['rules'];
     renderTags();
