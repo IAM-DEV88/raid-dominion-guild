@@ -256,7 +256,7 @@ export const guides: Guide[] = [
         title: 'Gestor de jugadores',
         content: [
           'Desde el menú > Banda, el clic en el texto anuncia la banda y el clic en el icono abre su gestor de jugadores.',
-          'Cada jugador tiene rol, dual, clase, gearscore, líder, asistencia y sanción (detalle en la sección "Bandas vivas").',
+          'Cada jugador tiene rol, dual, clase, gearscore, líder, asistencia y sanción.',
           'Cada jugador tiene botones para invitarlo y susurrarle una plantilla de invitación; para reclutar en el canal usa el [spammer de banda](#guide-comunicacion).',
         ],
       },
