@@ -56,10 +56,12 @@
 4. Promoción a `member` (regla 20260830) por **conteo acumulado** en
    `raiddominion_characters` (`raiddominion_try_promote_member`): con ≥2 personajes
    registrados (sin importar hermandad) valida TODOS y promueve si está en visitante.
+   Con SV que acredite `isGM` basta ≥1 (regla 20260925).
    Los personajes que entren después heredan el validado. Jamás degrada.
-5. Reclamo de hermandad (`raiddominion_claim_from_sv`) exige SV con `isGM` Y ≥3
-   personajes validados ("se activa con la llegada de un tercero"); un
-   `guild_master` ya verificado re-verifica/reclama sin esa restricción.
+5. Reclamo de hermandad (`raiddominion_claim_from_sv`) exige SV con `isGM` Y ≥1
+   personaje validado (regla 20260925: el SV maestro valida con uno); un
+   `guild_master` ya verificado re-verifica/reclama sin esa restricción. Guard:
+   si el personaje principal del SV pertenece a otra cuenta, no se reclama.
 
 Helpers: `canAccessGuildDashboard()`, `canManageGuild()`, `isStaff()`.
 

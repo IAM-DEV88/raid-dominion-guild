@@ -6,6 +6,7 @@
 
 import { el } from '@/lib/ui/preview';
 import { ui } from '@/lib/ui/design';
+import { toast } from '@/lib/ui/toast';
 import { card, cardTop } from '@/lib/ui/card';
 import { ruleKey, ruleId, escapeHtml } from '@/lib/ui/dashboard/format';
 import { supabase } from '@/lib/supabase';
@@ -22,9 +23,18 @@ import {
 import type { GuildRow } from '@/types/database';
 import type { ContentItem } from '@/types/parser';
 
-export function setMsg(el: HTMLElement, ok: boolean, text: string): void {
+export interface SetMsgOpts {
+  toast?: boolean;
+  title?: string;
+}
+
+export function setMsg(el: HTMLElement, ok: boolean, text: string, opts?: SetMsgOpts): void {
   el.textContent = text;
   el.className = `mt-3 text-sm rounded-md px-4 py-2.5 ${ok ? ui.status.success : ui.status.error}`;
+  if (opts?.toast === false) return;
+  const title = opts?.title ?? 'Operación exitosa';
+  if (ok) toast.success(title, text);
+  else toast.error(title, text);
 }
 
 export interface GuildCardOptions {
@@ -256,18 +266,21 @@ export async function loadBandProposals(g: GuildRow, body: HTMLElement): Promise
         if (status === 'rejected') {
           // Las rechazadas SALEN de la lista; las aprobadas permanecen
           // (re-decidibles en cualquier momento).
+          toast.success('Banda rechazada', `"${bp.name}" fue rechazada y retirada de la lista.`);
           row.remove();
           renderCount();
           if (body.querySelectorAll('div[data-prop-row]').length === 0) {
             body.innerHTML = '<p class="text-sm text-gray-400 italic">Aún no hay bandas propuestas por tus miembros.</p>';
           }
         } else {
+          toast.success('Banda aprobada', `"${bp.name}" fue aprobada e integrada al portal.`);
           refreshState();
           renderActions();
           renderCount();
           row.classList.add('border-amber-700/40');
         }
       } else {
+        toast.error('No se pudo decidir la banda', r.error || 'Error desconocido');
         saving.textContent = '✗ error';
         saving.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
         window.setTimeout(() => { saving.textContent = ''; }, 2500);
@@ -436,10 +449,12 @@ export function renderGuildCard(g: GuildRow, opts: GuildCardOptions): HTMLElemen
       guildRules = next;
       reglasStatus.textContent = '✓';
       reglasStatus.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+      toast.success('Reglas actualizadas', 'Las reglas de tu portal se guardaron correctamente.');
     } else {
       guildRules = prev;
       reglasStatus.textContent = '✗ ' + (res.error || 'error');
       reglasStatus.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+      toast.error('No se pudieron guardar las reglas', res.error || 'Error desconocido');
     }
     renderReglasTags();
     rebuildReglasSelect();
@@ -494,20 +509,33 @@ export function renderGuildCard(g: GuildRow, opts: GuildCardOptions): HTMLElemen
     input.disabled = false;
     if (error) {
       input.checked = !input.checked;
-      setMsg(msg, false, 'No se pudo cambiar la publicación del portal.');
+      setMsg(msg, false, 'No se pudo cambiar la publicación del portal.', {
+        title: 'Publicación del portal',
+      });
       return;
     }
     openLink.classList.toggle('hidden', !input.checked);
     g.is_public = input.checked;
     opts.refreshHdrGuild();
-    setMsg(msg, true, input.checked ? 'Portal publicado: ya es visible en /hermandad/' + g.slug : 'Portal oculto: solo tú puedes verlo.');
+    setMsg(
+      msg,
+      true,
+      input.checked
+        ? 'Portal publicado: ya es visible en /hermandad/' + g.slug
+        : 'Portal oculto: solo tú puedes verlo.',
+      { title: input.checked ? 'Portal publicado' : 'Portal oculto' },
+    );
   });
   copyBtn.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(url);
-      setMsg(msg, true, 'Enlace copiado al portapapeles.');
+      setMsg(msg, true, 'Enlace copiado al portapapeles.', {
+        title: 'Enlace copiado',
+      });
     } catch {
-      setMsg(msg, false, 'No se pudo copiar automáticamente.');
+      setMsg(msg, false, 'No se pudo copiar automáticamente.', {
+        title: 'Portapapeles',
+      });
     }
   });
   if (g.is_public) openLink.classList.remove('hidden');

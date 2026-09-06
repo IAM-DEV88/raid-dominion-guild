@@ -7,6 +7,7 @@
 import { el } from '@/lib/ui/preview';
 import { ruleKey } from '@/lib/ui/dashboard/format';
 import { ui } from '@/lib/ui/design';
+import { toast } from '@/lib/ui/toast';
 import { card, cardTop } from '@/lib/ui/card';
 import {
   setBandVisibility,
@@ -95,10 +96,15 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
       opts.onHdrRefresh();
       status.textContent = input.checked ? '✓ pública' : '✓ privada';
       status.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+      toast.success(
+        input.checked ? 'Banda publicada' : 'Banda ocultada',
+        `"${b.name}" ahora ${input.checked ? 'es visible en el directorio' : 'no aparece en el directorio'}.`,
+      );
     } else {
       input.checked = !input.checked;
       status.textContent = '✗ error';
       status.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+      toast.error('No se pudo actualizar la banda', res.error || 'Error desconocido');
     }
     window.setTimeout(() => { status.textContent = ''; }, 2500);
   }));
@@ -112,10 +118,17 @@ export function renderBandDetail(b: BandRow, opts: BandDetailOptions): HTMLEleme
       b.hide_players = input.checked;
       status.textContent = input.checked ? '✓ ocultos' : '✓ visibles';
       status.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+      toast.success(
+        input.checked ? 'Jugadores ocultos' : 'Jugadores visibles',
+        input.checked
+          ? `Los nombres/jugadores de "${b.name}" ya no se ven en el público.`
+          : `Los nombres/jugadores de "${b.name}" aparecen en el portal.`,
+      );
     } else {
       input.checked = !input.checked;
       status.textContent = '✗ error';
       status.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+      toast.error('No se pudo actualizar la banda', res.error || 'Error desconocido');
     }
     window.setTimeout(() => { status.textContent = ''; }, 2500);
   }));

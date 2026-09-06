@@ -1069,6 +1069,23 @@ export async function upsertMyCharacter(
   return { ok: true, result: rpc.data as 'created' | 'updated' | 'conflict' };
 }
 
+// Pre-check (20260925): ¿a quién pertenece UN personaje por nombre/reino?
+// 'other' = ya está en OTRA cuenta (el SV que lo traiga como principal es
+// ajeno y no debe guardarse); 'mine' = es de esta cuenta; 'free' = nadie.
+// Orden deliberado: ante un empate realm-tolerante (reino vacío en un lado),
+// gana 'other' ("a toda costa"): un duplicado entre cuentas se bloquea.
+export async function checkCharacterOwner(
+  name: string,
+  realm?: string
+): Promise<{ ok: boolean; result?: 'free' | 'mine' | 'other'; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_check_character_owner', {
+    p_name: name,
+    p_realm: realm ?? null,
+  });
+  if (rpc.error) return { ok: false, error: rpc.error.message };
+  return { ok: true, result: rpc.data as 'free' | 'mine' | 'other' };
+}
+
 // Guarda el roster del upload como evidencia para promociones ajenas
 export async function saveRosterEvidence(
   svId: string,
@@ -1089,10 +1106,11 @@ export interface PromotionResult {
 }
 
 // Intenta promover visitante→member. p_sv_id opcional habilita la
-// auto-validación GM: un SV con registry.guild.isGM + más de dos personajes
-// registrados valida los personajes de la cuenta sin evidencia cruzada.
-// Si la DB aún no tiene la migración 20260824 (sin parámetro p_sv_id),
-// reintenta sin argumento por si la firma antigua sigue viva.
+// auto-validación GM (regla 20260925): un SV con registry.guild.isGM y >= 1
+// personaje registrado valida la cuenta. La regla base (>= 2 personajes
+// acumulados) sigue vigente para cuentas sin SV de maestro.
+// Si la DB aún no tiene la nueva firma (sin parámetro p_sv_id), reintenta sin
+// argumento por si la firma antigua sigue viva.
 export async function tryPromoteMember(svId?: string): Promise<{ ok: boolean; data?: PromotionResult; error?: string }> {
   const rpc = await supabase.rpc('raiddominion_try_promote_member', svId ? { p_sv_id: svId } : {});
   if (rpc.error && svId) {

@@ -1,14 +1,17 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import Navigation from '@/components/Navigation.astro';
-import Breadcrumb from '@/components/Breadcrumb.astro';
-import EmptyState from '@/components/ui/EmptyState.astro';
-import { ui } from '@/lib/ui/design';
+import Layout from "@/layouts/Layout.astro";
+import Navigation from "@/components/Navigation.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import EmptyState from "@/components/ui/EmptyState.astro";
+import { ui } from "@/lib/ui/design";
 
 const ctaVacio = `${ui.btnBase} ${ui.btnPrimary} px-6 py-3 text-sm`;
 ---
 
-<Layout title="Mi Dashboard - RaidDominion" description="Tu addon en la comunidad RaidDominion: registro, bandas, hermandad y perfil.">
+<Layout
+  title="Mi Dashboard - RaidDominion"
+  description="Tu addon en la comunidad RaidDominion: registro, bandas, hermandad y perfil."
+>
   <Navigation currentPath="/dashboard" />
   <main class="relative py-16">
     <div class="max-w-6xl mx-auto">
@@ -18,41 +21,115 @@ const ctaVacio = `${ui.btnBase} ${ui.btnPrimary} px-6 py-3 text-sm`;
            compacto (avatar + identidad + acciones en una fila; badges debajo) -->
       <header class="mb-8 animate-fade-in-1">
         <div class="flex items-start gap-4">
-          <div id="avatar" class="w-12 h-12 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-black text-lg font-black shadow-lg shadow-amber-900/30 ring-2 ring-amber-500/30 select-none">–</div>
+          <div
+            id="avatar"
+            class="w-12 h-12 shrink-0 rounded-full bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-black text-lg font-black shadow-lg shadow-amber-900/30 ring-2 ring-amber-500/30 select-none"
+          >
+            –
+          </div>
           <div class="min-w-0 flex-1">
             <p class={`${ui.eyebrow} mb-1`}>Mi cuenta</p>
-            <h1 id="account-title" class={`${ui.text.h1} ${ui.gradientTitle} tracking-wide leading-tight truncate`}>Cuenta</h1>
-            <p id="user-email" class={`${ui.text.caption} italic mt-0.5 truncate`}></p>
+            <h1
+              id="account-title"
+              class={`${ui.text.h1} ${ui.gradientTitle} tracking-wide leading-tight truncate`}
+            >
+              Cuenta
+            </h1>
+            <p
+              id="user-email"
+              class={`${ui.text.caption} italic mt-0.5 truncate`}
+            >
+            </p>
           </div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <a href="/upload" class={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-widest border bg-amber-900/40 border-amber-500/40 text-amber-300 hover:bg-amber-800/50 hover:border-amber-400/70 ${ui.transition} ${ui.focusRing}`} title="Sube tu SavedVariables" aria-label="Sube tu SavedVariables">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <a
+              href="/upload"
+              class={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[10px] font-black uppercase tracking-widest border bg-amber-900/40 border-amber-500/40 text-amber-300 hover:bg-amber-800/50 hover:border-amber-400/70 ${ui.transition} ${ui.focusRing}`}
+              title="Sube tu SavedVariables"
+              aria-label="Sube tu SavedVariables"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                ></path></svg
+              >
               <span class="hidden sm:inline">Subir SV</span>
             </a>
-            <button type="button" id="config-btn"
+            <button
+              type="button"
+              id="config-btn"
               class={`inline-flex items-center justify-center w-9 h-9 rounded-md text-[10px] font-black uppercase tracking-widest border bg-gray-800/70 border-gray-600 text-gray-300 hover:text-amber-200 hover:border-amber-500/50 ${ui.transition} ${ui.focusRing}`}
-              aria-label="Configuración de perfil, seguridad y zona de peligro" title="Configuración de perfil, seguridad y zona de peligro">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              aria-label="Configuración de perfil, seguridad y zona de peligro"
+              title="Configuración de perfil, seguridad y zona de peligro"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                ></path><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg
+              >
             </button>
           </div>
         </div>
         <div class="flex flex-wrap items-center gap-1.5 mt-3">
-          <span id="role-badge" class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-300`}>…</span>
-          <span id="validated-badge" class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-400`}>…</span>
-          <span id="public-badge" class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-400`}>…</span>
+          <span
+            id="role-badge"
+            class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-300`}
+            >…</span
+          >
+          <span
+            id="validated-badge"
+            class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-400`}
+            >…</span
+          >
+          <span
+            id="public-badge"
+            class={`${ui.badge} ${ui.badgeMd} bg-gray-800/70 border-gray-600 text-gray-400`}
+            >…</span
+          >
         </div>
         <div class={`${ui.dividerFadeBoth} mt-6`} aria-hidden="true"></div>
       </header>
 
       <!-- Pestañas (generadas desde src/lib/ui/tabs.ts = contrato único;
            navegación con ←/→/Home/End; activación automática al enfocar) -->
-      <nav id="tab-bar" class="flex flex-nowrap items-center gap-1 rd-tabbar relative mb-6 animate-fade-in-1 overflow-x-auto justify-start [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" style="animation-delay: 0.15s" role="tablist" aria-label="Secciones del panel"></nav>
+      <nav
+        id="tab-bar"
+        class="flex flex-nowrap items-center gap-1 rd-tabbar relative mb-6 animate-fade-in-1 overflow-x-auto justify-start [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style="animation-delay: 0.15s"
+        role="tablist"
+        aria-label="Secciones del panel"
+      >
+      </nav>
 
       <!-- ── Resumen ─────────────────────────────────────────────────────── -->
-      
 
       <!-- ── Mi Registro (config + historial + visor) ─────────────────────── -->
-      <section id="panel-registro" role="tabpanel" aria-labelledby="tab-registro" class="hidden space-y-6">
+      <section
+        id="panel-registro"
+        role="tabpanel"
+        aria-labelledby="tab-registro"
+        class="hidden space-y-6"
+      >
         <!-- Estado vacío -->
         <EmptyState
           id="registro-empty"
@@ -62,13 +139,22 @@ const ctaVacio = `${ui.btnBase} ${ui.btnPrimary} px-6 py-3 text-sm`;
           title="Aún no subes ningún SavedVariables"
           gradient={false}
           message="Sube tu archivo RaidDominion.lua para ver aquí todo tu registro: personaje, hermandad y configuración del addon."
-          cta={{ label: 'Ir a Subir SavedVariables', href: '/upload' }}
+          cta={{ label: "Ir a Subir SavedVariables", href: "/upload" }}
           ctaCls="px-6 py-3 text-sm"
         >
           <div slot="body">
-            <p class="text-sm text-gray-400 max-w-md mx-auto mb-6">Sube tu archivo <code class="text-amber-300">RaidDominion.lua</code> para ver aquí todo tu registro: personaje, hermandad y configuración del addon.</p>
+            <p class="text-sm text-gray-400 max-w-md mx-auto mb-6">
+              Sube tu archivo <code class="text-amber-300"
+                >RaidDominion.lua</code
+              > para ver aquí todo tu registro: personaje, hermandad y configuración
+              del addon.
+            </p>
             <a href="/upload" class={ctaVacio}>Ir a Subir SavedVariables</a>
-            <p id="registro-empty-note" class="hidden mt-4 text-xs text-red-300"></p>
+            <p
+              id="registro-empty-note"
+              class="hidden mt-4 text-xs text-red-300"
+            >
+            </p>
           </div>
         </EmptyState>
 
@@ -76,1656 +162,2573 @@ const ctaVacio = `${ui.btnBase} ${ui.btnPrimary} px-6 py-3 text-sm`;
           <!-- Ventana: cabecera + visor contiguos (sin gap ni radio en la junta,
                esquina inferior cuadrada) -->
           <div>
-            <div class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}>
-              <div class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0">
-              <div class="min-w-0">
-                <p class={`${ui.eyebrow} mb-1`}>Registro del addon</p>
-                <h2 id="hdr-registro-title" class="text-lg font-bold text-amber-200 flex items-center">
-                  <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
-                  <span id="hdr-registro-title-text" class={`${ui.gradientTitle} font-black italic`}>Registro</span>
-                </h2>
-                <!-- Indicadores del análisis seleccionado (liberan el contenido
+            <div
+              class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}
+            >
+              <div
+                class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0"
+              >
+                <div class="min-w-0">
+                  <p class={`${ui.eyebrow} mb-1`}>Registro del addon</p>
+                  <h2
+                    id="hdr-registro-title"
+                    class="text-lg font-bold text-amber-200 flex items-center"
+                  >
+                    <span
+                      class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                    ></span>
+                    <span
+                      id="hdr-registro-title-text"
+                      class={`${ui.gradientTitle} font-black italic`}
+                      >Registro</span
+                    >
+                  </h2>
+                  <!-- Indicadores del análisis seleccionado (liberan el contenido
                      de repetir cifras y títulos) -->
-                <div class="flex flex-wrap gap-2 mt-3" aria-label="Indicadores del registro">
-                  <span class="${ui.badgeStat}">
-                    Personajes <strong id="hdr-registro-chars" class={`${ui.statValue} text-sm`}>0</strong>
-                  </span>
-                  <span class="${ui.badgeStat}">
-                    Hermandades <strong id="hdr-registro-guilds" class={`${ui.statValue} text-sm`}>0</strong>
-                  </span>
-                  <span class="${ui.badgeStat}">
-                    Bandas <strong id="hdr-registro-bands" class={`${ui.statValue} text-sm`}>0</strong>
-                  </span>
-                  <span class="${ui.badgeStat}">
-                    Reglas <strong id="hdr-registro-rules" class={`${ui.statValue} text-sm`}>0</strong>
-                  </span>
-                </div>
-              </div>
-
-              <div id="sv-select-wrap" class="md:w-80 shrink-0">
-                <div class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2">
-                  <div class="flex items-center justify-between gap-2">
-                    <label for="sv-select" class="block text-[11px] font-black uppercase tracking-widest text-gray-500">Registro</label>
-                    <span id="sv-counter" class="text-sm font-bold text-amber-300" aria-live="polite"></span>
-                  </div>
-                  <div class="relative">
-                    <select id="sv-select" class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"></select>
-                    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                  <div
+                    class="flex flex-wrap gap-2 mt-3"
+                    aria-label="Indicadores del registro"
+                  >
+                    <span class="${ui.badgeStat}">
+                      Personajes <strong
+                        id="hdr-registro-chars"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
+                    </span>
+                    <span class="${ui.badgeStat}">
+                      Hermandades <strong
+                        id="hdr-registro-guilds"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
+                    </span>
+                    <span class="${ui.badgeStat}">
+                      Bandas <strong
+                        id="hdr-registro-bands"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
+                    </span>
+                    <span class="${ui.badgeStat}">
+                      Reglas <strong
+                        id="hdr-registro-rules"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
                     </span>
                   </div>
-                  <button type="button" id="sv-delete-btn"
-                    class="w-full mt-2 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[11px] font-black uppercase tracking-widest border border-red-800/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 ${ui.transition} ${ui.focusRing}">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    Eliminar este análisis
-                  </button>
+                </div>
+
+                <div id="sv-select-wrap" class="md:w-80 shrink-0">
+                  <div
+                    class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2"
+                  >
+                    <div class="flex items-center justify-between gap-2">
+                      <label
+                        for="sv-select"
+                        class="block text-[11px] font-black uppercase tracking-widest text-gray-500"
+                        >Registro</label
+                      >
+                      <span
+                        id="sv-counter"
+                        class="text-sm font-bold text-amber-300"
+                        aria-live="polite"></span>
+                    </div>
+                    <div class="relative">
+                      <select
+                        id="sv-select"
+                        class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"
+                      ></select>
+                      <span
+                        class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"></path></svg
+                        >
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      id="sv-delete-btn"
+                      class="w-full mt-2 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-[11px] font-black uppercase tracking-widest border border-red-800/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 ${ui.transition} ${ui.focusRing}"
+                    >
+                      <svg
+                        class="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                        ><path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        ></path></svg
+                      >
+                      Eliminar este análisis
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Banner de reclamo condicional: franja contigua a la ventana
+            <!-- Banner de reclamo condicional: franja contigua a la ventana
                (sin radio ni márgenes) entre la cabecera y el visor -->
-          <div id="claim-banner" class="hidden border border-amber-600/30 border-t-0 bg-gradient-to-br from-amber-950/40 to-gray-900/60 p-4 sm:p-6">
-            <h3 class="text-base font-black uppercase tracking-widest text-amber-300 mb-1">¿Lideras una o más hermandades?</h3>
-            <p class="text-sm text-gray-300 mb-4">Tu SavedVariables acredita rango de liderazgo. Reclámalas y obtén el portal web gratuito de cada guild (puedes ser maestro de varias):</p>
-            <ol class="space-y-2 mb-5 text-sm text-gray-300 list-none">
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center">1</span><span>Sube tu SavedVariables donde el addon te reporte como Maestro (<code class="text-amber-300">registry.guild.isGM</code>).</span></li>
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center">2</span><span>Reclama aquí tus hermandades: la ficha de cada una nace con los datos exactos del juego.</span></li>
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center">3</span><span>Publícalas desde Hermandad y comparte <code class="text-amber-300">/hermandad/tu-hermandad</code>.</span></li>
-            </ol>
-            <button type="button" id="claim-btn" class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest`}>Reclamar mis hermandades</button>
-            <p id="claim-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
-          </div>
-
-          <!-- Visor único del snapshot seleccionado: fondo sólido distintivo del
-               cuerpo. El título y la fecha del análisis viven en el encabezado
-               de la pestaña; aquí solo el contenido del registro. -->
-          <div class={`${ui.sectionBody} space-y-5`}>
-
-            <!-- Personajes del registro: fusión de registry.player + personajes
-                 de la cuenta (characters) + registros por personaje (registries),
-                 con la card de personaje estandarizada -->
-            <div>
-              <h4 class={ui.subTitle}>Personajes del registro <span id="cnt-viewer-chars" class="text-gray-500"></span></h4>
-              <div id="viewer-characters" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-2"></div>
+            <div
+              id="claim-banner"
+              class="hidden border border-amber-600/30 border-t-0 bg-gradient-to-br from-amber-950/40 to-gray-900/60 p-4 sm:p-6"
+            >
+              <h3
+                class="text-base font-black uppercase tracking-widest text-amber-300 mb-1"
+              >
+                ¿Lideras una o más hermandades?
+              </h3>
+              <p class="text-sm text-gray-300 mb-4">
+                Tu SavedVariables acredita rango de liderazgo. Reclámalas y
+                obtén el portal web gratuito de cada guild (puedes ser maestro
+                de varias):
+              </p>
+              <ol class="space-y-2 mb-5 text-sm text-gray-300 list-none">
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >1</span
+                  ><span
+                    >Sube tu SavedVariables donde el addon te reporte como
+                    Maestro (<code class="text-amber-300"
+                      >registry.guild.isGM</code
+                    >).</span>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >2</span
+                  ><span
+                    >Reclama aquí tus hermandades: la ficha de cada una nace con
+                    los datos exactos del juego.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-500/15 border border-amber-400/50 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >3</span
+                  ><span
+                    >Publícalas desde Hermandad y comparte <code
+                      class="text-amber-300">/hermandad/tu-hermandad</code
+                    >.</span>
+                </li>
+              </ol>
+              <button
+                type="button"
+                id="claim-btn"
+                class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest`}
+                >Reclamar mis hermandades</button
+              >
+              <p
+                id="claim-msg"
+                class="hidden mt-3 text-sm rounded-md px-4 py-2.5"
+                role="status"
+              >
+              </p>
             </div>
 
-            <!-- Hermandades en el registro -->
-            <div class="bg-gray-800/50 border border-amber-700/30 rounded-md p-4">
-              <h4 class={ui.subTitle}>Hermandades en el registro</h4>
-              <div id="viewer-guilds" class="mt-2 space-y-2"></div>
+            <!-- Visor único del snapshot seleccionado: fondo sólido distintivo del
+               cuerpo. El título y la fecha del análisis viven en el encabezado
+               de la pestaña; aquí solo el contenido del registro. -->
+            <div class={`${ui.sectionBody} space-y-5`}>
+              <!-- Personajes del registro: fusión de registry.player + personajes
+                 de la cuenta (characters) + registros por personaje (registries),
+                 con la card de personaje estandarizada -->
+              <div>
+                <h4 class={ui.subTitle}>
+                  Personajes del registro <span
+                    id="cnt-viewer-chars"
+                    class="text-gray-500"></span>
+                </h4>
+                <div
+                  id="viewer-characters"
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-2"
+                >
+                </div>
+              </div>
+
+              <!-- Hermandades en el registro -->
+              <div
+                class="bg-gray-800/50 border border-amber-700/30 rounded-md p-4"
+              >
+                <h4 class={ui.subTitle}>Hermandades en el registro</h4>
+                <div id="viewer-guilds" class="mt-2 space-y-2"></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ── Mis Personajes ──────────────────────────────────────────────── -->
-      <section id="panel-personajes" role="tabpanel" aria-labelledby="tab-personajes" class="hidden">
-        <!-- Estado vacío: sin personajes detectados -->
-        <EmptyState
-          id="characters-empty"
-          hidden
-          cls="mb-6"
-          icon="user"
-          eyebrow="Personajes"
-          title="Aún no registras personajes"
-          gradient={false}
-          message="Sube tu SavedVariables desde el addon y aparecerán aquí."
-          cta={{ label: 'Subir ahora', href: '/upload' }}
-          ctaCls="px-6 py-3 text-sm"
-        />
-        <div id="chars-sectionhead" class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}>
-          <div class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0">
-            <div class="min-w-0">
-              <p class={`${ui.eyebrow} mb-1`}>Personajes</p>
-              <h2 id="hdr-chars-title" class="text-lg font-bold text-amber-200 flex items-center">
-                <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
-                <span id="hdr-chars-title-text" class={`${ui.gradientTitle} font-black italic`}>Mi roster de personajes</span>
-              </h2>
-              <div class="flex flex-wrap gap-2 mt-3" aria-label="Indicadores de personajes">
-                <span class="${ui.badgeStat}">
-                  Personajes <strong id="hdr-chars-total" class={`${ui.statValue} text-sm`}>0</strong>
-                </span>
-                <span class="${ui.badgeStat}">
-                  Públicos <strong id="hdr-chars-public" class={`${ui.statValue} text-sm`}>0</strong>
-                </span>
-              </div>
-            </div>
-
-            <!-- Ayuda al stat: detecta más personajes subiendo el SV -->
-            <div class="md:w-80 shrink-0">
-              <div class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2">
-                <p class="block text-[11px] font-black uppercase tracking-widest text-gray-500">¿Falta algún personaje?</p>
-                <a href="/upload" class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-amber-300 hover:text-amber-200 transition-colors">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                  Subir SavedVariables
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="chars-sectionbody" class={`${ui.sectionBody} space-y-5`}>
-          <!-- Datos del perfil: controles dentro del contenido de la ventana de
-               personajes (nombre visible, principal, visibilidad pública, guardar).
-               Estilo de sub-bloque del cuerpo, igual que los bloques del registro. -->
-          <div class="bg-gray-800/50 border border-amber-700/30 rounded-md p-4">
-            <h4 class={ui.subTitle}>Datos del perfil</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label for="display-name" class={ui.form.label}>Nombre visible</label>
-                <input type="text" id="display-name" maxlength="40" placeholder="Tu nombre en el portal"
-                  class={`${ui.form.input} ${ui.focusRing}`} />
-              </div>
-              <div>
-                <label for="character-main" class={ui.form.label}>Personaje principal</label>
-                <div class="relative">
-                  <select id="character-main" disabled
-                    class={`${ui.form.input} ${ui.focusRing} appearance-none pl-3 pr-10 disabled:opacity-60 disabled:cursor-not-allowed`}>
-                    <option value="">Ninguno</option>
-                  </select>
-                  <svg aria-hidden="true" class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                </div>
-                <p id="character-main-hint" class={ui.form.helperText}>Solo puedes elegir entre los personajes detectados en tu SavedVariables.</p>
-              </div>
-            </div>
-
-            <label for="profile-public" class={`mt-4 flex items-start gap-3 cursor-pointer select-none border border-gray-700/60 hover:border-amber-600/40 rounded-md p-4 ${ui.transition}`}>
-              <input type="checkbox" id="profile-public" class="mt-0.5 w-4 h-4 accent-amber-500" />
-              <span class={`${ui.text.body} font-medium`}>Perfil y datos públicos
-                <span class={`block ${ui.text.caption} italic mt-0.5`}>Al activarlo, tu perfil de jugador será visible públicamente para la comunidad.</span>
-              </span>
-            </label>
-
-            <div class="mt-4 flex flex-wrap items-center gap-3">
-              <button id="save-profile"
-                class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none`}>
-                Guardar cambios
-              </button>
-              <a id="public-profile-link" href="#" target="_blank" rel="noopener" class={`hidden px-4 py-2 rounded-md text-xs font-black uppercase tracking-widest ${ui.status.success}`}>Ver perfil público →</a>
-            </div>
-            <p id="profile-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
-          </div>
-
-          <div id="characters-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-          <p id="characters-onboarding" class="hidden text-xs text-amber-100/90 bg-amber-950/30 border-l-2 border-amber-500/60 px-4 py-3 rounded-md"></p>
-          <p id="characters-status" class="hidden text-sm text-gray-400"></p>
-        </div>
-      </section>
-
-<!-- ── Mis Bandas ──────────────────────────────────────────────────── -->
-      <section id="panel-bandas" role="tabpanel" aria-labelledby="tab-bandas" class="hidden">
-        <!-- Estado vacío: sin bandas registradas. Ventana propia, hermano del
-             gestor (mismo modelo que Personajes/Hermandad/Registro). -->
-        <EmptyState
-          id="bands-empty"
-          hidden
-          cls="mb-6"
-          icon="code"
-          eyebrow="Bandas"
-          title="Aún no detectamos bandas"
-          gradient={false}
-          message="Sube tu SavedVariables desde el addon para que tus bandas y reglas aparezcan aquí."
-          cta={{ label: 'Subir SavedVariables', href: '/upload' }}
-          ctaCls="px-6 py-3 text-sm"
-        />
-
-        <div id="bands-sectionhead" class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}>
-          <div class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0">
-            <div class="min-w-0">
-              <p class={`${ui.eyebrow} mb-1`}>Gestión de bandas</p>
-              <h2 id="hdr-band-name" class="text-lg font-bold text-amber-200 flex items-center">
-                <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
-                <span id="hdr-band-name-text" class={`${ui.gradientTitle} font-black italic`}>Mis bandas</span>
-              </h2>
-              <!-- Indicadores de la banda seleccionada en el navegador (liberan
-                   el detalle de repetir título y badges). Horario y GS viven en
-                   el título, unidos como en el selector. -->
-              <div class="flex flex-wrap gap-2 mt-3" aria-label="Indicadores de la banda seleccionada">
-                <span class="${ui.badgeStat}">
-                  Jugadores <strong id="hdr-band-players" class={`${ui.statValue} text-sm`}>0</strong>
-                </span>
-                <span class="${ui.badgeStat}">
-                  Reglas <strong id="hdr-band-rules" class={`${ui.statValue} text-sm`}>0</strong>
-                </span>
-                <span id="hdr-band-status" class="hidden"></span>
-              </div>
-            </div>
-
-            <!-- Navegador de bandas: el selector elige qué banda se edita. -->
-            <div id="band-select-wrap" class="hidden md:w-80 shrink-0">
-              <div class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2">
-                <div class="flex items-center justify-between gap-2">
-                  <label for="band-select" class="block text-[11px] font-black uppercase tracking-widest text-gray-500">Bandas</label>
-                  <span id="band-counter" class="text-sm font-bold text-amber-300" aria-live="polite"></span>
-                </div>
-                <div class="relative">
-                  <select id="band-select" class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"></select>
-                  <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        <section
+          id="panel-personajes"
+          role="tabpanel"
+          aria-labelledby="tab-personajes"
+          class="hidden"
+        >
+          <!-- Estado vacío: sin personajes detectados -->
+          <EmptyState
+            id="characters-empty"
+            hidden
+            cls="mb-6"
+            icon="user"
+            eyebrow="Personajes"
+            title="Aún no registras personajes"
+            gradient={false}
+            message="Sube tu SavedVariables desde el addon y aparecerán aquí."
+            cta={{ label: "Subir ahora", href: "/upload" }}
+            ctaCls="px-6 py-3 text-sm"
+          />
+          <div
+            id="chars-sectionhead"
+            class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}
+          >
+            <div
+              class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0"
+            >
+              <div class="min-w-0">
+                <p class={`${ui.eyebrow} mb-1`}>Personajes</p>
+                <h2
+                  id="hdr-chars-title"
+                  class="text-lg font-bold text-amber-200 flex items-center"
+                >
+                  <span
+                    class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                  ></span>
+                  <span
+                    id="hdr-chars-title-text"
+                    class={`${ui.gradientTitle} font-black italic`}
+                    >Mi roster de personajes</span
+                  >
+                </h2>
+                <div
+                  class="flex flex-wrap gap-2 mt-3"
+                  aria-label="Indicadores de personajes"
+                >
+                  <span class="${ui.badgeStat}">
+                    Personajes <strong
+                      id="hdr-chars-total"
+                      class={`${ui.statValue} text-sm`}>0</strong
+                    >
+                  </span>
+                  <span class="${ui.badgeStat}">
+                    Públicos <strong
+                      id="hdr-chars-public"
+                      class={`${ui.statValue} text-sm`}>0</strong
+                    >
                   </span>
                 </div>
               </div>
+
+              <!-- Ayuda al stat: detecta más personajes subiendo el SV -->
+              <div class="md:w-80 shrink-0">
+                <div
+                  class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2"
+                >
+                  <p
+                    class="block text-[11px] font-black uppercase tracking-widest text-gray-500"
+                  >
+                    ¿Falta algún personaje?
+                  </p>
+                  <a
+                    href="/upload"
+                    class="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-amber-300 hover:text-amber-200 transition-colors"
+                  >
+                    <svg
+                      class="w-3.5 h-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      ></path></svg
+                    >
+                    Subir SavedVariables
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div id="bands-sectionbody" class={`${ui.sectionBody} space-y-5`}>
-          <!-- Detalle de la banda seleccionada -->
-          <div id="band-detail" class="hidden"></div>
-          <!-- Onboarding: visitante sin validar no puede publicar bandas -->
-          <div id="bands-onboarding" class="hidden text-xs text-amber-100/90 bg-amber-950/30 border-l-2 border-amber-500/60 px-4 py-3 rounded-md"></div>
-        </div>
-        <p id="bands-status" class="text-sm text-gray-400" aria-live="polite"></p>
-      </section>
+          <div id="chars-sectionbody" class={`${ui.sectionBody} space-y-5`}>
+            <!-- Datos del perfil: controles dentro del contenido de la ventana de
+               personajes (nombre visible, principal, visibilidad pública, guardar).
+               Estilo de sub-bloque del cuerpo, igual que los bloques del registro. -->
+            <div
+              class="bg-gray-800/50 border border-amber-700/30 rounded-md p-4"
+            >
+              <h4 class={ui.subTitle}>Datos del perfil</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="display-name" class={ui.form.label}
+                    >Nombre visible</label
+                  >
+                  <input
+                    type="text"
+                    id="display-name"
+                    maxlength="40"
+                    placeholder="Tu nombre en el portal"
+                    class={`${ui.form.input} ${ui.focusRing}`}
+                  />
+                </div>
+                <div>
+                  <label for="character-main" class={ui.form.label}
+                    >Personaje principal</label
+                  >
+                  <div class="relative">
+                    <select
+                      id="character-main"
+                      disabled
+                      class={`${ui.form.input} ${ui.focusRing} appearance-none pl-3 pr-10 disabled:opacity-60 disabled:cursor-not-allowed`}
+                    >
+                      <option value="">Ninguno</option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      ><path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 9l-7 7-7-7"></path></svg
+                    >
+                  </div>
+                  <p id="character-main-hint" class={ui.form.helperText}>
+                    Solo puedes elegir entre los personajes detectados en tu
+                    SavedVariables.
+                  </p>
+                </div>
+              </div>
 
-      <!-- ── Mi Hermandad ────────────────────────────────────────────────── -->
-      <section id="panel-hermandad" role="tabpanel" aria-labelledby="tab-hermandad" class="hidden space-y-6">
-        <!-- Sin hermandad aún: solo vía SV (registry.guild.isGM) -->
-        <EmptyState
-          id="guild-empty"
-          hidden
-          icon="building"
-          eyebrow="Hermandad"
-          title="Tu hermandad nace de tu SavedVariables"
-          gradient={false}
-          bodyAlign="start"
+              <label
+                for="profile-public"
+                class={`mt-4 flex items-start gap-3 cursor-pointer select-none border border-gray-700/60 hover:border-amber-600/40 rounded-md p-4 ${ui.transition}`}
+              >
+                <input
+                  type="checkbox"
+                  id="profile-public"
+                  class="mt-0.5 w-4 h-4 accent-amber-500"
+                />
+                <span class={`${ui.text.body} font-medium`}
+                  >Perfil y datos públicos
+                  <span class={`block ${ui.text.caption} italic mt-0.5`}
+                    >Al activarlo, tu perfil de jugador será visible
+                    públicamente para la comunidad.</span
+                  >
+                </span>
+              </label>
+
+              <div class="mt-4 flex flex-wrap items-center gap-3">
+                <button
+                  id="save-profile"
+                  class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none`}
+                >
+                  Guardar cambios
+                </button>
+                <a
+                  id="public-profile-link"
+                  href="#"
+                  target="_blank"
+                  rel="noopener"
+                  class={`hidden px-4 py-2 rounded-md text-xs font-black uppercase tracking-widest ${ui.status.success}`}
+                  >Ver perfil público →</a
+                >
+              </div>
+              <p
+                id="profile-msg"
+                class="hidden mt-3 text-sm rounded-md px-4 py-2.5"
+                role="status"
+              >
+              </p>
+            </div>
+
+            <div
+              id="characters-list"
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            >
+            </div>
+            <p
+              id="characters-onboarding"
+              class="hidden text-xs text-amber-100/90 bg-amber-950/30 border-l-2 border-amber-500/60 px-4 py-3 rounded-md"
+            >
+            </p>
+            <p id="characters-status" class="hidden text-sm text-gray-400"></p>
+          </div>
+        </section>
+
+        <!-- ── Mis Bandas ──────────────────────────────────────────────────── -->
+        <section
+          id="panel-bandas"
+          role="tabpanel"
+          aria-labelledby="tab-bandas"
+          class="hidden"
         >
-          <div slot="body">
-            <p class="text-sm text-gray-400 mb-6">Sin formularios: los datos provienen del addon y cada re-upload los mantiene actualizados.</p>
-            <ol class="space-y-3 mb-7 text-sm text-gray-300 list-none">
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center">1</span><span>Sube un SavedVariables donde el addon te reporte como Maestro o con dos o más personajes registrados.</span></li>
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center">2</span><span>Reclama la hermandad desde Registro: tu rol de Maestro se asigna verificado por el addon.</span></li>
-              <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center">3</span><span>Publica el portal y comparte su dirección con tu comunidad.</span></li>
-            </ol>
-            <div class="text-center">
-              <a href="/upload" class={ctaVacio}>Subir SavedVariables</a>
+          <!-- Estado vacío: sin bandas registradas. Ventana propia, hermano del
+             gestor (mismo modelo que Personajes/Hermandad/Registro). -->
+          <EmptyState
+            id="bands-empty"
+            hidden
+            cls="mb-6"
+            icon="code"
+            eyebrow="Bandas"
+            title="Aún no detectamos bandas"
+            gradient={false}
+            message="Sube tu SavedVariables desde el addon para que tus bandas y reglas aparezcan aquí."
+            cta={{ label: "Subir SavedVariables", href: "/upload" }}
+            ctaCls="px-6 py-3 text-sm"
+          />
+
+          <div
+            id="bands-sectionhead"
+            class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}
+          >
+            <div
+              class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0"
+            >
+              <div class="min-w-0">
+                <p class={`${ui.eyebrow} mb-1`}>Gestión de bandas</p>
+                <h2
+                  id="hdr-band-name"
+                  class="text-lg font-bold text-amber-200 flex items-center"
+                >
+                  <span
+                    class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                  ></span>
+                  <span
+                    id="hdr-band-name-text"
+                    class={`${ui.gradientTitle} font-black italic`}
+                    >Mis bandas</span
+                  >
+                </h2>
+                <!-- Indicadores de la banda seleccionada en el navegador (liberan
+                   el detalle de repetir título y badges). Horario y GS viven en
+                   el título, unidos como en el selector. -->
+                <div
+                  class="flex flex-wrap gap-2 mt-3"
+                  aria-label="Indicadores de la banda seleccionada"
+                >
+                  <span class="${ui.badgeStat}">
+                    Jugadores <strong
+                      id="hdr-band-players"
+                      class={`${ui.statValue} text-sm`}>0</strong
+                    >
+                  </span>
+                  <span class="${ui.badgeStat}">
+                    Reglas <strong
+                      id="hdr-band-rules"
+                      class={`${ui.statValue} text-sm`}>0</strong
+                    >
+                  </span>
+                  <span id="hdr-band-status" class="hidden"></span>
+                </div>
+              </div>
+
+              <!-- Navegador de bandas: el selector elige qué banda se edita. -->
+              <div id="band-select-wrap" class="hidden md:w-80 shrink-0">
+                <div
+                  class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2"
+                >
+                  <div class="flex items-center justify-between gap-2">
+                    <label
+                      for="band-select"
+                      class="block text-[11px] font-black uppercase tracking-widest text-gray-500"
+                      >Bandas</label
+                    >
+                    <span
+                      id="band-counter"
+                      class="text-sm font-bold text-amber-300"
+                      aria-live="polite"></span>
+                  </div>
+                  <div class="relative">
+                    <select
+                      id="band-select"
+                      class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"
+                    ></select>
+                    <span
+                      class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70"
+                    >
+                      <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        ><path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"></path></svg
+                      >
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </EmptyState>
 
-        <!-- Gestión multi-hermandad -->
-        <div id="guild-manage" class="hidden">
-          <div class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}>
-            <div class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0">
-              <div class="min-w-0">
-                <p class={`${ui.eyebrow} mb-1`}>Gestión de hermandad</p>
-                  <h2 id="hdr-guild-name" class="text-lg font-bold text-amber-200 flex items-center">
-                    <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
-                    <span id="hdr-guild-name-text" class={`${ui.gradientTitle} font-black italic`}>Tus hermandades</span>
+          <div id="bands-sectionbody" class={`${ui.sectionBody} space-y-5`}>
+            <!-- Detalle de la banda seleccionada -->
+            <div id="band-detail" class="hidden"></div>
+            <!-- Onboarding: visitante sin validar no puede publicar bandas -->
+            <div
+              id="bands-onboarding"
+              class="hidden text-xs text-amber-100/90 bg-amber-950/30 border-l-2 border-amber-500/60 px-4 py-3 rounded-md"
+            >
+            </div>
+          </div>
+          <p id="bands-status" class="text-sm text-gray-400" aria-live="polite">
+          </p>
+        </section>
+
+        <!-- ── Mi Hermandad ────────────────────────────────────────────────── -->
+        <section
+          id="panel-hermandad"
+          role="tabpanel"
+          aria-labelledby="tab-hermandad"
+          class="hidden space-y-6"
+        >
+          <!-- Sin hermandad aún: solo vía SV (registry.guild.isGM) -->
+          <EmptyState
+            id="guild-empty"
+            hidden
+            icon="building"
+            eyebrow="Hermandad"
+            title="Tu hermandad nace de tu SavedVariables"
+            gradient={false}
+            bodyAlign="start"
+          >
+            <div slot="body">
+              <p class="text-sm text-gray-400 mb-6">
+                Sin formularios: los datos provienen del addon y cada re-upload
+                los mantiene actualizados.
+              </p>
+              <ol class="space-y-3 mb-7 text-sm text-gray-300 list-none">
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >1</span
+                  ><span
+                    >Sube un SavedVariables donde el addon te reporte como
+                    Maestro o con dos o más personajes registrados.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >2</span
+                  ><span
+                    >Reclama la hermandad desde Registro: tu rol de Maestro se
+                    asigna verificado por el addon.</span>
+                </li>
+                <li class="flex gap-3">
+                  <span
+                    class="shrink-0 w-6 h-6 rounded-full bg-amber-900/40 border border-amber-500/40 text-amber-200 text-xs font-black flex items-center justify-center"
+                    >3</span
+                  ><span
+                    >Publica el portal y comparte su dirección con tu comunidad.</span>
+                </li>
+              </ol>
+              <div class="text-center">
+                <a href="/upload" class={ctaVacio}>Subir SavedVariables</a>
+              </div>
+            </div>
+          </EmptyState>
+
+          <!-- Gestión multi-hermandad -->
+          <div id="guild-manage" class="hidden">
+            <div
+              class={`${ui.sectionHead} ${ui.cutTop} bg-gradient-to-br from-amber-900/20 to-transparent`}
+            >
+              <div
+                class="md:flex md:items-start md:justify-between gap-6 space-y-6 md:space-y-0"
+              >
+                <div class="min-w-0">
+                  <p class={`${ui.eyebrow} mb-1`}>Gestión de hermandad</p>
+                  <h2
+                    id="hdr-guild-name"
+                    class="text-lg font-bold text-amber-200 flex items-center"
+                  >
+                    <span
+                      class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                    ></span>
+                    <span
+                      id="hdr-guild-name-text"
+                      class={`${ui.gradientTitle} font-black italic`}
+                      >Tus hermandades</span
+                    >
                   </h2>
                   <!-- Indicadores de la hermandad seleccionada en el navegador
                        (liberan la ficha de repetir título y badges); el total
                        de hermandades vive en el contador del selector -->
-                  <div class="flex flex-wrap gap-2 mt-3" aria-label="Indicadores de la hermandad seleccionada">
+                  <div
+                    class="flex flex-wrap gap-2 mt-3"
+                    aria-label="Indicadores de la hermandad seleccionada"
+                  >
                     <span class="${ui.badgeStat}">
-                      Integrantes <strong id="hdr-guild-members" class={`${ui.statValue} text-sm`}>0</strong>
+                      Integrantes <strong
+                        id="hdr-guild-members"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
                     </span>
                     <span class="${ui.badgeStat}">
-                      Bandas integradas <strong id="hdr-guild-bands" class={`${ui.statValue} text-sm`}>0</strong>
+                      Bandas integradas <strong
+                        id="hdr-guild-bands"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
                     </span>
                     <span class="${ui.badgeStat}">
-                      Reglas <strong id="hdr-guild-rules" class={`${ui.statValue} text-sm`}>0</strong>
+                      Reglas <strong
+                        id="hdr-guild-rules"
+                        class={`${ui.statValue} text-sm`}>0</strong
+                      >
                     </span>
                     <span id="hdr-guild-vis" class="hidden"></span>
                     <span id="hdr-guild-claim" class="hidden"></span>
                   </div>
-              </div>
+                </div>
 
-              <!-- Navegador de hermandades: el selector elige qué ficha se edita. -->
-              <div id="guild-select-wrap" class="hidden md:w-80 shrink-0">
-                <div class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2">
-                  <div class="flex items-center justify-between gap-2">
-                    <label for="guild-select" class="block text-[11px] font-black uppercase tracking-widest text-gray-500">Hermandad</label>
-                    <span id="guild-counter" class="text-sm font-bold text-amber-300" aria-live="polite"></span>
-                  </div>
-                  <div class="relative">
-                    <select id="guild-select" class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"></select>
-                    <span class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70">
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                    </span>
+                <!-- Navegador de hermandades: el selector elige qué ficha se edita. -->
+                <div id="guild-select-wrap" class="hidden md:w-80 shrink-0">
+                  <div
+                    class="bg-gray-950/50 border border-amber-700/30 rounded-md p-3 space-y-2"
+                  >
+                    <div class="flex items-center justify-between gap-2">
+                      <label
+                        for="guild-select"
+                        class="block text-[11px] font-black uppercase tracking-widest text-gray-500"
+                        >Hermandad</label
+                      >
+                      <span
+                        id="guild-counter"
+                        class="text-sm font-bold text-amber-300"
+                        aria-live="polite"></span>
+                    </div>
+                    <div class="relative">
+                      <select
+                        id="guild-select"
+                        class="w-full px-4 py-2.5 pr-10 rounded-md bg-gray-950/80 border border-amber-700/40 text-sm text-amber-100 focus:border-amber-500/70 focus:outline-none focus:ring-2 focus:ring-amber-500/20 appearance-none cursor-pointer"
+                      ></select>
+                      <span
+                        class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-amber-500/70"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          ><path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M19 9l-7 7-7-7"></path></svg
+                        >
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class={`${ui.sectionBody} space-y-6`}>
+              <div id="guild-cards" class="space-y-6"></div>
+            </div>
           </div>
-          <div class={`${ui.sectionBody} space-y-6`}>
-            <div id="guild-cards" class="space-y-6"></div>
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- ── Panel oculto de configuración (seguridad + zona de peligro) ────
+        <!-- ── Panel oculto de configuración (seguridad + zona de peligro) ────
            No es una pestaña de la barra: se abre con el ícono de engranaje del
            encabezado (DASHBOARD_CONFIG en tabs.ts, hash #cuenta). El hash
            histórico #perfil se redirige a #cuenta (syncTabFromHash). -->
-      <section id="panel-cuenta" role="region" aria-label="Configuración de cuenta, seguridad y zona de peligro" class="hidden space-y-6">
-        <!-- Sección 1: Seguridad (ventana numerada y colapsable) -->
-        <details class="group border border-amber-600/30 rounded-t-md" aria-label="Sección 1: Seguridad">
-          <summary class="cursor-pointer select-none list-none flex flex-wrap items-center justify-between gap-3 bg-gradient-to-br from-red-950/20 to-transparent rounded-t-md border-b border-amber-600/30 p-4 sm:p-6">
-            <span class="flex items-center gap-3 min-w-0">
-              <span class="shrink-0 w-8 h-8 rounded-full bg-red-950/40 border border-red-500/40 text-red-200 text-sm font-black flex items-center justify-center">1</span>
-              <span class="min-w-0">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">Seguridad</span>
-                <span class="block text-lg font-bold text-amber-200 leading-tight flex items-center"><span class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"></span>Cuenta y contraseña</span>
+        <section
+          id="panel-cuenta"
+          role="region"
+          aria-label="Configuración de cuenta, seguridad y zona de peligro"
+          class="hidden space-y-6"
+        >
+          <!-- Sección 1: Seguridad (ventana numerada y colapsable) -->
+          <details
+            class="group border border-amber-600/30 rounded-t-md"
+            aria-label="Sección 1: Seguridad"
+          >
+            <summary
+              class="cursor-pointer select-none list-none flex flex-wrap items-center justify-between gap-3 bg-gradient-to-br from-red-950/20 to-transparent rounded-t-md border-b border-amber-600/30 p-4 sm:p-6"
+            >
+              <span class="flex items-center gap-3 min-w-0">
+                <span
+                  class="shrink-0 w-8 h-8 rounded-full bg-red-950/40 border border-red-500/40 text-red-200 text-sm font-black flex items-center justify-center"
+                  >1</span
+                >
+                <span class="min-w-0">
+                  <span
+                    class="block text-[10px] font-black uppercase tracking-widest text-red-400 mb-1"
+                    >Seguridad</span
+                  >
+                  <span
+                    class="block text-lg font-bold text-amber-200 leading-tight flex items-center"
+                    ><span
+                      class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+                    ></span>Cuenta y contraseña</span
+                  >
+                </span>
               </span>
-            </span>
-            <span class="flex items-center gap-3">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-red-400/80">Protege tu cuenta</span>
-              <svg aria-hidden="true" class="w-4 h-4 text-red-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </span>
-          </summary>
-          <div class="bg-gray-900/60 backdrop-blur-sm p-4 sm:p-6">
-          <div class="space-y-4">
-            <div>
-              <label for="new-password" class={ui.form.label}>Nueva contraseña</label>
-              <input type="password" id="new-password" autocomplete="new-password" minlength="8"
-                class={`${ui.form.input} ${ui.focusRing}`} />
-              <p class={ui.form.helperText}>Mínimo 8 caracteres, con al menos una letra y un número.</p>
-            </div>
-            <div>
-              <label for="new-password-confirm" class={ui.form.label}>Confirmar nueva contraseña</label>
-              <input type="password" id="new-password-confirm" autocomplete="new-password"
-                class={`${ui.form.input} ${ui.focusRing}`} />
-            </div>
-            <button id="save-password"
-              class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none`}>
-              Actualizar contraseña
-            </button>
-            <p id="password-msg" class="hidden text-sm rounded-md px-4 py-2.5" role="status"></p>
-          </div>
-
-          <div class="border-t border-gray-700/50 mt-6 pt-5 flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h3 class={`${ui.text.h3} text-red-300`}>Sesión</h3>
-              <p class={ui.text.caption}>Cierra sesión en este dispositivo.</p>
-            </div>
-            <button id="logout-btn"
-              class={`${ui.btnBase} px-6 py-2.5 border border-red-700/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 text-xs font-black uppercase tracking-widest`}>
-              Cerrar sesión
-            </button>
-          </div>
-          </div>
-        </details>
-
-        <!-- Sección 2: Zona de peligro (ventana numerada y colapsable) -->
-        <details class="group border border-amber-600/30 rounded-t-md" aria-label="Sección 2: Zona de peligro">
-          <summary class="cursor-pointer select-none list-none flex flex-wrap items-center justify-between gap-3 bg-gradient-to-br from-red-950/20 to-transparent rounded-t-md border-b border-amber-600/30 p-4 sm:p-6">
-            <span class="flex items-center gap-3 min-w-0">
-              <span class="shrink-0 w-8 h-8 rounded-full bg-red-950/40 border border-red-500/40 text-red-200 text-sm font-black flex items-center justify-center">2</span>
-              <span class="min-w-0">
-                <span class="block text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">Zona de peligro</span>
-                <span class="block text-lg font-bold text-red-300 leading-tight flex items-center"><span class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"></span>Acciones destructivas</span>
+              <span class="flex items-center gap-3">
+                <span
+                  class="text-[11px] font-bold uppercase tracking-widest text-red-400/80"
+                  >Protege tu cuenta</span
+                >
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 text-red-400 transition-transform group-open:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"></path></svg
+                >
               </span>
-            </span>
-            <span class="flex items-center gap-3">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-red-400/80">Irreversible</span>
-              <svg aria-hidden="true" class="w-4 h-4 text-red-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </span>
-          </summary>
-          <div class="bg-gray-900/60 backdrop-blur-sm p-4 sm:p-6">
-
-          <!-- Resetear datos (moderado: conserva la cuenta) -->
-          <div class="border border-amber-800/40 bg-amber-950/10 rounded-md p-5">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-              <div class="max-w-md">
-                <h3 class={`${ui.text.h3} text-amber-300`}>Resetear datos del SV</h3>
-                <p class={`${ui.text.caption} mt-1`}>Borra tu historial de uploads, los personajes detectados y, si la tienes, tu hermandad con su portal. Tu rol vuelve a <strong class="text-amber-300">visitante</strong> (salvo staff) y podrás re-subir tu SavedVariables para empezar desde cero. Tu cuenta, nombre visible y datos en otras apps del ecosistema se conservan.</p>
-              </div>
-              <button id="reset-data-btn"
-                class={`${ui.btnBase} px-6 py-2.5 border border-amber-700/50 text-amber-300 hover:bg-amber-950/40 hover:text-amber-200 text-xs font-black uppercase tracking-widest`}>
-                Resetear mis datos
-              </button>
-            </div>
-
-            <div id="reset-data-confirm" class="hidden mt-4 border border-amber-800/50 bg-amber-950/20 rounded-md p-5">
-              <p class={`${ui.text.body} text-amber-100 mb-3`}>Esto borrará permanentemente tu historial de SV, personajes y hermandad. Escribe <span class="font-black uppercase">RESETEAR</span> para confirmar.</p>
-              <div class="flex flex-wrap items-center gap-3">
-                <input type="text" id="reset-data-input" autocomplete="off" placeholder="RESETEAR"
-                  class={`${ui.form.input} ${ui.focusRing} sm:w-56 uppercase placeholder:normal-case`} />
-                <button id="reset-data-confirm-btn" disabled
-                  class={`${ui.btnBase} px-6 py-2.5 bg-amber-800/60 hover:bg-amber-700/70 text-amber-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}>
-                  Confirmar reseteo
+            </summary>
+            <div class="bg-gray-900/60 backdrop-blur-sm p-4 sm:p-6">
+              <div class="space-y-4">
+                <div>
+                  <label for="new-password" class={ui.form.label}
+                    >Nueva contraseña</label
+                  >
+                  <input
+                    type="password"
+                    id="new-password"
+                    autocomplete="new-password"
+                    minlength="8"
+                    class={`${ui.form.input} ${ui.focusRing}`}
+                  />
+                  <p class={ui.form.helperText}>
+                    Mínimo 8 caracteres, con al menos una letra y un número.
+                  </p>
+                </div>
+                <div>
+                  <label for="new-password-confirm" class={ui.form.label}
+                    >Confirmar nueva contraseña</label
+                  >
+                  <input
+                    type="password"
+                    id="new-password-confirm"
+                    autocomplete="new-password"
+                    class={`${ui.form.input} ${ui.focusRing}`}
+                  />
+                </div>
+                <button
+                  id="save-password"
+                  class={`${ui.btnBase} ${ui.btnPrimary} px-6 py-2.5 text-xs font-black uppercase tracking-widest transform hover:scale-105 disabled:opacity-50 disabled:pointer-events-none`}
+                >
+                  Actualizar contraseña
                 </button>
-                <button id="reset-data-cancel"
-                  class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}>
+                <p
+                  id="password-msg"
+                  class="hidden text-sm rounded-md px-4 py-2.5"
+                  role="status"
+                >
+                </p>
+              </div>
+
+              <div
+                class="border-t border-gray-700/50 mt-6 pt-5 flex flex-wrap items-center justify-between gap-3"
+              >
+                <div>
+                  <h3 class={`${ui.text.h3} text-red-300`}>Sesión</h3>
+                  <p class={ui.text.caption}>
+                    Cierra sesión en este dispositivo.
+                  </p>
+                </div>
+                <button
+                  id="logout-btn"
+                  class={`${ui.btnBase} px-6 py-2.5 border border-red-700/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 text-xs font-black uppercase tracking-widest`}
+                >
+                  Cerrar sesión
+                </button>
+              </div>
+            </div>
+          </details>
+
+          <!-- Sección 2: Zona de peligro (ventana numerada y colapsable) -->
+          <details
+            class="group border border-amber-600/30 rounded-t-md"
+            aria-label="Sección 2: Zona de peligro"
+          >
+            <summary
+              class="cursor-pointer select-none list-none flex flex-wrap items-center justify-between gap-3 bg-gradient-to-br from-red-950/20 to-transparent rounded-t-md border-b border-amber-600/30 p-4 sm:p-6"
+            >
+              <span class="flex items-center gap-3 min-w-0">
+                <span
+                  class="shrink-0 w-8 h-8 rounded-full bg-red-950/40 border border-red-500/40 text-red-200 text-sm font-black flex items-center justify-center"
+                  >2</span
+                >
+                <span class="min-w-0">
+                  <span
+                    class="block text-[10px] font-black uppercase tracking-widest text-red-400 mb-1"
+                    >Zona de peligro</span
+                  >
+                  <span
+                    class="block text-lg font-bold text-red-300 leading-tight flex items-center"
+                    ><span
+                      class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+                    ></span>Acciones destructivas</span
+                  >
+                </span>
+              </span>
+              <span class="flex items-center gap-3">
+                <span
+                  class="text-[11px] font-bold uppercase tracking-widest text-red-400/80"
+                  >Irreversible</span
+                >
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 text-red-400 transition-transform group-open:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"></path></svg
+                >
+              </span>
+            </summary>
+            <div class="bg-gray-900/60 backdrop-blur-sm p-4 sm:p-6">
+              <!-- Resetear datos (moderado: conserva la cuenta) -->
+              <div
+                class="border border-amber-800/40 bg-amber-950/10 rounded-md p-5"
+              >
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                  <div class="max-w-md">
+                    <h3 class={`${ui.text.h3} text-amber-300`}>
+                      Resetear datos del SV
+                    </h3>
+                    <p class={`${ui.text.caption} mt-1`}>
+                      Borra tu historial de uploads, los personajes detectados
+                      y, si la tienes, tu hermandad con su portal. Tu rol vuelve
+                      a <strong class="text-amber-300">visitante</strong> (salvo staff)
+                      y podrás re-subir tu SavedVariables para empezar desde cero.
+                      Tu cuenta, nombre visible y datos en otras apps del ecosistema
+                      se conservan.
+                    </p>
+                  </div>
+                  <button
+                    id="reset-data-btn"
+                    class={`${ui.btnBase} px-6 py-2.5 border border-amber-700/50 text-amber-300 hover:bg-amber-950/40 hover:text-amber-200 text-xs font-black uppercase tracking-widest`}
+                  >
+                    Resetear mis datos
+                  </button>
+                </div>
+
+                <div
+                  id="reset-data-confirm"
+                  class="hidden mt-4 border border-amber-800/50 bg-amber-950/20 rounded-md p-5"
+                >
+                  <p class={`${ui.text.body} text-amber-100 mb-3`}>
+                    Esto borrará permanentemente tu historial de SV, personajes
+                    y hermandad. Escribe <span class="font-black uppercase"
+                      >RESETEAR</span
+                    > para confirmar.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <input
+                      type="text"
+                      id="reset-data-input"
+                      autocomplete="off"
+                      placeholder="RESETEAR"
+                      class={`${ui.form.input} ${ui.focusRing} sm:w-56 uppercase placeholder:normal-case`}
+                    />
+                    <button
+                      id="reset-data-confirm-btn"
+                      disabled
+                      class={`${ui.btnBase} px-6 py-2.5 bg-amber-800/60 hover:bg-amber-700/70 text-amber-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}
+                    >
+                      Confirmar reseteo
+                    </button>
+                    <button
+                      id="reset-data-cancel"
+                      class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                  <p
+                    id="reset-data-msg"
+                    class="hidden mt-3 text-sm rounded-md px-4 py-2.5"
+                    role="status"
+                  >
+                  </p>
+                </div>
+              </div>
+
+              <!-- Eliminar cuenta (severo) -->
+              <div
+                class="border border-red-800/40 bg-red-950/10 rounded-md p-5 mt-4"
+              >
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                  <div class="max-w-md">
+                    <h3 class={`${ui.text.h3} text-red-400`}>
+                      Eliminar cuenta
+                    </h3>
+                    <p class={`${ui.text.caption} mt-1`}>
+                      Borra permanentemente tu perfil, personajes, uploads y
+                      hermandades de RaidDominion. Tu cuenta de usuario y tus
+                      datos en otras apps del ecosistema se conservan.
+                    </p>
+                  </div>
+                  <button
+                    id="delete-account-btn"
+                    class={`${ui.btnBase} px-6 py-2.5 border border-red-700/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 text-xs font-black uppercase tracking-widest`}
+                  >
+                    Eliminar mi cuenta
+                  </button>
+                </div>
+
+                <div
+                  id="delete-account-confirm"
+                  class="hidden mt-4 border border-red-800/50 bg-red-950/20 rounded-md p-5"
+                >
+                  <p class={`${ui.text.body} text-red-200 mb-3`}>
+                    Esto borrará permanentemente todos tus datos de
+                    RaidDominion. Escribe <span class="font-black uppercase"
+                      >ELIMINAR</span
+                    > para confirmar.
+                  </p>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <input
+                      type="text"
+                      id="delete-account-input"
+                      autocomplete="off"
+                      placeholder="ELIMINAR"
+                      class={`${ui.form.input} ${ui.focusRing} sm:w-56 uppercase placeholder:normal-case`}
+                    />
+                    <button
+                      id="delete-account-confirm-btn"
+                      disabled
+                      class={`${ui.btnBase} px-6 py-2.5 bg-red-900/60 hover:bg-red-700/70 text-red-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}
+                    >
+                      Confirmar eliminación
+                    </button>
+                    <button
+                      id="delete-account-cancel"
+                      class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                  <p
+                    id="delete-account-msg"
+                    class="hidden mt-3 text-sm rounded-md px-4 py-2.5"
+                    role="status"
+                  >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </details>
+        </section>
+        <div class={`${ui.dividerFadeLeft} mt-12`} aria-hidden="true"></div>
+
+        <!-- Modal de confirmación: eliminar un análisis individual -->
+        <div
+          id="sv-delete-modal"
+          class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="sv-delete-title"
+        >
+          <div
+            id="sv-delete-backdrop"
+            class="absolute inset-0 bg-black/70 backdrop-blur-sm"
+          >
+          </div>
+          <div
+            class="relative w-full max-w-md bg-gray-900 border border-red-900/50 rounded-md shadow-2xl shadow-black/60 overflow-hidden"
+          >
+            <div
+              class="bg-gradient-to-br from-red-950/30 to-transparent border-b border-red-900/40 px-5 py-4"
+            >
+              <p
+                class="text-[10px] font-black uppercase tracking-widest text-red-400 mb-1"
+              >
+                Registro del addon
+              </p>
+              <h3
+                id="sv-delete-title"
+                class="text-lg font-bold text-red-200 flex items-center"
+              >
+                <span
+                  class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"
+                ></span>
+                ¿Eliminar este análisis?
+              </h3>
+            </div>
+            <div class="p-5">
+              <p class="text-sm text-gray-300 leading-relaxed">
+                Se borrará permanentemente el análisis <strong
+                  id="sv-delete-label"
+                  class="text-amber-200"></strong> y sus evidencias de roster. Tus
+                personajes detectados se conservan.
+              </p>
+              <p
+                id="sv-delete-msg"
+                class="hidden mt-3 text-sm rounded-md px-4 py-2.5"
+                role="status"
+              >
+              </p>
+              <div class="mt-5 flex flex-wrap items-center justify-end gap-3">
+                <button
+                  type="button"
+                  id="sv-delete-cancel"
+                  class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}
+                >
                   Cancelar
                 </button>
-              </div>
-              <p id="reset-data-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
-            </div>
-          </div>
-
-          <!-- Eliminar cuenta (severo) -->
-          <div class="border border-red-800/40 bg-red-950/10 rounded-md p-5 mt-4">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-              <div class="max-w-md">
-                <h3 class={`${ui.text.h3} text-red-400`}>Eliminar cuenta</h3>
-                <p class={`${ui.text.caption} mt-1`}>Borra permanentemente tu perfil, personajes, uploads y hermandades de RaidDominion. Tu cuenta de usuario y tus datos en otras apps del ecosistema se conservan.</p>
-              </div>
-              <button id="delete-account-btn"
-                class={`${ui.btnBase} px-6 py-2.5 border border-red-700/50 text-red-300 hover:bg-red-950/40 hover:text-red-200 text-xs font-black uppercase tracking-widest`}>
-                Eliminar mi cuenta
-              </button>
-            </div>
-
-            <div id="delete-account-confirm" class="hidden mt-4 border border-red-800/50 bg-red-950/20 rounded-md p-5">
-              <p class={`${ui.text.body} text-red-200 mb-3`}>Esto borrará permanentemente todos tus datos de RaidDominion. Escribe <span class="font-black uppercase">ELIMINAR</span> para confirmar.</p>
-              <div class="flex flex-wrap items-center gap-3">
-                <input type="text" id="delete-account-input" autocomplete="off" placeholder="ELIMINAR"
-                  class={`${ui.form.input} ${ui.focusRing} sm:w-56 uppercase placeholder:normal-case`} />
-                <button id="delete-account-confirm-btn" disabled
-                  class={`${ui.btnBase} px-6 py-2.5 bg-red-900/60 hover:bg-red-700/70 text-red-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}>
-                  Confirmar eliminación
-                </button>
-                <button id="delete-account-cancel"
-                  class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}>
-                  Cancelar
+                <button
+                  type="button"
+                  id="sv-delete-confirm"
+                  class={`${ui.btnBase} px-6 py-2.5 bg-red-900/60 hover:bg-red-800/70 text-red-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}
+                >
+                  Eliminar
                 </button>
               </div>
-              <p id="delete-account-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
-            </div>
-          </div>
-          </div>
-        </details>
-      </section>
-      <div class={`${ui.dividerFadeLeft} mt-12`} aria-hidden="true"></div>
-
-      <!-- Modal de confirmación: eliminar un análisis individual -->
-      <div id="sv-delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="sv-delete-title">
-        <div id="sv-delete-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
-        <div class="relative w-full max-w-md bg-gray-900 border border-red-900/50 rounded-md shadow-2xl shadow-black/60 overflow-hidden">
-          <div class="bg-gradient-to-br from-red-950/30 to-transparent border-b border-red-900/40 px-5 py-4">
-            <p class="text-[10px] font-black uppercase tracking-widest text-red-400 mb-1">Registro del addon</p>
-            <h3 id="sv-delete-title" class="text-lg font-bold text-red-200 flex items-center">
-              <span class="w-2 h-2 rounded-full bg-red-500 mr-3 shadow-[0_0_8px_rgba(239,68,68,0.4)]"></span>
-              ¿Eliminar este análisis?
-            </h3>
-          </div>
-          <div class="p-5">
-            <p class="text-sm text-gray-300 leading-relaxed">Se borrará permanentemente el análisis <strong id="sv-delete-label" class="text-amber-200"></strong> y sus evidencias de roster. Tus personajes detectados se conservan.</p>
-            <p id="sv-delete-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
-            <div class="mt-5 flex flex-wrap items-center justify-end gap-3">
-              <button type="button" id="sv-delete-cancel"
-                class={`${ui.btnBase} px-4 py-2.5 border border-gray-700 text-gray-400 hover:text-gray-200 text-xs font-black uppercase tracking-widest`}>
-                Cancelar
-              </button>
-              <button type="button" id="sv-delete-confirm"
-                class={`${ui.btnBase} px-6 py-2.5 bg-red-900/60 hover:bg-red-800/70 text-red-100 text-xs font-black uppercase tracking-widest disabled:opacity-50 disabled:pointer-events-none`}>
-                Eliminar
-              </button>
             </div>
           </div>
         </div>
+        <!-- El modal de eliminación y el divisor viven a nivel del contenedor
+             (hermanos de los paneles), no dentro de ninguna pestaña. -->
       </div>
-    </div>
-  </main>
-</Layout>
+    </main>
 
-<script>
-  import { supabase } from '@/lib/supabase';
-  import {
-    listMyUploads,
-    getUpload,
-    deleteMyUpload,
-    getMyProfile,
-    updateMyProfile,
-    getMyGuilds,
-    ensureMyProfileSlug,
-    getMyCharacters,
-    getMyBands,
-    getMyMembershipGuilds,
-    getMyRulesCatalog,
-    listGuildPortalBands,
-    claimGuildFromSV,
-    tryPromoteMember,
-    setCharacterVisibility,
-    deleteMyAccount,
-    resetMyData,
-  } from '@/lib/api';
-  import type { UploadSummary, CharacterRow } from '@/lib/api';
-  import type { BandRow } from '@/types/database';
-  import { handleFromSlug } from '@/lib/ui/playerNames';
-  import { DASHBOARD_TABS, DASHBOARD_CONFIG, tabFromHash, tabHash } from '@/lib/ui/tabs';
-  import { isVisitor } from '@/lib/roles';
-  import { ui } from '@/lib/ui/design';
-  import { renderCharacterCard } from '@/lib/ui/cards';
-  import { svLabel } from '@/lib/ui/dashboard/format';
-  import {
-    collectRegistryGuilds,
-    renderRegistryGuildCards,
-    characterListKey,
-    renderCharactersMerged,
-  } from '@/lib/ui/dashboard/visitor';
-  import { bandPlayerCount, bandRuleCount, renderBandDetail } from '@/lib/ui/dashboard/bands';
-  import { renderGuildCard } from '@/lib/ui/dashboard/guilds';
-  import { bandMergeKey, mergeBandPlayers } from '@/lib/bandMerge';
-  import type { ParsedSavedVariables, ContentItem } from '@/types/parser';
-  import type { RaiddominionRole, GuildRow } from '@/types/database';
+  <script>
+    import { supabase } from "@/lib/supabase";
+    import {
+      listMyUploads,
+      getUpload,
+      deleteMyUpload,
+      getMyProfile,
+      updateMyProfile,
+      getMyGuilds,
+      ensureMyProfileSlug,
+      getMyCharacters,
+      getMyBands,
+      getMyMembershipGuilds,
+      getMyRulesCatalog,
+      listGuildPortalBands,
+      claimGuildFromSV,
+      tryPromoteMember,
+      setCharacterVisibility,
+      deleteMyAccount,
+      resetMyData,
+    } from "@/lib/api";
+    import type { UploadSummary, CharacterRow } from "@/lib/api";
+    import type { BandRow } from "@/types/database";
+    import { handleFromSlug } from "@/lib/ui/playerNames";
+    import {
+      DASHBOARD_TABS,
+      DASHBOARD_CONFIG,
+      tabFromHash,
+      tabHash,
+    } from "@/lib/ui/tabs";
+    import { isVisitor } from "@/lib/roles";
+    import { ui } from "@/lib/ui/design";
+    import { toast } from "@/lib/ui/toast";
+    import { renderCharacterCard } from "@/lib/ui/cards";
+    import { svLabel } from "@/lib/ui/dashboard/format";
+    import {
+      collectRegistryGuilds,
+      renderRegistryGuildCards,
+      characterListKey,
+      renderCharactersMerged,
+    } from "@/lib/ui/dashboard/visitor";
+    import {
+      bandPlayerCount,
+      bandRuleCount,
+      renderBandDetail,
+    } from "@/lib/ui/dashboard/bands";
+    import { renderGuildCard } from "@/lib/ui/dashboard/guilds";
+    import { bandMergeKey, mergeBandPlayers } from "@/lib/bandMerge";
+    import type { ParsedSavedVariables, ContentItem } from "@/types/parser";
+    import type { RaiddominionRole, GuildRow } from "@/types/database";
 
-  const PANELS = DASHBOARD_TABS.map((t) => t.id) as string[];
-  type PanelName = (typeof PANELS)[number];
+    const PANELS = DASHBOARD_TABS.map((t) => t.id) as string[];
+    type PanelName = (typeof PANELS)[number];
 
-  const emailEl = document.getElementById('user-email') as HTMLElement;
-  const avatarEl = document.getElementById('avatar') as HTMLElement;
-  const badgeEl = document.getElementById('role-badge') as HTMLElement;
+    const emailEl = document.getElementById("user-email") as HTMLElement;
+    const avatarEl = document.getElementById("avatar") as HTMLElement;
+    const badgeEl = document.getElementById("role-badge") as HTMLElement;
 
-  const ROLE_LABELS: Record<RaiddominionRole, string> = {
-    visitante: 'Visitante',
-    member: 'Miembro',
-    guild_master: 'Maestro de Hermandad',
-    moderator: 'Moderador',
-    admin: 'Administrador',
-  };
-  const ROLE_STYLES = ui.badgeRole;
+    const ROLE_LABELS: Record<RaiddominionRole, string> = {
+      visitante: "Visitante",
+      member: "Miembro",
+      guild_master: "Maestro de Hermandad",
+      moderator: "Moderador",
+      admin: "Administrador",
+    };
+    const ROLE_STYLES = ui.badgeRole;
 
-  // Badges del encabezado: cuenta validada (rol >= member) y estado público
-  // del perfil. Se refrescan en loadProfile, en la promoción a Miembro y en
-  // vivo al cambiar el toggle de perfil público de Configuración.
-  const validatedBadgeEl = document.getElementById('validated-badge') as HTMLElement;
-  const publicBadgeEl = document.getElementById('public-badge') as HTMLElement;
-  const BADGE_BASE = `${ui.badge} ${ui.badgeMd}`;
+    // Badges del encabezado: cuenta validada (rol >= member) y estado público
+    // del perfil. Se refrescan en loadProfile, en la promoción a Miembro y en
+    // vivo al cambiar el toggle de perfil público de Configuración.
+    const validatedBadgeEl = document.getElementById(
+      "validated-badge",
+    ) as HTMLElement;
+    const publicBadgeEl = document.getElementById(
+      "public-badge",
+    ) as HTMLElement;
+    const BADGE_BASE = `${ui.badge} ${ui.badgeMd}`;
 
-  function refreshHeaderBadges(): void {
-    const validated = !isVisitor(currentRole);
-    validatedBadgeEl.textContent = validated ? '✓ Cuenta validada' : 'Cuenta sin validar';
-    validatedBadgeEl.className = `${BADGE_BASE} ${validated ? ui.status.success : 'bg-gray-800/70 border-gray-600 text-gray-400'}`;
-    publicBadgeEl.textContent = profilePublic ? 'Público' : 'Privado';
-    publicBadgeEl.className = `${BADGE_BASE} ${profilePublic ? ui.badgeRole.guild_master : 'bg-gray-800/70 border-gray-600 text-gray-400'}`;
-  }
-
-  // ── Estado reactivo (declarado antes de las llamadas void load*) ─────────
-  let currentRole: RaiddominionRole = 'member';
-  let profilePublic = false;
-  let accountEmail = '';
-  let myCharacters: CharacterRow[] = [];
-  let profileCharacterName: string | null = null;
-  let uploadsCache: UploadSummary[] = [];
-  let currentSvId = '';
-  let lastLeads = false;
-  let snapshotGmGuilds: string[] = [];
-  let myGuilds: GuildRow[] = [];
-  let membershipGuilds: GuildRow[] = [];
-  let rulesCatalog: ContentItem[] = [];
-  // Último análisis renderizado: los indicadores del encabezado de Registro
-  // se calculan de él (liberan al visor de repetir cifras).
-  let lastSnapshot: ParsedSavedVariables | null = null;
-  // Bandas del usuario y banda actualmente seleccionada en el navegador.
-  let allBands: BandRow[] = [];
-  let currentBandId: string | null = null;
-  // Hermandad actualmente seleccionada en el navegador de hermandades.
-  let currentGuildId: string | null = null;
-  // Integrantes, bandas integradas y reglas por hermandad (roster/portal del
-  // último análisis cargado), para los indicadores de cabecera de la ficha
-  // seleccionada.
-  const guildMembersCount = new Map<string, number>();
-  const guildBandsCount = new Map<string, number>();
-  const guildRulesCount = new Map<string, number>();
-
-  // ── Indicadores de los encabezados de bloque (Registro/Bandas/Hermandad) ──
-  function setHdrChip(id: string, value: number | string): void {
-    const el = document.getElementById(id);
-    if (el) el.textContent = String(value ?? 0);
-  }
-
-  // Registro: personajes, hermandades, bandas y reglas del análisis activo +
-  // nº de análisis subidos. Leyendo de lastSnapshot (no del DOM) los chips
-  // quedan también correctos antes de que termine el render del visor.
-  function refreshHdrRegistro(): void {
-    const d = lastSnapshot;
-    if (!d) {
-      setHdrChip('hdr-registro-chars', 0);
-      setHdrChip('hdr-registro-guilds', 0);
-      setHdrChip('hdr-registro-bands', 0);
-      setHdrChip('hdr-registro-rules', 0);
-      return;
+    function refreshHeaderBadges(): void {
+      const validated = !isVisitor(currentRole);
+      validatedBadgeEl.textContent = validated
+        ? "✓ Cuenta validada"
+        : "Cuenta sin validar";
+      validatedBadgeEl.className = `${BADGE_BASE} ${validated ? ui.status.success : "bg-gray-800/70 border-gray-600 text-gray-400"}`;
+      publicBadgeEl.textContent = profilePublic ? "Público" : "Privado";
+      publicBadgeEl.className = `${BADGE_BASE} ${profilePublic ? ui.badgeRole.guild_master : "bg-gray-800/70 border-gray-600 text-gray-400"}`;
     }
-    const guildNames = new Set<string>();
-    if (d.registryGuild?.name) guildNames.add(d.registryGuild.name.trim().toLowerCase());
-    d.registries.forEach((reg) => {
-      if (reg.guild?.name) guildNames.add(reg.guild!.name.trim().toLowerCase());
-    });
-    setHdrChip('hdr-registro-chars', d.characters.length);
-    setHdrChip('hdr-registro-guilds', guildNames.size);
-    setHdrChip('hdr-registro-bands', d.bands.length);
-    setHdrChip('hdr-registro-rules', d.rules.length);
-  }
 
-  // Los toggles y cambios de estado llaman a refreshHdrBands (nombre legado):
-  // ahora solo refresca los indicadores de la banda seleccionada en el header.
-  function refreshHdrBands(): void {
-    void refreshHdrBandSelected();
-  }
+    // ── Estado reactivo (declarado antes de las llamadas void load*) ─────────
+    let currentRole: RaiddominionRole = "member";
+    let profilePublic = false;
+    let accountEmail = "";
+    let myCharacters: CharacterRow[] = [];
+    let profileCharacterName: string | null = null;
+    let uploadsCache: UploadSummary[] = [];
+    let currentSvId = "";
+    let lastLeads = false;
+    let snapshotGmGuilds: string[] = [];
+    let myGuilds: GuildRow[] = [];
+    let membershipGuilds: GuildRow[] = [];
+    let rulesCatalog: ContentItem[] = [];
+    // Último análisis renderizado: los indicadores del encabezado de Registro
+    // se calculan de él (liberan al visor de repetir cifras).
+    let lastSnapshot: ParsedSavedVariables | null = null;
+    // Bandas del usuario y banda actualmente seleccionada en el navegador.
+    let allBands: BandRow[] = [];
+    let currentBandId: string | null = null;
+    // Hermandad actualmente seleccionada en el navegador de hermandades.
+    let currentGuildId: string | null = null;
+    // Integrantes, bandas integradas y reglas por hermandad (roster/portal del
+    // último análisis cargado), para los indicadores de cabecera de la ficha
+    // seleccionada.
+    const guildMembersCount = new Map<string, number>();
+    const guildBandsCount = new Map<string, number>();
+    const guildRulesCount = new Map<string, number>();
 
-  // Conteo de jugadores de una banda INTEGRADA ya combinado con las demás
-  // bandas públicas del mismo grupo (clave name|horario|GS). null si no hay
-  // grupo (o falla la consulta): en ese caso se usa el roster propio.
-  async function mergedBandPlayerCount(b: BandRow): Promise<number | null> {
-    try {
-      const portal = await listGuildPortalBands(b.guild_id as string);
-      if (!portal.ok || !portal.bands) return null;
-      const key = bandMergeKey(b);
-      const group = portal.bands.filter((x) => bandMergeKey(x) === key);
-      if (group.length === 0) return null;
-      return mergeBandPlayers(group).length;
-    } catch {
-      return null;
+    // ── Indicadores de los encabezados de bloque (Registro/Bandas/Hermandad) ──
+    function setHdrChip(id: string, value: number | string): void {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(value ?? 0);
     }
-  }
 
-  // Banda seleccionada en el navegador: nombre·horario·GS en el título del
-  // encabezado (formato del selector, el SPAN interno preserva el icono "ul")
-  // + indicadores (jugadores, reglas y el estado de integración si lo tiene).
-  // El detalle ya no repite título ni badges; esta función se llama en los
-  // mismos puntos que refreshHdrBands (toggles y cambios de estado). Para
-  // bandas que se combinan por match de nombre|horario, el conteo de jugadores
-  // es la UNIÓN del grupo (mismo criterio que el portal y la página de banda).
-  async function refreshHdrBandSelected(): Promise<void> {
-    const band = currentBandId ? allBands.find((b) => b.id === currentBandId) : undefined;
-    const titleEl = document.getElementById('hdr-band-name-text');
-    if (titleEl) {
-      if (!band) {
-        titleEl.textContent = 'Mis bandas';
-      } else {
-        const parts = [band.name || 'Banda sin nombre'];
-        if (band.schedule) parts.push(band.schedule);
-        if (typeof band.min_gs === 'number' && band.min_gs > 0) parts.push(`GS ${band.min_gs}`);
-        titleEl.textContent = parts.join(' · ');
-      }
-    }
-    let playersLabel: number | string = band ? (band.hide_players ? 'ocultos' : bandPlayerCount(band)) : 0;
-    if (band && band.guild_id && band.is_rank_integrated && !band.hide_players) {
-      const merged = await mergedBandPlayerCount(band);
-      if (merged !== null) playersLabel = merged;
-    }
-    setHdrChip('hdr-band-players', playersLabel);
-    setHdrChip('hdr-band-rules', band ? bandRuleCount(band) : 0);
-
-    const statusEl = document.getElementById('hdr-band-status') as HTMLElement | null;
-    if (!statusEl) return;
-    const chipBase = `${ui.badge} ${ui.badgeMd}`;
-    const st = (band?.integration_status ?? 'none') as string;
-    if (st !== 'none') {
-      let text = '';
-      let cls = '';
-      if (st === 'approved' && band!.guild_id && band!.is_public) {
-        text = '✓ en el portal de la hermandad';
-        cls = 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40';
-      } else if (st === 'approved' && band!.guild_id) {
-        text = '✓ integrada · privada';
-        cls = 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40';
-      } else if (st === 'pending') {
-        text = '⏳ propuesta pendiente';
-        cls = 'text-sky-300 bg-sky-950/30 border-sky-600/40';
-      } else if (st === 'rejected') {
-        text = '✗ propuesta rechazada';
-        cls = 'text-red-300 bg-red-950/30 border-red-600/40';
-      }
-      if (text) {
-        statusEl.textContent = text;
-        statusEl.className = chipBase + ' ' + cls;
-        statusEl.classList.remove('hidden');
+    // Registro: personajes, hermandades, bandas y reglas del análisis activo +
+    // nº de análisis subidos. Leyendo de lastSnapshot (no del DOM) los chips
+    // quedan también correctos antes de que termine el render del visor.
+    function refreshHdrRegistro(): void {
+      const d = lastSnapshot;
+      if (!d) {
+        setHdrChip("hdr-registro-chars", 0);
+        setHdrChip("hdr-registro-guilds", 0);
+        setHdrChip("hdr-registro-bands", 0);
+        setHdrChip("hdr-registro-rules", 0);
         return;
       }
-    }
-    statusEl.classList.add('hidden');
-  }
-
-  // Hermandad: la ficha seleccionada en el navegador → nombre en el título del
-  // encabezado (el SPAN interno preserva el icono "ul") + indicadores de ESA
-  // hermandad: integrantes, bandas integradas y estados de publicación y de
-  // verificación. La ficha ya no repite título ni badges; el total de
-  // hermandades vive en el contador del selector ("Hermandad N/total").
-  function refreshHdrGuild(): void {
-    const guild = currentGuildId ? myGuilds.find((g) => g.id === currentGuildId) : undefined;
-
-    const nameEl = document.getElementById('hdr-guild-name-text');
-    if (nameEl) {
-      nameEl.textContent = guild
-        ? `${guild.name || 'Hermandad sin nombre'}${guild.realm ? ` · ${guild.realm}` : ''}`
-        : 'Tus hermandades';
+      const guildNames = new Set<string>();
+      if (d.registryGuild?.name)
+        guildNames.add(d.registryGuild.name.trim().toLowerCase());
+      d.registries.forEach((reg) => {
+        if (reg.guild?.name)
+          guildNames.add(reg.guild!.name.trim().toLowerCase());
+      });
+      setHdrChip("hdr-registro-chars", d.registries.filter((r) => r.player).length);
+      setHdrChip("hdr-registro-guilds", guildNames.size);
+      setHdrChip("hdr-registro-bands", d.bands.length);
+      setHdrChip("hdr-registro-rules", d.rules.length);
     }
 
-    setHdrChip('hdr-guild-members', guild ? (guildMembersCount.get(guild.id) ?? 0) : 0);
-    setHdrChip('hdr-guild-bands', guild ? (guildBandsCount.get(guild.id) ?? 0) : 0);
-    setHdrChip('hdr-guild-rules', guild ? (guildRulesCount.get(guild.id) ?? 0) : 0);
+    // Los toggles y cambios de estado llaman a refreshHdrBands (nombre legado):
+    // ahora solo refresca los indicadores de la banda seleccionada en el header.
+    function refreshHdrBands(): void {
+      void refreshHdrBandSelected();
+    }
 
-    const chipBase = `${ui.badge} ${ui.badgeMd}`;
-    const visEl = document.getElementById('hdr-guild-vis') as HTMLElement | null;
-    if (visEl) {
-      if (!guild) {
-        visEl.classList.add('hidden');
-      } else {
-        visEl.textContent = guild.is_public ? '✓ pública' : 'privada';
-        visEl.className = chipBase + (guild.is_public
-          ? ' text-emerald-300 bg-emerald-950/30 border-emerald-600/40'
-          : ' text-gray-400 bg-gray-950/50 border-gray-700/50');
-        visEl.classList.remove('hidden');
+    // Conteo de jugadores de una banda INTEGRADA ya combinado con las demás
+    // bandas públicas del mismo grupo (clave name|horario|GS). null si no hay
+    // grupo (o falla la consulta): en ese caso se usa el roster propio.
+    async function mergedBandPlayerCount(b: BandRow): Promise<number | null> {
+      try {
+        const portal = await listGuildPortalBands(b.guild_id as string);
+        if (!portal.ok || !portal.bands) return null;
+        const key = bandMergeKey(b);
+        const group = portal.bands.filter((x) => bandMergeKey(x) === key);
+        if (group.length === 0) return null;
+        return mergeBandPlayers(group).length;
+      } catch {
+        return null;
       }
     }
 
-    const claimEl = document.getElementById('hdr-guild-claim') as HTMLElement | null;
-    if (claimEl) {
-      if (!guild) {
-        claimEl.classList.add('hidden');
-      } else {
-        const verified = guild.claim_status === 'verified';
-        claimEl.textContent = verified ? '✓ verificada' : guild.claim_status === 'rejected' ? '✗ rechazada' : '⏳ en revisión';
-        claimEl.className = chipBase + (verified
-          ? ' text-emerald-300 bg-emerald-950/30 border-emerald-600/40'
-          : guild.claim_status === 'rejected'
-            ? ' text-red-300 bg-red-950/30 border-red-600/40'
-            : ' text-amber-300 bg-amber-950/30 border-amber-600/40');
-        claimEl.classList.remove('hidden');
-      }
-    }
-  }
-
-  // ¿Puede publicar bandas/personajes? Un Visitante sin personajes validados
-  // no puede activar visibilidad pública hasta validar como Miembro (regla
-  // 20260830: >= 2 personajes registrados validan la cuenta y la promueven).
-  function canPublishContent(): boolean {
-    if (currentRole === 'visitante') {
-      return myCharacters.some((c) => c.member_verified);
-    }
-    return true;
-  }
-  const PUBLISH_GATE_MSG = 'Estás en Visitante y tus personajes aún no están validados. Para publicar personajes y bandas, sube tu SavedVariables con al menos dos personajes: tu cuenta quedará validada como Miembro y podrás activar su visibilidad pública.';
-  // Resuelve cuando loadProfile fija currentRole; personajes/bandas esperan
-  // por él para aplicar correctamente el gate de publicación.
-  let resolveProfileReady: () => void;
-  const profileReady = new Promise<void>((r) => { resolveProfileReady = r; });
-
-  function msgBox(id: string, ok: boolean, text: string): void {
-    const box = document.getElementById(id) as HTMLElement;
-    box.textContent = text;
-    box.className = `mt-3 text-sm rounded-md px-4 py-2.5 ${ok ? ui.status.success : ui.status.error}`;
-  }
-
-  // Muestra u oculta el enlace al perfil público con un slug conocido o generándolo
-  async function syncPublicLink(isPublic: boolean | null | undefined, knownSlug?: string): Promise<void> {
-    const link = document.getElementById('public-profile-link') as HTMLAnchorElement;
-    if (!isPublic) {
-      link.classList.add('hidden');
-      return;
-    }
-    let slug = knownSlug;
-    if (!slug) {
-      const res = await ensureMyProfileSlug();
-      if (res.ok && res.slug) slug = res.slug;
-    }
-    if (slug) {
-      link.href = `/jugador/${slug}`;
-      link.classList.remove('hidden');
-    }
-  }
-
-  // ── Sesión ───────────────────────────────────────────────────────────────
-  const { data: sessionData } = await supabase.auth.getSession();
-  if (!sessionData.session?.user) {
-    window.location.replace('/login?next=%2Fdashboard');
-  } else {
-    const email = sessionData.session.user.email ?? '';
-    accountEmail = email;
-    emailEl.textContent = email;
-    avatarEl.textContent = (email[0] ?? '?').toUpperCase();
-
-    void loadProfile();
-    void loadCharacters();
-    void loadHistory();
-    void loadGuilds();
-    void loadBands();
-  }
-
-  // ── Pestañas ─────────────────────────────────────────────────────────────
-  // La barra de pestañas se genera desde src/lib/ui/tabs.ts (contrato único):
-  // ids, labels y hashes salen SOLO de ahí, nunca hardcodeados aquí.
-  const tabBar = document.getElementById('tab-bar') as HTMLElement;
-  const tabBtnCls =
-    'tab-btn shrink-0 whitespace-nowrap px-2 sm:px-4 py-2.5 text-xs font-black uppercase tracking-widest border-b-2 rounded-t-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 hover:text-amber-200';
-  const tabs: HTMLButtonElement[] = DASHBOARD_TABS.map((t) => {
-    const btn = document.createElement('button');
-    btn.id = `tab-${t.id}`;
-    btn.dataset.tab = t.id;
-    btn.setAttribute('role', 'tab');
-    btn.setAttribute('aria-controls', `panel-${t.id}`);
-    // Contrato de barra: todas las pestañas alineadas a la izquierda; el
-    // scroll horizontal (oculto) deja ver el resto en pantallas estrechas.
-    btn.className = tabBtnCls;
-    btn.textContent = t.label;
-    tabBar.appendChild(btn);
-    return btn;
-  });
-
-  function activateTab(name: PanelName, updateHash = true): void {
-    // El panel oculto de configuración no es una pestaña: al activar cualquier
-    // pestaña se cierra (se reabre SOLO con su ícono de engranaje).
-    document.getElementById(`panel-${DASHBOARD_CONFIG.id}`)?.classList.add('hidden');
-    tabs.forEach((b) => {
-      const active = b.dataset.tab === name;
-      b.setAttribute('aria-selected', String(active));
-      b.tabIndex = active ? 0 : -1;
-      // Tabs limpios: sin fondo ni caja; solo el borde inferior activo.
-      b.classList.toggle('border-amber-400', active);
-      b.classList.toggle('text-amber-200', active);
-      b.classList.toggle('border-transparent', !active);
-      b.classList.toggle('text-gray-500', !active);
-    });
-    PANELS.forEach((p) => {
-      document.getElementById(`panel-${p}`)?.classList.toggle('hidden', p !== name);
-    });
-    if (updateHash) {
-      const target = tabHash(name);
-      if (window.location.hash !== target) {
-        // replaceState evita saltar y no ensucia el historial con cada click
-        window.history.replaceState(null, '', target);
-      }
-    }
-  }
-
-  tabs.forEach((btn) => btn.addEventListener('click', () => activateTab((btn.dataset.tab ?? PANELS[0]) as PanelName)));
-  document.querySelectorAll<HTMLButtonElement>('.goto-btn').forEach((b) =>
-    b.addEventListener('click', () => activateTab((b.dataset.goto ?? PANELS[0]) as PanelName)));
-
-  // "Pestaña oculta" de configuración (seguridad y zona de peligro): desactiva
-  // la barra y muestra SOLO su panel. Se abre desde el ícono de engranaje del
-  // encabezado (DASHBOARD_CONFIG en tabs.ts, hash #cuenta).
-  function openConfigPanel(updateHash = true): void {
-    tabs.forEach((b) => {
-      b.setAttribute('aria-selected', 'false');
-      b.tabIndex = -1;
-      b.classList.remove('border-amber-400', 'text-amber-200');
-      b.classList.add('border-transparent', 'text-gray-500');
-    });
-    PANELS.forEach((p) => document.getElementById(`panel-${p}`)?.classList.add('hidden'));
-    document.getElementById(`panel-${DASHBOARD_CONFIG.id}`)?.classList.remove('hidden');
-    if (updateHash) {
-      const target = DASHBOARD_CONFIG.hash;
-      if (window.location.hash !== target) {
-        window.history.replaceState(null, '', target);
-      }
-    }
-  }
-  const configBtn = document.getElementById('config-btn') as HTMLButtonElement | null;
-  configBtn?.addEventListener('click', () => openConfigPanel());
-
-  // Deep-link: #cuenta abre la configuración (el hash histórico #perfil se
-  // redirige a #cuenta); cualquier otro hash cae a la pestaña correspondiente
-  // de la barra (o la primera si no existe).
-  function syncTabFromHash(): void {
-    let id = tabFromHash(window.location.hash);
-    if (id === 'perfil') {
-      id = DASHBOARD_CONFIG.id;
-      if (window.location.hash !== DASHBOARD_CONFIG.hash) {
-        window.history.replaceState(null, '', DASHBOARD_CONFIG.hash);
-      }
-    }
-    if (id === DASHBOARD_CONFIG.id) {
-      openConfigPanel(false);
-      return;
-    }
-    activateTab((PANELS.includes(id) ? id : PANELS[0]) as PanelName, false);
-  }
-  window.addEventListener('hashchange', syncTabFromHash);
-  syncTabFromHash();
-
-  // Patrón ARIA tabs: ←/→ mueven foco (con activación), Home/End saltan a los extremos
-  tabBar.addEventListener('keydown', (e) => {
-    const ev = e as KeyboardEvent;
-    const idx = tabs.indexOf(ev.target as HTMLButtonElement);
-    if (idx === -1) return;
-    let next: number | null = null;
-    if (ev.key === 'ArrowRight') next = (idx + 1) % tabs.length;
-    else if (ev.key === 'ArrowLeft') next = (idx - 1 + tabs.length) % tabs.length;
-    else if (ev.key === 'Home') next = 0;
-    else if (ev.key === 'End') next = tabs.length - 1;
-    if (next === null) return;
-    ev.preventDefault();
-    const target = tabs[next];
-    target.focus();
-    activateTab((target.dataset.tab ?? PANELS[0]) as PanelName);
-  });
-
-  // ── Perfil ───────────────────────────────────────────────────────────────
-
-  // Rellena el <select> del personaje principal SOLO con personajes PÚBLICOS.
-  // Incluye la opción "Ninguno" para poder desmarcar el principal.
-  function populateMainCharacterSelect(): void {
-    const sel = document.getElementById('character-main') as HTMLSelectElement;
-    const hint = document.getElementById('character-main-hint') as HTMLElement;
-    sel.innerHTML = '';
-    const none = document.createElement('option');
-    none.value = '';
-    none.textContent = 'Ninguno';
-    sel.appendChild(none);
-    // Solo los personajes habilitados como públicos pueden ser principal: un
-    // personaje privado no aparece en la lista ni se puede guardar como tal.
-    const publicChars = myCharacters.filter((c) => c.is_public);
-    publicChars.forEach((c) => {
-      const opt = document.createElement('option');
-      opt.value = c.id;
-      opt.textContent = c.realm ? `${c.name} · ${c.realm}` : c.name;
-      sel.appendChild(opt);
-    });
-    if (publicChars.length === 0) {
-      sel.disabled = true;
-      sel.selectedIndex = 0;
-      hint.textContent = myCharacters.length === 0
-        ? 'Sube tu SavedVariables para detectar tus personajes y elegir tu principal.'
-        : 'Activa la visibilidad pública de al menos un personaje para elegir tu principal.';
-      return;
-    }
-    sel.disabled = false;
-    hint.textContent = 'Solo puedes elegir entre tus personajes públicos.';
-    syncMainCharacterSelect();
-  }
-
-// Preselecciona el personaje guardado SOLO si es PÚBLICO; si el guardado es
-  // privado o no existe, queda "Ninguno" seleccionado (opción índice 0).
-  // Nunca auto-selecciona un personaje de forma implícita.
-  function syncMainCharacterSelect(): void {
-    const sel = document.getElementById('character-main') as HTMLSelectElement;
-    if (myCharacters.length === 0) return;
-    const match = profileCharacterName
-      ? myCharacters.find((c) => c.name.toUpperCase() === profileCharacterName!.toUpperCase())
-      : undefined;
-    if (match && match.is_public) {
-      sel.value = match.id;
-    } else {
-      sel.selectedIndex = 0; // "Ninguno"
-    }
-  }
-
-  async function loadProfile(): Promise<void> {
-    const nameInput = document.getElementById('display-name') as HTMLInputElement;
-    const publicToggle = document.getElementById('profile-public') as HTMLInputElement;
-
-    const res = await getMyProfile();
-    if (!res.ok || !res.profile) {
-      badgeEl.textContent = 'Visitante';
-      currentRole = 'visitante';
-      profilePublic = false;
-      refreshHeaderBadges();
-      resolveProfileReady();
-      return;
-    }
-    const p = res.profile;
-    currentRole = p.role;
-    badgeEl.textContent = ROLE_LABELS[p.role] ?? p.role;
-    badgeEl.className = `${BADGE_BASE} ${ROLE_STYLES[p.role] ?? ROLE_STYLES.member}`;
-    profilePublic = p.is_public === true;
-    refreshHeaderBadges();
-
-    if (p.display_name) {
-      nameInput.value = p.display_name;
-    }
-
-    // Título de la cuenta: nombre visible → handle estable del slug. NUNCA se
-    // usa character_name como nombre de cuenta (el "Personaje principal" es
-    // solo un dato del perfil, no el nombre visible de la cuenta): las cuentas
-    // sin nombre visible caen a su @hex (p. ej. @e3ef4b2).
-    const accountTitle = (p.display_name ?? '').trim() || handleFromSlug(p.slug);
-    const titleEl = document.getElementById('account-title');
-    if (titleEl) titleEl.textContent = accountTitle || 'Cuenta';
-    avatarEl.textContent = (accountTitle.replace(/^@/, '')[0] || '?').toUpperCase();
-    profileCharacterName = p.character_name;
-    syncMainCharacterSelect();
-    publicToggle.checked = p.is_public === true;
-
-    await syncPublicLink(p.is_public, p.slug ?? undefined);
-    resolveProfileReady();
-  }
-
-  // La visibilidad pública se persiste al instante (no requiere Guardar)
-  document.getElementById('profile-public')?.addEventListener('change', async (e) => {
-    const box = e.target as HTMLInputElement;
-    box.disabled = true;
-    const res = await updateMyProfile({ is_public: box.checked });
-    box.disabled = false;
-    if (!res.ok) {
-      box.checked = !box.checked;
-      msgBox('profile-msg', false, 'No se pudo cambiar la visibilidad: ' + (res.error || ''));
-      return;
-    }
-    profilePublic = box.checked;
-    refreshHeaderBadges();
-    await syncPublicLink(box.checked);
-    msgBox('profile-msg', true, box.checked ? 'Perfil público activado.' : 'Perfil privado.');
-  });
-
-  document.getElementById('save-profile')?.addEventListener('click', async () => {
-    const btn = document.getElementById('save-profile') as HTMLButtonElement;
-    const nameInput = document.getElementById('display-name') as HTMLInputElement;
-    const publicToggle = document.getElementById('profile-public') as HTMLInputElement;
-    const charSel = document.getElementById('character-main') as HTMLSelectElement;
-    const selectedChar = myCharacters.find((c) => c.id === charSel.value);
-
-    btn.disabled = true; btn.textContent = 'Guardando…';
-    const res = await updateMyProfile({
-      display_name: nameInput.value.trim() || null,
-      character_name: selectedChar?.name ?? null,
-      is_public: publicToggle.checked,
-    });
-    btn.disabled = false; btn.textContent = 'Guardar cambios';
-
-    if (res.ok) {
-      profileCharacterName = selectedChar?.name ?? null;
-      profilePublic = publicToggle.checked;
-      refreshHeaderBadges();
-      // Al retirar el nombre visible, el avatar cae al personaje principal o,
-      // en su defecto, a la inicial del correo (nunca queda desactualizado).
-      const nameSource = nameInput.value.trim() || selectedChar?.name || accountEmail || '';
-      avatarEl.textContent = nameSource[0]?.toUpperCase() || '?';
-      await syncPublicLink(publicToggle.checked);
-      msgBox('profile-msg', true, publicToggle.checked
-        ? 'Cambios guardados. Tu perfil es público.'
-        : 'Cambios guardados. Tu perfil es privado.');
-    } else {
-      msgBox('profile-msg', false, 'No se pudo guardar: ' + (res.error || ''));
-    }
-  });
-
-  // ── Mis Personajes ───────────────────────────────────────────────────────
-  // Indicadores del encabezado de Personajes: total y públicos.
-  function refreshHdrCharacters(): void {
-    const total = myCharacters.length;
-    const publics = myCharacters.filter((c) => c.is_public).length;
-    setHdrChip('hdr-chars-total', total);
-    setHdrChip('hdr-chars-public', publics);
-  }
-
-  async function loadCharacters(): Promise<void> {
-    await profileReady;
-    const listEl = document.getElementById('characters-list') as HTMLElement;
-    const statusEl = document.getElementById('characters-status') as HTMLElement;
-    const onboardingEl = document.getElementById('characters-onboarding') as HTMLElement;
-    const emptyEl = document.getElementById('characters-empty') as HTMLElement;
-
-    const res = await getMyCharacters();
-    if (!res.ok) {
-      statusEl.textContent = 'No se pudieron cargar tus personajes.';
-      statusEl.classList.remove('hidden');
-      return;
-    }
-    const items = res.items ?? [];
-    myCharacters = items;
-    refreshHdrCharacters();
-    populateMainCharacterSelect();
-    listEl.innerHTML = '';
-    // Encabezado y roster solo tienen sentido con personajes registrados.
-    emptyEl.classList.toggle('hidden', items.length > 0);
-    document.getElementById('chars-sectionhead')?.classList.toggle('hidden', items.length === 0);
-    document.getElementById('chars-sectionbody')?.classList.toggle('hidden', items.length === 0);
-    statusEl.classList.add('hidden');
-    if (items.length === 0) {
-      return;
-    }
-
-    // Onboarding: un Visitante sin personajes validados no puede publicar;
-    // el mensaje explica la regla hasta que valide como Miembro.
-    if (!canPublishContent()) {
-      onboardingEl.classList.remove('hidden');
-      onboardingEl.textContent = PUBLISH_GATE_MSG;
-    } else {
-      onboardingEl.classList.add('hidden');
-    }
-
-    items.forEach((c, i) => listEl.appendChild(renderCharacterCard(c, {
-      number: i + 1,
-      canPublish: canPublishContent(),
-      hideStats: true,
-      setVisibility: async (visible) => {
-        const res = await setCharacterVisibility(c.id, visible);
-        if (res.ok) {
-          // Refresco del selector de personaje principal e indicadores.
-          populateMainCharacterSelect();
-          refreshHdrCharacters();
+    // Banda seleccionada en el navegador: nombre·horario·GS en el título del
+    // encabezado (formato del selector, el SPAN interno preserva el icono "ul")
+    // + indicadores (jugadores, reglas y el estado de integración si lo tiene).
+    // El detalle ya no repite título ni badges; esta función se llama en los
+    // mismos puntos que refreshHdrBands (toggles y cambios de estado). Para
+    // bandas que se combinan por match de nombre|horario, el conteo de jugadores
+    // es la UNIÓN del grupo (mismo criterio que el portal y la página de banda).
+    async function refreshHdrBandSelected(): Promise<void> {
+      const band = currentBandId
+        ? allBands.find((b) => b.id === currentBandId)
+        : undefined;
+      const titleEl = document.getElementById("hdr-band-name-text");
+      if (titleEl) {
+        if (!band) {
+          titleEl.textContent = "Mis bandas";
+        } else {
+          const parts = [band.name || "Banda sin nombre"];
+          if (band.schedule) parts.push(band.schedule);
+          if (typeof band.min_gs === "number" && band.min_gs > 0)
+            parts.push(`GS ${band.min_gs}`);
+          titleEl.textContent = parts.join(" · ");
         }
-        return res;
-      },
-    })));
-  }
+      }
+      let playersLabel: number | string = band
+        ? band.hide_players
+          ? "ocultos"
+          : bandPlayerCount(band)
+        : 0;
+      if (
+        band &&
+        band.guild_id &&
+        band.is_rank_integrated &&
+        !band.hide_players
+      ) {
+        const merged = await mergedBandPlayerCount(band);
+        if (merged !== null) playersLabel = merged;
+      }
+      setHdrChip("hdr-band-players", playersLabel);
+      setHdrChip("hdr-band-rules", band ? bandRuleCount(band) : 0);
 
-  // ── Mi Registro: historial + visor del snapshot seleccionado ────────────
-
-  // Contador "Análisis N/total" del selector de análisis (patrón de bandas).
-  function updateSvCounter(): void {
-    const counter = document.getElementById('sv-counter') as HTMLElement | null;
-    if (!counter) return;
-    const total = uploadsCache.length;
-    if (total === 0) {
-      counter.textContent = '';
-      return;
-    }
-    const idx = currentSvId ? uploadsCache.findIndex((u) => u.id === currentSvId) + 1 : 1;
-    counter.textContent = `${idx} de ${total}`;
-  }
-
-  function showRegistroEmpty(note?: string): void {
-    document.getElementById('registro-empty')?.classList.remove('hidden');
-    document.getElementById('registro-main')?.classList.add('hidden');
-    const noteEl = document.getElementById('registro-empty-note') as HTMLElement;
-    if (note) {
-      noteEl.textContent = note;
-      noteEl.classList.remove('hidden');
-    } else {
-      noteEl.classList.add('hidden');
-    }
-  }
-
-  function showBandsEmpty(): void {
-    // Las bandas se gestionan desde Mis Bandas (loadBands, datos de BD).
-    document.getElementById('band-detail')?.classList.add('hidden');
-    document.getElementById('band-select-wrap')?.classList.add('hidden');
-  }
-
-  async function loadHistory(): Promise<void> {
-    const select = document.getElementById('sv-select') as HTMLSelectElement;
-
-    const res = await listMyUploads();
-    if (!res.ok) {
-      showRegistroEmpty('No se pudo cargar tu historial de análisis.');
-      showBandsEmpty();
-      return;
-    }
-    const items = res.items ?? [];
-    uploadsCache = items;
-    refreshHdrRegistro();
-
-    if (items.length === 0) {
-      showRegistroEmpty();
-      showBandsEmpty();
-      return;
+      const statusEl = document.getElementById(
+        "hdr-band-status",
+      ) as HTMLElement | null;
+      if (!statusEl) return;
+      const chipBase = `${ui.badge} ${ui.badgeMd}`;
+      const st = (band?.integration_status ?? "none") as string;
+      if (st !== "none") {
+        let text = "";
+        let cls = "";
+        if (st === "approved" && band!.guild_id && band!.is_public) {
+          text = "✓ en el portal de la hermandad";
+          cls = "text-emerald-300 bg-emerald-950/30 border-emerald-600/40";
+        } else if (st === "approved" && band!.guild_id) {
+          text = "✓ integrada · privada";
+          cls = "text-emerald-300 bg-emerald-950/30 border-emerald-600/40";
+        } else if (st === "pending") {
+          text = "⏳ propuesta pendiente";
+          cls = "text-sky-300 bg-sky-950/30 border-sky-600/40";
+        } else if (st === "rejected") {
+          text = "✗ propuesta rechazada";
+          cls = "text-red-300 bg-red-950/30 border-red-600/40";
+        }
+        if (text) {
+          statusEl.textContent = text;
+          statusEl.className = chipBase + " " + cls;
+          statusEl.classList.remove("hidden");
+          return;
+        }
+      }
+      statusEl.classList.add("hidden");
     }
 
-    // Con análisis disponibles: muestra el visor y oculta el estado vacío
-    document.getElementById('registro-empty')?.classList.add('hidden');
-    document.getElementById('registro-main')?.classList.remove('hidden');
+    // Hermandad: la ficha seleccionada en el navegador → nombre en el título del
+    // encabezado (el SPAN interno preserva el icono "ul") + indicadores de ESA
+    // hermandad: integrantes, bandas integradas y estados de publicación y de
+    // verificación. La ficha ya no repite título ni badges; el total de
+    // hermandades vive en el contador del selector ("Hermandad N/total").
+    function refreshHdrGuild(): void {
+      const guild = currentGuildId
+        ? myGuilds.find((g) => g.id === currentGuildId)
+        : undefined;
 
-    select.innerHTML = '';
-    items.forEach((item, i) => {
-      const opt = document.createElement('option');
-      opt.value = item.id;
-      opt.textContent = `${i + 1}. ${svLabel(item)}`;
-      select.appendChild(opt);
-    });
-    select.value = items[0].id;
-    updateSvCounter();
+      const nameEl = document.getElementById("hdr-guild-name-text");
+      if (nameEl) {
+        nameEl.textContent = guild
+          ? `${guild.name || "Hermandad sin nombre"}${guild.realm ? ` · ${guild.realm}` : ""}`
+          : "Tus hermandades";
+      }
 
-    const first = items[0];
-    if (first) void renderSnapshot(first.id);
-  }
+      setHdrChip(
+        "hdr-guild-members",
+        guild ? (guildMembersCount.get(guild.id) ?? 0) : 0,
+      );
+      setHdrChip(
+        "hdr-guild-bands",
+        guild ? (guildBandsCount.get(guild.id) ?? 0) : 0,
+      );
+      setHdrChip(
+        "hdr-guild-rules",
+        guild ? (guildRulesCount.get(guild.id) ?? 0) : 0,
+      );
 
-  async function renderSnapshot(svId: string): Promise<void> {
-    currentSvId = svId;
-    updateSvCounter();
-    const res = await getUpload(svId);
-    if (!res.ok || !res.item?.raw) return;
-    const d = res.item.raw as ParsedSavedVariables;
-    const item = uploadsCache.find((u) => u.id === svId);
+      const chipBase = `${ui.badge} ${ui.badgeMd}`;
+      const visEl = document.getElementById(
+        "hdr-guild-vis",
+      ) as HTMLElement | null;
+      if (visEl) {
+        if (!guild) {
+          visEl.classList.add("hidden");
+        } else {
+          visEl.textContent = guild.is_public ? "✓ pública" : "privada";
+          visEl.className =
+            chipBase +
+            (guild.is_public
+              ? " text-emerald-300 bg-emerald-950/30 border-emerald-600/40"
+              : " text-gray-400 bg-gray-950/50 border-gray-700/50");
+          visEl.classList.remove("hidden");
+        }
+      }
 
-    // Título del encabezado = título + fecha del análisis seleccionado. Se
-    // setea el SPAN interno para preservar el icono "ul" del encabezado.
-    const hdrTitle = document.getElementById('hdr-registro-title-text');
-    if (hdrTitle) hdrTitle.textContent = item ? svLabel(item) : 'Análisis';
-
-    // Cifras del análisis en los chips del encabezado; el visor no repite
-    // estadísticas: solo muestra el contenido del registro.
-    lastSnapshot = d;
-    refreshHdrRegistro();
-
-    // Hermandades del registro (cifras)
-    renderGuilds(d);
-
-    // Personajes del registro (fusión player + cuenta + registries) con la
-    // card de personaje estandarizada; si el personaje tiene ficha pública,
-    // la card enlaza a ella (slug cruzado contra Mis Personajes).
-    const slugByKey = new Map<string, string>();
-    myCharacters.forEach((mc) => {
-      const key = characterListKey(mc.name, mc.realm);
-      if (mc.slug) slugByKey.set(key, mc.slug);
-    });
-    renderCharactersMerged(d, slugByKey);
-
-    const leadsAnywhere = d.registryGuild?.isGM === true ||
-      d.registries.some((r) => r.guild?.isGM === true);
-    updateClaimBanner(leadsAnywhere);
-  }
-
-// Hermandades del registro (registry.*.guild): capa fina que conecta el
-  // estado del closure (snapshotGmGuilds/updateClaimBanner) con los renderers
-  // puros de visitor.ts (collectRegistryGuilds + renderRegistryGuildCards).
-  function renderGuilds(d: ParsedSavedVariables): void {
-    const wrap = document.getElementById('viewer-guilds') as HTMLElement;
-    const guilds = collectRegistryGuilds(d);
-    snapshotGmGuilds = guilds.filter((g) => g.isGM).map((g) => g.name);
-    updateClaimBanner();
-    renderRegistryGuildCards(wrap, guilds);
-  }
-
-  // Banner de reclamo: si el snapshot acredita liderazgo de alguna hermandad
-  // que el usuario aún no ha reclamado (puede ser maestro de varias).
-  function updateClaimBanner(leads: boolean | null = null): void {
-    if (leads !== null) lastLeads = leads;
-    const unclaimed = snapshotGmGuilds.filter((n) =>
-      !myGuilds.some((g) => g.name.trim().toLowerCase() === n.trim().toLowerCase()));
-    document.getElementById('claim-banner')?.classList.toggle('hidden', !(lastLeads && unclaimed.length > 0));
-  }
-
-  const claimBtn = document.getElementById('claim-btn') as HTMLButtonElement;
-  claimBtn.addEventListener('click', async () => {
-    if (!currentSvId) return;
-    claimBtn.disabled = true; claimBtn.textContent = 'Reclamando…';
-
-    // Promoción pendiente: una cuenta con >= 2 personajes registrados pasa a
-    // Miembro en BD. Sin esto, un Visitante que ya cumple la regla chocaría
-    // con "Requiere ser Miembro o Maestro" del RPC de reclamo.
-    const promo = await tryPromoteMember(currentSvId);
-    if (promo.ok && promo.data?.promoted) {
-      currentRole = 'member';
-      badgeEl.textContent = ROLE_LABELS.member ?? 'member';
-      badgeEl.className = `${BADGE_BASE} ${ROLE_STYLES.member}`;
-      refreshHeaderBadges();
-    }
-
-    const res = await claimGuildFromSV(currentSvId);
-    claimBtn.disabled = false; claimBtn.textContent = 'Reclamar mis hermandades';
-    if (res.ok) {
-      msgBox('claim-msg', true, '¡Hermandad(es) reclamada(s)! Ya eres Maestro: publícalas desde Hermandad.');
-      updateClaimBanner(false);
-      void loadGuilds();
-      void loadProfile();
-    } else {
-      const err = res.error || '';
-      if (err.includes('3 personajes')) {
-        msgBox('claim-msg', false, 'Tu SV acredita maestría de hermandad, pero el reclamo requiere al menos 3 personajes validados. Registra otro personaje y vuelve a subir tu SV.');
-      } else if (err.includes('Miembro')) {
-        msgBox('claim-msg', false, 'La promoción a Miembro requiere al menos dos personajes registrados. El reclamo se completará cuando tu cuenta quede validada.');
-      } else {
-        msgBox('claim-msg', false, 'No se pudo reclamar: ' + err);
+      const claimEl = document.getElementById(
+        "hdr-guild-claim",
+      ) as HTMLElement | null;
+      if (claimEl) {
+        if (!guild) {
+          claimEl.classList.add("hidden");
+        } else {
+          const verified = guild.claim_status === "verified";
+          claimEl.textContent = verified
+            ? "✓ verificada"
+            : guild.claim_status === "rejected"
+              ? "✗ rechazada"
+              : "⏳ en revisión";
+          claimEl.className =
+            chipBase +
+            (verified
+              ? " text-emerald-300 bg-emerald-950/30 border-emerald-600/40"
+              : guild.claim_status === "rejected"
+                ? " text-red-300 bg-red-950/30 border-red-600/40"
+                : " text-amber-300 bg-amber-950/30 border-amber-600/40");
+          claimEl.classList.remove("hidden");
+        }
       }
     }
-  });
 
-  (document.getElementById('sv-select') as HTMLSelectElement).addEventListener('change', (e) => {
-    const id = (e.target as HTMLSelectElement).value;
-    if (id) void renderSnapshot(id);
-  });
-
-  // ── Eliminar un análisis individual (confirmación modal) ─────────────────
-  const svDeleteModal = document.getElementById('sv-delete-modal') as HTMLElement;
-  const svDeleteBtn = document.getElementById('sv-delete-btn') as HTMLButtonElement;
-  const svDeleteLabel = document.getElementById('sv-delete-label') as HTMLElement;
-  const svDeleteMsg = document.getElementById('sv-delete-msg') as HTMLElement;
-  const svDeleteCancel = document.getElementById('sv-delete-cancel') as HTMLButtonElement;
-  const svDeleteConfirm = document.getElementById('sv-delete-confirm') as HTMLButtonElement;
-
-  function closeSvDeleteModal(): void {
-    svDeleteModal.classList.add('hidden');
-    svDeleteMsg.classList.add('hidden');
-    svDeleteConfirm.disabled = false;
-    svDeleteConfirm.textContent = 'Eliminar';
-  }
-
-  svDeleteBtn.addEventListener('click', () => {
-    const item = uploadsCache.find((u) => u.id === currentSvId);
-    svDeleteLabel.textContent = item ? `"${svLabel(item)}"` : '';
-    svDeleteMsg.classList.add('hidden');
-    svDeleteConfirm.disabled = false;
-    svDeleteConfirm.textContent = 'Eliminar';
-    svDeleteModal.classList.remove('hidden');
-  });
-
-  document.getElementById('sv-delete-backdrop')?.addEventListener('click', closeSvDeleteModal);
-  svDeleteCancel.addEventListener('click', closeSvDeleteModal);
-
-  svDeleteConfirm.addEventListener('click', async () => {
-    if (!currentSvId) { closeSvDeleteModal(); return; }
-    svDeleteConfirm.disabled = true;
-    svDeleteConfirm.textContent = 'Eliminando…';
-    const res = await deleteMyUpload(currentSvId);
-    if (!res.ok) {
-      svDeleteConfirm.disabled = false;
-      svDeleteConfirm.textContent = 'Eliminar';
-      svDeleteMsg.className = 'mt-3 text-sm rounded-md px-4 py-2.5 bg-red-950/40 border border-red-900/40 text-red-200';
-      svDeleteMsg.textContent = 'No se pudo eliminar el análisis: ' + (res.error || '');
-      return;
+    // ¿Puede publicar bandas/personajes? Un Visitante sin personajes validados
+    // no puede activar visibilidad pública hasta validar como Miembro (regla
+    // 20260830: >= 2 personajes registrados validan la cuenta y la promueven).
+    function canPublishContent(): boolean {
+      if (currentRole === "visitante") {
+        return myCharacters.some((c) => c.member_verified);
+      }
+      return true;
     }
-    svDeleteMsg.className = 'mt-3 text-sm rounded-md px-4 py-2.5 bg-emerald-950/40 border border-emerald-900/40 text-emerald-200';
-    svDeleteMsg.textContent = 'Análisis eliminado.';
-    await loadHistory();
-    closeSvDeleteModal();
-  });
-
-  // Escape cierra el modal
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !svDeleteModal.classList.contains('hidden')) {
-      closeSvDeleteModal();
-    }
-  });
-
-  // ── Mis Bandas ───────────────────────────────────────────────────────────
-  // Las bandas y reglas nacen del SV (el addon es la única fuente; sin
-  // formularios). Aquí solo se controla la visibilidad pública de cada una.
-
-  function populateBandSelect(): void {
-    const wrap = document.getElementById('band-select-wrap') as HTMLElement;
-    const sel = document.getElementById('band-select') as HTMLSelectElement;
-    sel.innerHTML = '';
-    allBands.forEach((b, i) => {
-      const opt = document.createElement('option');
-      opt.value = b.id;
-      const name = b.name || 'Banda sin nombre';
-      opt.textContent = b.schedule ? `${i + 1}. ${name} · ${b.schedule}` : `${i + 1}. ${name}`;
-      if (b.id === currentBandId) opt.selected = true;
-      sel.appendChild(opt);
+    const PUBLISH_GATE_MSG =
+      "Estás en Visitante y tus personajes aún no están validados. Para publicar personajes y bandas, sube tu SavedVariables con al menos dos personajes: tu cuenta quedará validada como Miembro y podrás activar su visibilidad pública.";
+    // Resuelve cuando loadProfile fija currentRole; personajes/bandas esperan
+    // por él para aplicar correctamente el gate de publicación.
+    let resolveProfileReady: () => void;
+    const profileReady = new Promise<void>((r) => {
+      resolveProfileReady = r;
     });
-    updateBandCounter();
-    // Evita listeners duplicados si loadBands corre varias veces.
-    sel.replaceWith(sel.cloneNode(true));
-    (document.getElementById('band-select') as HTMLSelectElement).addEventListener('change', (e) => {
+
+    interface MsgBoxOpts {
+      toast?: boolean;
+      title?: string;
+    }
+    function msgBox(id: string, ok: boolean, text: string, opts?: MsgBoxOpts): void {
+      const box = document.getElementById(id) as HTMLElement;
+      box.textContent = text;
+      box.className = `mt-3 text-sm rounded-md px-4 py-2.5 ${ok ? ui.status.success : ui.status.error}`;
+      if (opts?.toast === false) return;
+      const title = opts?.title ?? (ok ? "Operación exitosa" : "Ocurrió un error");
+      if (ok) toast.success(title, text);
+      else toast.error(title, text);
+    }
+
+    // Muestra u oculta el enlace al perfil público con un slug conocido o generándolo
+    async function syncPublicLink(
+      isPublic: boolean | null | undefined,
+      knownSlug?: string,
+    ): Promise<void> {
+      const link = document.getElementById(
+        "public-profile-link",
+      ) as HTMLAnchorElement;
+      if (!isPublic) {
+        link.classList.add("hidden");
+        return;
+      }
+      let slug = knownSlug;
+      if (!slug) {
+        const res = await ensureMyProfileSlug();
+        if (res.ok && res.slug) slug = res.slug;
+      }
+      if (slug) {
+        link.href = `/jugador/${slug}`;
+        link.classList.remove("hidden");
+      }
+    }
+
+    // ── Sesión ───────────────────────────────────────────────────────────────
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session?.user) {
+      window.location.replace("/login?next=%2Fdashboard");
+    } else {
+      const email = sessionData.session.user.email ?? "";
+      accountEmail = email;
+      emailEl.textContent = email;
+      avatarEl.textContent = (email[0] ?? "?").toUpperCase();
+
+      void loadProfile();
+      void loadCharacters();
+      void loadHistory();
+      void loadGuilds();
+      void loadBands();
+    }
+
+    // ── Pestañas ─────────────────────────────────────────────────────────────
+    // La barra de pestañas se genera desde src/lib/ui/tabs.ts (contrato único):
+    // ids, labels y hashes salen SOLO de ahí, nunca hardcodeados aquí.
+    const tabBar = document.getElementById("tab-bar") as HTMLElement;
+    const tabBtnCls =
+      "tab-btn shrink-0 whitespace-nowrap px-2 sm:px-4 py-2.5 text-xs font-black uppercase tracking-widest border-b-2 rounded-t-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 hover:text-amber-200";
+    const tabs: HTMLButtonElement[] = DASHBOARD_TABS.map((t) => {
+      const btn = document.createElement("button");
+      btn.id = `tab-${t.id}`;
+      btn.dataset.tab = t.id;
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-controls", `panel-${t.id}`);
+      // Contrato de barra: todas las pestañas alineadas a la izquierda; el
+      // scroll horizontal (oculto) deja ver el resto en pantallas estrechas.
+      btn.className = tabBtnCls;
+      btn.textContent = t.label;
+      tabBar.appendChild(btn);
+      return btn;
+    });
+
+    function activateTab(name: PanelName, updateHash = true): void {
+      // El panel oculto de configuración no es una pestaña: al activar cualquier
+      // pestaña se cierra (se reabre SOLO con su ícono de engranaje).
+      document
+        .getElementById(`panel-${DASHBOARD_CONFIG.id}`)
+        ?.classList.add("hidden");
+      tabs.forEach((b) => {
+        const active = b.dataset.tab === name;
+        b.setAttribute("aria-selected", String(active));
+        b.tabIndex = active ? 0 : -1;
+        // Tabs limpios: sin fondo ni caja; solo el borde inferior activo.
+        b.classList.toggle("border-amber-400", active);
+        b.classList.toggle("text-amber-200", active);
+        b.classList.toggle("border-transparent", !active);
+        b.classList.toggle("text-gray-500", !active);
+      });
+      PANELS.forEach((p) => {
+        document
+          .getElementById(`panel-${p}`)
+          ?.classList.toggle("hidden", p !== name);
+      });
+      if (updateHash) {
+        const target = tabHash(name);
+        if (window.location.hash !== target) {
+          // replaceState evita saltar y no ensucia el historial con cada click
+          window.history.replaceState(null, "", target);
+        }
+      }
+    }
+
+    tabs.forEach((btn) =>
+      btn.addEventListener("click", () =>
+        activateTab((btn.dataset.tab ?? PANELS[0]) as PanelName),
+      ),
+    );
+    document
+      .querySelectorAll<HTMLButtonElement>(".goto-btn")
+      .forEach((b) =>
+        b.addEventListener("click", () =>
+          activateTab((b.dataset.goto ?? PANELS[0]) as PanelName),
+        ),
+      );
+
+    // "Pestaña oculta" de configuración (seguridad y zona de peligro): desactiva
+    // la barra y muestra SOLO su panel. Se abre desde el ícono de engranaje del
+    // encabezado (DASHBOARD_CONFIG en tabs.ts, hash #cuenta).
+    function openConfigPanel(updateHash = true): void {
+      tabs.forEach((b) => {
+        b.setAttribute("aria-selected", "false");
+        b.tabIndex = -1;
+        b.classList.remove("border-amber-400", "text-amber-200");
+        b.classList.add("border-transparent", "text-gray-500");
+      });
+      PANELS.forEach((p) =>
+        document.getElementById(`panel-${p}`)?.classList.add("hidden"),
+      );
+      document
+        .getElementById(`panel-${DASHBOARD_CONFIG.id}`)
+        ?.classList.remove("hidden");
+      if (updateHash) {
+        const target = DASHBOARD_CONFIG.hash;
+        if (window.location.hash !== target) {
+          window.history.replaceState(null, "", target);
+        }
+      }
+    }
+    const configBtn = document.getElementById(
+      "config-btn",
+    ) as HTMLButtonElement | null;
+    configBtn?.addEventListener("click", () => openConfigPanel());
+
+    // Deep-link: #cuenta abre la configuración (el hash histórico #perfil se
+    // redirige a #cuenta); cualquier otro hash cae a la pestaña correspondiente
+    // de la barra (o la primera si no existe).
+    function syncTabFromHash(): void {
+      let id = tabFromHash(window.location.hash);
+      if (id === "perfil") {
+        id = DASHBOARD_CONFIG.id;
+        if (window.location.hash !== DASHBOARD_CONFIG.hash) {
+          window.history.replaceState(null, "", DASHBOARD_CONFIG.hash);
+        }
+      }
+      if (id === DASHBOARD_CONFIG.id) {
+        openConfigPanel(false);
+        return;
+      }
+      activateTab((PANELS.includes(id) ? id : PANELS[0]) as PanelName, false);
+    }
+    window.addEventListener("hashchange", syncTabFromHash);
+    syncTabFromHash();
+
+    // Patrón ARIA tabs: ←/→ mueven foco (con activación), Home/End saltan a los extremos
+    tabBar.addEventListener("keydown", (e) => {
+      const ev = e as KeyboardEvent;
+      const idx = tabs.indexOf(ev.target as HTMLButtonElement);
+      if (idx === -1) return;
+      let next: number | null = null;
+      if (ev.key === "ArrowRight") next = (idx + 1) % tabs.length;
+      else if (ev.key === "ArrowLeft")
+        next = (idx - 1 + tabs.length) % tabs.length;
+      else if (ev.key === "Home") next = 0;
+      else if (ev.key === "End") next = tabs.length - 1;
+      if (next === null) return;
+      ev.preventDefault();
+      const target = tabs[next];
+      target.focus();
+      activateTab((target.dataset.tab ?? PANELS[0]) as PanelName);
+    });
+
+    // ── Perfil ───────────────────────────────────────────────────────────────
+
+    // Rellena el <select> del personaje principal SOLO con personajes PÚBLICOS.
+    // Incluye la opción "Ninguno" para poder desmarcar el principal.
+    function populateMainCharacterSelect(): void {
+      const sel = document.getElementById(
+        "character-main",
+      ) as HTMLSelectElement;
+      const hint = document.getElementById(
+        "character-main-hint",
+      ) as HTMLElement;
+      sel.innerHTML = "";
+      const none = document.createElement("option");
+      none.value = "";
+      none.textContent = "Ninguno";
+      sel.appendChild(none);
+      // Solo los personajes habilitados como públicos pueden ser principal: un
+      // personaje privado no aparece en la lista ni se puede guardar como tal.
+      const publicChars = myCharacters.filter((c) => c.is_public);
+      publicChars.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.realm ? `${c.name} · ${c.realm}` : c.name;
+        sel.appendChild(opt);
+      });
+      if (publicChars.length === 0) {
+        sel.disabled = true;
+        sel.selectedIndex = 0;
+        hint.textContent =
+          myCharacters.length === 0
+            ? "Sube tu SavedVariables para detectar tus personajes y elegir tu principal."
+            : "Activa la visibilidad pública de al menos un personaje para elegir tu principal.";
+        return;
+      }
+      sel.disabled = false;
+      hint.textContent = "Solo puedes elegir entre tus personajes públicos.";
+      syncMainCharacterSelect();
+    }
+
+    // Preselecciona el personaje guardado SOLO si es PÚBLICO; si el guardado es
+    // privado o no existe, queda "Ninguno" seleccionado (opción índice 0).
+    // Nunca auto-selecciona un personaje de forma implícita.
+    function syncMainCharacterSelect(): void {
+      const sel = document.getElementById(
+        "character-main",
+      ) as HTMLSelectElement;
+      if (myCharacters.length === 0) return;
+      const match = profileCharacterName
+        ? myCharacters.find(
+            (c) => c.name.toUpperCase() === profileCharacterName!.toUpperCase(),
+          )
+        : undefined;
+      if (match && match.is_public) {
+        sel.value = match.id;
+      } else {
+        sel.selectedIndex = 0; // "Ninguno"
+      }
+    }
+
+    async function loadProfile(): Promise<void> {
+      const nameInput = document.getElementById(
+        "display-name",
+      ) as HTMLInputElement;
+      const publicToggle = document.getElementById(
+        "profile-public",
+      ) as HTMLInputElement;
+
+      const res = await getMyProfile();
+      if (!res.ok || !res.profile) {
+        badgeEl.textContent = "Visitante";
+        currentRole = "visitante";
+        profilePublic = false;
+        refreshHeaderBadges();
+        resolveProfileReady();
+        return;
+      }
+      const p = res.profile;
+      currentRole = p.role;
+      badgeEl.textContent = ROLE_LABELS[p.role] ?? p.role;
+      badgeEl.className = `${BADGE_BASE} ${ROLE_STYLES[p.role] ?? ROLE_STYLES.member}`;
+      profilePublic = p.is_public === true;
+      refreshHeaderBadges();
+
+      if (p.display_name) {
+        nameInput.value = p.display_name;
+      }
+
+      // Título de la cuenta: nombre visible → handle estable del slug. NUNCA se
+      // usa character_name como nombre de cuenta (el "Personaje principal" es
+      // solo un dato del perfil, no el nombre visible de la cuenta): las cuentas
+      // sin nombre visible caen a su @hex (p. ej. @e3ef4b2).
+      const accountTitle =
+        (p.display_name ?? "").trim() || handleFromSlug(p.slug);
+      const titleEl = document.getElementById("account-title");
+      if (titleEl) titleEl.textContent = accountTitle || "Cuenta";
+      avatarEl.textContent = (
+        accountTitle.replace(/^@/, "")[0] || "?"
+      ).toUpperCase();
+      profileCharacterName = p.character_name;
+      syncMainCharacterSelect();
+      publicToggle.checked = p.is_public === true;
+
+      await syncPublicLink(p.is_public, p.slug ?? undefined);
+      resolveProfileReady();
+    }
+
+    // La visibilidad pública se persiste al instante (no requiere Guardar)
+    document
+      .getElementById("profile-public")
+      ?.addEventListener("change", async (e) => {
+        const box = e.target as HTMLInputElement;
+        box.disabled = true;
+        const res = await updateMyProfile({ is_public: box.checked });
+        box.disabled = false;
+        if (!res.ok) {
+          box.checked = !box.checked;
+          msgBox(
+            "profile-msg",
+            false,
+            "No se pudo cambiar la visibilidad: " + (res.error || ""),
+            { title: "Visibilidad del perfil" },
+          );
+          return;
+        }
+        profilePublic = box.checked;
+        refreshHeaderBadges();
+        await syncPublicLink(box.checked);
+        msgBox(
+          "profile-msg",
+          true,
+          box.checked ? "Perfil público activado." : "Perfil privado.",
+          { title: box.checked ? "Perfil público" : "Perfil privado" },
+        );
+      });
+
+    document
+      .getElementById("save-profile")
+      ?.addEventListener("click", async () => {
+        const btn = document.getElementById(
+          "save-profile",
+        ) as HTMLButtonElement;
+        const nameInput = document.getElementById(
+          "display-name",
+        ) as HTMLInputElement;
+        const publicToggle = document.getElementById(
+          "profile-public",
+        ) as HTMLInputElement;
+        const charSel = document.getElementById(
+          "character-main",
+        ) as HTMLSelectElement;
+        const selectedChar = myCharacters.find((c) => c.id === charSel.value);
+
+        btn.disabled = true;
+        btn.textContent = "Guardando…";
+        const res = await updateMyProfile({
+          display_name: nameInput.value.trim() || null,
+          character_name: selectedChar?.name ?? null,
+          is_public: publicToggle.checked,
+        });
+        btn.disabled = false;
+        btn.textContent = "Guardar cambios";
+
+        if (res.ok) {
+          profileCharacterName = selectedChar?.name ?? null;
+          profilePublic = publicToggle.checked;
+          refreshHeaderBadges();
+          // Al retirar el nombre visible, el avatar cae al personaje principal o,
+          // en su defecto, a la inicial del correo (nunca queda desactualizado).
+          const nameSource =
+            nameInput.value.trim() || selectedChar?.name || accountEmail || "";
+          avatarEl.textContent = nameSource[0]?.toUpperCase() || "?";
+          await syncPublicLink(publicToggle.checked);
+          msgBox(
+            "profile-msg",
+            true,
+            publicToggle.checked
+              ? "Cambios guardados. Tu perfil es público."
+              : "Cambios guardados. Tu perfil es privado.",
+            { title: "Perfil guardado" },
+          );
+        } else {
+          msgBox(
+            "profile-msg",
+            false,
+            "No se pudo guardar: " + (res.error || ""),
+            { title: "No se pudo guardar el perfil" },
+          );
+        }
+      });
+
+    // ── Mis Personajes ───────────────────────────────────────────────────────
+    // Indicadores del encabezado de Personajes: total y públicos.
+    function refreshHdrCharacters(): void {
+      const total = myCharacters.length;
+      const publics = myCharacters.filter((c) => c.is_public).length;
+      setHdrChip("hdr-chars-total", total);
+      setHdrChip("hdr-chars-public", publics);
+    }
+
+    async function loadCharacters(): Promise<void> {
+      await profileReady;
+      const listEl = document.getElementById("characters-list") as HTMLElement;
+      const statusEl = document.getElementById(
+        "characters-status",
+      ) as HTMLElement;
+      const onboardingEl = document.getElementById(
+        "characters-onboarding",
+      ) as HTMLElement;
+      const emptyEl = document.getElementById(
+        "characters-empty",
+      ) as HTMLElement;
+
+      const res = await getMyCharacters();
+      if (!res.ok) {
+        statusEl.textContent = "No se pudieron cargar tus personajes.";
+        statusEl.classList.remove("hidden");
+        return;
+      }
+      const items = res.items ?? [];
+      myCharacters = items;
+      refreshHdrCharacters();
+      populateMainCharacterSelect();
+      listEl.innerHTML = "";
+      // Encabezado y roster solo tienen sentido con personajes registrados.
+      emptyEl.classList.toggle("hidden", items.length > 0);
+      document
+        .getElementById("chars-sectionhead")
+        ?.classList.toggle("hidden", items.length === 0);
+      document
+        .getElementById("chars-sectionbody")
+        ?.classList.toggle("hidden", items.length === 0);
+      statusEl.classList.add("hidden");
+      if (items.length === 0) {
+        return;
+      }
+
+      // Onboarding: un Visitante sin personajes validados no puede publicar;
+      // el mensaje explica la regla hasta que valide como Miembro.
+      if (!canPublishContent()) {
+        onboardingEl.classList.remove("hidden");
+        onboardingEl.textContent = PUBLISH_GATE_MSG;
+      } else {
+        onboardingEl.classList.add("hidden");
+      }
+
+      items.forEach((c, i) =>
+        listEl.appendChild(
+          renderCharacterCard(c, {
+            number: i + 1,
+            canPublish: canPublishContent(),
+            hideStats: true,
+            setVisibility: async (visible) => {
+              const res = await setCharacterVisibility(c.id, visible);
+              if (res.ok) {
+                // Refresco del selector de personaje principal e indicadores.
+                populateMainCharacterSelect();
+                refreshHdrCharacters();
+              }
+              return res;
+            },
+          }),
+        ),
+      );
+    }
+
+    // ── Mi Registro: historial + visor del snapshot seleccionado ────────────
+
+    // Contador "Análisis N/total" del selector de análisis (patrón de bandas).
+    function updateSvCounter(): void {
+      const counter = document.getElementById(
+        "sv-counter",
+      ) as HTMLElement | null;
+      if (!counter) return;
+      const total = uploadsCache.length;
+      if (total === 0) {
+        counter.textContent = "";
+        return;
+      }
+      const idx = currentSvId
+        ? uploadsCache.findIndex((u) => u.id === currentSvId) + 1
+        : 1;
+      counter.textContent = `${idx} de ${total}`;
+    }
+
+    function showRegistroEmpty(note?: string): void {
+      document.getElementById("registro-empty")?.classList.remove("hidden");
+      document.getElementById("registro-main")?.classList.add("hidden");
+      const noteEl = document.getElementById(
+        "registro-empty-note",
+      ) as HTMLElement;
+      if (note) {
+        noteEl.textContent = note;
+        noteEl.classList.remove("hidden");
+      } else {
+        noteEl.classList.add("hidden");
+      }
+    }
+
+    function showBandsEmpty(): void {
+      // Las bandas se gestionan desde Mis Bandas (loadBands, datos de BD).
+      document.getElementById("band-detail")?.classList.add("hidden");
+      document.getElementById("band-select-wrap")?.classList.add("hidden");
+    }
+
+    async function loadHistory(): Promise<void> {
+      const select = document.getElementById("sv-select") as HTMLSelectElement;
+
+      const res = await listMyUploads();
+      if (!res.ok) {
+        showRegistroEmpty("No se pudo cargar tu historial de análisis.");
+        showBandsEmpty();
+        return;
+      }
+      const items = res.items ?? [];
+      uploadsCache = items;
+      refreshHdrRegistro();
+
+      if (items.length === 0) {
+        showRegistroEmpty();
+        showBandsEmpty();
+        return;
+      }
+
+      // Con análisis disponibles: muestra el visor y oculta el estado vacío
+      document.getElementById("registro-empty")?.classList.add("hidden");
+      document.getElementById("registro-main")?.classList.remove("hidden");
+
+      select.innerHTML = "";
+      items.forEach((item, i) => {
+        const opt = document.createElement("option");
+        opt.value = item.id;
+        opt.textContent = `${i + 1}. ${svLabel(item)}`;
+        select.appendChild(opt);
+      });
+      select.value = items[0].id;
+      updateSvCounter();
+
+      const first = items[0];
+      if (first) void renderSnapshot(first.id);
+    }
+
+    async function renderSnapshot(svId: string): Promise<void> {
+      currentSvId = svId;
+      updateSvCounter();
+      const res = await getUpload(svId);
+      if (!res.ok || !res.item?.raw) return;
+      const d = res.item.raw as ParsedSavedVariables;
+      const item = uploadsCache.find((u) => u.id === svId);
+
+      // Título del encabezado = título + fecha del análisis seleccionado. Se
+      // setea el SPAN interno para preservar el icono "ul" del encabezado.
+      const hdrTitle = document.getElementById("hdr-registro-title-text");
+      if (hdrTitle) hdrTitle.textContent = item ? svLabel(item) : "Análisis";
+
+      // Cifras del análisis en los chips del encabezado; el visor no repite
+      // estadísticas: solo muestra el contenido del registro.
+      lastSnapshot = d;
+      refreshHdrRegistro();
+
+      // Hermandades del registro (cifras)
+      renderGuilds(d);
+
+      // Personajes del registro (fusión player + cuenta + registries) con la
+      // card de personaje estandarizada; si el personaje tiene ficha pública,
+      // la card enlaza a ella (slug cruzado contra Mis Personajes).
+      const slugByKey = new Map<string, string>();
+      myCharacters.forEach((mc) => {
+        const key = characterListKey(mc.name, mc.realm);
+        if (mc.slug) slugByKey.set(key, mc.slug);
+      });
+      renderCharactersMerged(d, slugByKey, myCharacters);
+
+      const leadsAnywhere =
+        d.registryGuild?.isGM === true ||
+        d.registries.some((r) => r.guild?.isGM === true);
+      updateClaimBanner(leadsAnywhere);
+    }
+
+    // Hermandades del registro (registry.*.guild): capa fina que conecta el
+    // estado del closure (snapshotGmGuilds/updateClaimBanner) con los renderers
+    // puros de visitor.ts (collectRegistryGuilds + renderRegistryGuildCards).
+    function renderGuilds(d: ParsedSavedVariables): void {
+      const wrap = document.getElementById("viewer-guilds") as HTMLElement;
+      const guilds = collectRegistryGuilds(d);
+      snapshotGmGuilds = guilds.filter((g) => g.isGM).map((g) => g.name);
+      updateClaimBanner();
+      renderRegistryGuildCards(wrap, guilds);
+    }
+
+    // Banner de reclamo: si el snapshot acredita liderazgo de alguna hermandad
+    // que el usuario aún no ha reclamado (puede ser maestro de varias).
+    function updateClaimBanner(leads: boolean | null = null): void {
+      if (leads !== null) lastLeads = leads;
+      const unclaimed = snapshotGmGuilds.filter(
+        (n) =>
+          !myGuilds.some(
+            (g) => g.name.trim().toLowerCase() === n.trim().toLowerCase(),
+          ),
+      );
+      document
+        .getElementById("claim-banner")
+        ?.classList.toggle("hidden", !(lastLeads && unclaimed.length > 0));
+    }
+
+    const claimBtn = document.getElementById("claim-btn") as HTMLButtonElement;
+    claimBtn.addEventListener("click", async () => {
+      if (!currentSvId) return;
+      claimBtn.disabled = true;
+      claimBtn.textContent = "Reclamando…";
+
+      // Promoción pendiente: una cuenta con >= 2 personajes registrados pasa a
+      // Miembro en BD. Sin esto, un Visitante que ya cumple la regla chocaría
+      // con "Requiere ser Miembro o Maestro" del RPC de reclamo.
+      const promo = await tryPromoteMember(currentSvId);
+      if (promo.ok && promo.data?.promoted) {
+        currentRole = "member";
+        badgeEl.textContent = ROLE_LABELS.member ?? "member";
+        badgeEl.className = `${BADGE_BASE} ${ROLE_STYLES.member}`;
+        refreshHeaderBadges();
+        toast.success(
+          "Promovido a Miembro",
+          "Tu cuenta quedó validada como Miembro.",
+        );
+      }
+
+      const res = await claimGuildFromSV(currentSvId);
+      claimBtn.disabled = false;
+      claimBtn.textContent = "Reclamar mis hermandades";
+      if (res.ok) {
+        msgBox(
+          "claim-msg",
+          true,
+          "¡Hermandad(es) reclamada(s)! Ya eres Maestro: publícalas desde Hermandad.",
+          { toast: false },
+        );
+        toast.success(
+          "Hermandad(es) reclamada(s)",
+          "Eres maestro; ve a la pestaña Hermandad para publicar tus portales.",
+          { duration: 6000 },
+        );
+        updateClaimBanner(false);
+        void loadGuilds();
+        void loadProfile();
+      } else {
+        const err = res.error || "";
+        if (err.includes("personaje validado")) {
+          msgBox(
+            "claim-msg",
+            false,
+            "El reclamo requiere al menos un personaje validado. Valida tu cuenta registrando tu personaje y vuelve a subir tu SV.",
+            { title: "Reclamo de hermandad" },
+          );
+        } else if (err.includes("otra cuenta")) {
+          msgBox(
+            "claim-msg",
+            false,
+            "Este SavedVariables pertenece a otra cuenta; no puedes reclamar su hermandad desde aquí.",
+            { title: "Reclamo de hermandad" },
+          );
+        } else if (err.includes("Miembro")) {
+          msgBox(
+            "claim-msg",
+            false,
+            "La validación a Miembro requiere personajes registrados (con un SV de maestro, isGM, basta uno). El reclamo se completará cuando tu cuenta quede validada.",
+            { title: "Reclamo de hermandad" },
+          );
+        } else {
+          msgBox("claim-msg", false, "No se pudo reclamar: " + err, {
+            title: "Reclamo de hermandad",
+          });
+        }
+      }
+    });
+
+    (
+      document.getElementById("sv-select") as HTMLSelectElement
+    ).addEventListener("change", (e) => {
       const id = (e.target as HTMLSelectElement).value;
-      currentBandId = id;
-      showBandDetail(id);
+      if (id) void renderSnapshot(id);
     });
-    wrap.classList.toggle('hidden', allBands.length === 0);
-  }
 
-  function updateBandCounter(): void {
-    const counter = document.getElementById('band-counter') as HTMLElement | null;
-    if (!counter) return;
-    const total = allBands.length;
-    if (total === 0) {
-      counter.textContent = '';
-      return;
+    // ── Eliminar un análisis individual (confirmación modal) ─────────────────
+    const svDeleteModal = document.getElementById(
+      "sv-delete-modal",
+    ) as HTMLElement;
+    const svDeleteBtn = document.getElementById(
+      "sv-delete-btn",
+    ) as HTMLButtonElement;
+    const svDeleteLabel = document.getElementById(
+      "sv-delete-label",
+    ) as HTMLElement;
+    const svDeleteMsg = document.getElementById("sv-delete-msg") as HTMLElement;
+    const svDeleteCancel = document.getElementById(
+      "sv-delete-cancel",
+    ) as HTMLButtonElement;
+    const svDeleteConfirm = document.getElementById(
+      "sv-delete-confirm",
+    ) as HTMLButtonElement;
+
+    function closeSvDeleteModal(): void {
+      svDeleteModal.classList.add("hidden");
+      svDeleteMsg.classList.add("hidden");
+      svDeleteConfirm.disabled = false;
+      svDeleteConfirm.textContent = "Eliminar";
     }
-    const idx = currentBandId ? allBands.findIndex((x) => x.id === currentBandId) + 1 : 1;
-    counter.textContent = `${idx} de ${total}`;
-  }
 
-  function showBandDetail(id: string): void {
-    const detailEl = document.getElementById('band-detail') as HTMLElement;
-    const band = allBands.find((b) => b.id === id);
-    if (!band) {
-      detailEl.classList.add('hidden');
+    svDeleteBtn.addEventListener("click", () => {
+      const item = uploadsCache.find((u) => u.id === currentSvId);
+      svDeleteLabel.textContent = item ? `"${svLabel(item)}"` : "";
+      svDeleteMsg.classList.add("hidden");
+      svDeleteConfirm.disabled = false;
+      svDeleteConfirm.textContent = "Eliminar";
+      svDeleteModal.classList.remove("hidden");
+    });
+
+    document
+      .getElementById("sv-delete-backdrop")
+      ?.addEventListener("click", closeSvDeleteModal);
+    svDeleteCancel.addEventListener("click", closeSvDeleteModal);
+
+    svDeleteConfirm.addEventListener("click", async () => {
+      if (!currentSvId) {
+        closeSvDeleteModal();
+        return;
+      }
+      svDeleteConfirm.disabled = true;
+      svDeleteConfirm.textContent = "Eliminando…";
+      const res = await deleteMyUpload(currentSvId);
+      if (!res.ok) {
+        svDeleteConfirm.disabled = false;
+        svDeleteConfirm.textContent = "Eliminar";
+        svDeleteMsg.className =
+          "mt-3 text-sm rounded-md px-4 py-2.5 bg-red-950/40 border border-red-900/40 text-red-200";
+        const msg = "No se pudo eliminar el análisis: " + (res.error || "");
+        svDeleteMsg.textContent = msg;
+        toast.error(
+          "No se pudo eliminar el análisis",
+          res.error || "Error desconocido",
+        );
+        return;
+      }
+      svDeleteMsg.className =
+        "mt-3 text-sm rounded-md px-4 py-2.5 bg-emerald-950/40 border border-emerald-900/40 text-emerald-200";
+      svDeleteMsg.textContent = "Análisis eliminado.";
+      toast.success(
+        "Análisis eliminado",
+        "El SavedVariables seleccionado fue borrado de tu historial.",
+      );
+      await loadHistory();
+      closeSvDeleteModal();
+    });
+
+    // Escape cierra el modal
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !svDeleteModal.classList.contains("hidden")) {
+        closeSvDeleteModal();
+      }
+    });
+
+    // ── Mis Bandas ───────────────────────────────────────────────────────────
+    // Las bandas y reglas nacen del SV (el addon es la única fuente; sin
+    // formularios). Aquí solo se controla la visibilidad pública de cada una.
+
+    function populateBandSelect(): void {
+      const wrap = document.getElementById("band-select-wrap") as HTMLElement;
+      const sel = document.getElementById("band-select") as HTMLSelectElement;
+      sel.innerHTML = "";
+      allBands.forEach((b, i) => {
+        const opt = document.createElement("option");
+        opt.value = b.id;
+        const name = b.name || "Banda sin nombre";
+        opt.textContent = b.schedule
+          ? `${i + 1}. ${name} · ${b.schedule}`
+          : `${i + 1}. ${name}`;
+        if (b.id === currentBandId) opt.selected = true;
+        sel.appendChild(opt);
+      });
+      updateBandCounter();
+      // Evita listeners duplicados si loadBands corre varias veces.
+      sel.replaceWith(sel.cloneNode(true));
+      (
+        document.getElementById("band-select") as HTMLSelectElement
+      ).addEventListener("change", (e) => {
+        const id = (e.target as HTMLSelectElement).value;
+        currentBandId = id;
+        showBandDetail(id);
+      });
+      wrap.classList.toggle("hidden", allBands.length === 0);
+    }
+
+    function updateBandCounter(): void {
+      const counter = document.getElementById(
+        "band-counter",
+      ) as HTMLElement | null;
+      if (!counter) return;
+      const total = allBands.length;
+      if (total === 0) {
+        counter.textContent = "";
+        return;
+      }
+      const idx = currentBandId
+        ? allBands.findIndex((x) => x.id === currentBandId) + 1
+        : 1;
+      counter.textContent = `${idx} de ${total}`;
+    }
+
+    function showBandDetail(id: string): void {
+      const detailEl = document.getElementById("band-detail") as HTMLElement;
+      const band = allBands.find((b) => b.id === id);
+      if (!band) {
+        detailEl.classList.add("hidden");
+        updateBandCounter();
+        refreshHdrBandSelected();
+        return;
+      }
       updateBandCounter();
       refreshHdrBandSelected();
-      return;
+      detailEl.innerHTML = "";
+      detailEl.classList.remove("hidden");
+      detailEl.appendChild(
+        renderBandDetail(band, {
+          blocked: !canPublishContent(),
+          membershipGuilds,
+          rulesCatalog,
+          onHdrRefresh: refreshHdrBands,
+        }),
+      );
     }
-    updateBandCounter();
-    refreshHdrBandSelected();
-    detailEl.innerHTML = '';
-    detailEl.classList.remove('hidden');
-    detailEl.appendChild(renderBandDetail(band, {
-      blocked: !canPublishContent(),
-      membershipGuilds,
-      rulesCatalog,
-      onHdrRefresh: refreshHdrBands,
-    }));
-  }
 
-  // ── Navegador de hermandades (patrón del selector de bandas) ─────────────
+    // ── Navegador de hermandades (patrón del selector de bandas) ─────────────
 
-  function populateGuildSelect(): void {
-    const wrap = document.getElementById('guild-select-wrap') as HTMLElement;
-    const sel = document.getElementById('guild-select') as HTMLSelectElement;
-    sel.innerHTML = '';
-    myGuilds.forEach((g, i) => {
-      const opt = document.createElement('option');
-      opt.value = g.id;
-      const realm = g.realm ? ` · ${g.realm}` : '';
-      opt.textContent = `${i + 1}. ${g.name}${realm}`;
-      if (g.id === currentGuildId) opt.selected = true;
-      sel.appendChild(opt);
-    });
-    updateGuildCounter();
-    // Evita listeners duplicados si loadGuilds corre varias veces.
-    sel.replaceWith(sel.cloneNode(true));
-    (document.getElementById('guild-select') as HTMLSelectElement).addEventListener('change', (e) => {
-      const id = (e.target as HTMLSelectElement).value;
-      currentGuildId = id;
-      showGuildDetail(id);
-    });
-    wrap.classList.toggle('hidden', myGuilds.length === 0);
-  }
-
-  function updateGuildCounter(): void {
-    const counter = document.getElementById('guild-counter') as HTMLElement | null;
-    if (!counter) return;
-    const total = myGuilds.length;
-    if (total === 0) {
-      counter.textContent = '';
-      return;
-    }
-    const idx = currentGuildId ? myGuilds.findIndex((x) => x.id === currentGuildId) + 1 : 1;
-    counter.textContent = `${idx} de ${total}`;
-  }
-
-  function showGuildDetail(id: string): void {
-    const cardsEl = document.getElementById('guild-cards') as HTMLElement;
-    const guild = myGuilds.find((g) => g.id === id);
-    if (!guild) {
-      cardsEl.innerHTML = '';
+    function populateGuildSelect(): void {
+      const wrap = document.getElementById("guild-select-wrap") as HTMLElement;
+      const sel = document.getElementById("guild-select") as HTMLSelectElement;
+      sel.innerHTML = "";
+      myGuilds.forEach((g, i) => {
+        const opt = document.createElement("option");
+        opt.value = g.id;
+        const realm = g.realm ? ` · ${g.realm}` : "";
+        opt.textContent = `${i + 1}. ${g.name}${realm}`;
+        if (g.id === currentGuildId) opt.selected = true;
+        sel.appendChild(opt);
+      });
       updateGuildCounter();
-      return;
-    }
-    updateGuildCounter();
-    refreshHdrGuild();
-    cardsEl.innerHTML = '';
-    cardsEl.appendChild(renderGuildCard(guild, {
-      rulesCatalog,
-      refreshHdrGuild,
-      guildMembersCount,
-      guildBandsCount,
-      guildRulesCount,
-    }));
-  }
-
-  async function loadBands(): Promise<void> {
-    await profileReady;
-    const selectWrap = document.getElementById('band-select-wrap') as HTMLElement;
-    const detailEl = document.getElementById('band-detail') as HTMLElement;
-    const emptyEl = document.getElementById('bands-empty') as HTMLElement;
-    const statusEl = document.getElementById('bands-status') as HTMLElement;
-
-    const [res, memRes, rulesRes] = await Promise.all([getMyBands(), getMyMembershipGuilds(), getMyRulesCatalog()]);
-    if (!res.ok) {
-      selectWrap.classList.add('hidden');
-      detailEl.classList.add('hidden');
-      emptyEl.classList.add('hidden');
-      statusEl.textContent = 'No se pudieron cargar tus bandas: ' + (res.error || '');
-      return;
-    }
-    if (memRes.ok) membershipGuilds = memRes.items ?? [];
-    if (rulesRes.ok) rulesCatalog = rulesRes.items ?? [];
-    const items = res.items ?? [];
-    allBands = items;
-    currentBandId = items[0]?.id ?? null;
-    const onboardingEl = document.getElementById('bands-onboarding') as HTMLElement;
-
-    selectWrap.classList.toggle('hidden', items.length === 0);
-    emptyEl.classList.toggle('hidden', items.length > 0);
-    // Ventana del gestor y empty state son mutuamente excluyentes (modelo de
-    // las hermanas): el gestor solo tiene sentido con bandas registradas.
-    document.getElementById('bands-sectionhead')?.classList.toggle('hidden', items.length === 0);
-    document.getElementById('bands-sectionbody')?.classList.toggle('hidden', items.length === 0);
-    statusEl.textContent = '';
-    refreshHdrBands();
-    if (items.length > 0) {
-      populateBandSelect();
-      showBandDetail(currentBandId!);
-    } else {
-      detailEl.innerHTML = '';
-      detailEl.classList.add('hidden');
+      // Evita listeners duplicados si loadGuilds corre varias veces.
+      sel.replaceWith(sel.cloneNode(true));
+      (
+        document.getElementById("guild-select") as HTMLSelectElement
+      ).addEventListener("change", (e) => {
+        const id = (e.target as HTMLSelectElement).value;
+        currentGuildId = id;
+        showGuildDetail(id);
+      });
+      wrap.classList.toggle("hidden", myGuilds.length === 0);
     }
 
-    // Onboarding: un Visitante sin personajes validados no puede publicar.
-    onboardingEl.classList.toggle('hidden', !(items.length > 0 && !canPublishContent()));
-    onboardingEl.textContent = PUBLISH_GATE_MSG;
-  }
+    function updateGuildCounter(): void {
+      const counter = document.getElementById(
+        "guild-counter",
+      ) as HTMLElement | null;
+      if (!counter) return;
+      const total = myGuilds.length;
+      if (total === 0) {
+        counter.textContent = "";
+        return;
+      }
+      const idx = currentGuildId
+        ? myGuilds.findIndex((x) => x.id === currentGuildId) + 1
+        : 1;
+      counter.textContent = `${idx} de ${total}`;
+    }
 
-  // ── Mi Hermandad ─────────────────────────────────────────────────────────
-  // ── Mi Hermandad (multi-hermandad) ───────────────────────────────────────
+    function showGuildDetail(id: string): void {
+      const cardsEl = document.getElementById("guild-cards") as HTMLElement;
+      const guild = myGuilds.find((g) => g.id === id);
+      if (!guild) {
+        cardsEl.innerHTML = "";
+        updateGuildCounter();
+        return;
+      }
+      updateGuildCounter();
+      refreshHdrGuild();
+      cardsEl.innerHTML = "";
+      cardsEl.appendChild(
+        renderGuildCard(guild, {
+          rulesCatalog,
+          refreshHdrGuild,
+          guildMembersCount,
+          guildBandsCount,
+          guildRulesCount,
+        }),
+      );
+    }
 
-  async function loadGuilds(): Promise<void> {
-    const empty = document.getElementById('guild-empty') as HTMLElement;
-    const manage = document.getElementById('guild-manage') as HTMLElement;
+    async function loadBands(): Promise<void> {
+      await profileReady;
+      const selectWrap = document.getElementById(
+        "band-select-wrap",
+      ) as HTMLElement;
+      const detailEl = document.getElementById("band-detail") as HTMLElement;
+      const emptyEl = document.getElementById("bands-empty") as HTMLElement;
+      const statusEl = document.getElementById("bands-status") as HTMLElement;
 
-    const res = await getMyGuilds();
-    if (!res.ok) {
-      myGuilds = [];
+      const [res, memRes, rulesRes] = await Promise.all([
+        getMyBands(),
+        getMyMembershipGuilds(),
+        getMyRulesCatalog(),
+      ]);
+      if (!res.ok) {
+        selectWrap.classList.add("hidden");
+        detailEl.classList.add("hidden");
+        emptyEl.classList.add("hidden");
+        statusEl.textContent =
+          "No se pudieron cargar tus bandas: " + (res.error || "");
+        return;
+      }
+      if (memRes.ok) membershipGuilds = memRes.items ?? [];
+      if (rulesRes.ok) rulesCatalog = rulesRes.items ?? [];
+      const items = res.items ?? [];
+      allBands = items;
+      currentBandId = items[0]?.id ?? null;
+      const onboardingEl = document.getElementById(
+        "bands-onboarding",
+      ) as HTMLElement;
+
+      selectWrap.classList.toggle("hidden", items.length === 0);
+      emptyEl.classList.toggle("hidden", items.length > 0);
+      // Ventana del gestor y empty state son mutuamente excluyentes (modelo de
+      // las hermanas): el gestor solo tiene sentido con bandas registradas.
+      document
+        .getElementById("bands-sectionhead")
+        ?.classList.toggle("hidden", items.length === 0);
+      document
+        .getElementById("bands-sectionbody")
+        ?.classList.toggle("hidden", items.length === 0);
+      statusEl.textContent = "";
+      refreshHdrBands();
+      if (items.length > 0) {
+        populateBandSelect();
+        showBandDetail(currentBandId!);
+      } else {
+        detailEl.innerHTML = "";
+        detailEl.classList.add("hidden");
+      }
+
+      // Onboarding: un Visitante sin personajes validados no puede publicar.
+      onboardingEl.classList.toggle(
+        "hidden",
+        !(items.length > 0 && !canPublishContent()),
+      );
+      onboardingEl.textContent = PUBLISH_GATE_MSG;
+    }
+
+    // ── Mi Hermandad ─────────────────────────────────────────────────────────
+    // ── Mi Hermandad (multi-hermandad) ───────────────────────────────────────
+
+    async function loadGuilds(): Promise<void> {
+      const empty = document.getElementById("guild-empty") as HTMLElement;
+      const manage = document.getElementById("guild-manage") as HTMLElement;
+
+      const res = await getMyGuilds();
+      if (!res.ok) {
+        myGuilds = [];
+        updateClaimBanner();
+        return;
+      }
+      const items = res.items ?? [];
+      myGuilds = items;
+      guildMembersCount.clear();
+      guildBandsCount.clear();
+      guildRulesCount.clear();
+      refreshHdrGuild();
+      // El aviso de "bandas sin hermandad" depende de myGuilds: se re-evalúa aquí.
+      void loadBands();
+
+      if (items.length === 0) {
+        empty.classList.remove("hidden");
+        manage.classList.add("hidden");
+        updateClaimBanner();
+        return;
+      }
+
+      empty.classList.add("hidden");
+      manage.classList.remove("hidden");
+      // Catálogo de reglas para el editor de cada ficha de hermandad (el mismo
+      // que usa el panel de bandas: unión de raw.rules de los uploads).
+      const rulesRes = await getMyRulesCatalog();
+      if (rulesRes.ok) rulesCatalog = rulesRes.items ?? [];
+      currentGuildId = items[0]?.id ?? null;
+      populateGuildSelect();
+      if (currentGuildId) showGuildDetail(currentGuildId);
       updateClaimBanner();
-      return;
-    }
-    const items = res.items ?? [];
-    myGuilds = items;
-    guildMembersCount.clear();
-    guildBandsCount.clear();
-    guildRulesCount.clear();
-    refreshHdrGuild();
-    // El aviso de "bandas sin hermandad" depende de myGuilds: se re-evalúa aquí.
-    void loadBands();
-
-    if (items.length === 0) {
-      empty.classList.remove('hidden');
-      manage.classList.add('hidden');
-      updateClaimBanner();
-      return;
     }
 
-    empty.classList.add('hidden');
-    manage.classList.remove('hidden');
-    // Catálogo de reglas para el editor de cada ficha de hermandad (el mismo
-    // que usa el panel de bandas: unión de raw.rules de los uploads).
-    const rulesRes = await getMyRulesCatalog();
-    if (rulesRes.ok) rulesCatalog = rulesRes.items ?? [];
-    currentGuildId = items[0]?.id ?? null;
-    populateGuildSelect();
-    if (currentGuildId) showGuildDetail(currentGuildId);
-    updateClaimBanner();
-  }
+    // ── Seguridad: contraseña y sesión ───────────────────────────────────────
+    document
+      .getElementById("save-password")
+      ?.addEventListener("click", async () => {
+        const btn = document.getElementById(
+          "save-password",
+        ) as HTMLButtonElement;
+        const pass = (
+          document.getElementById("new-password") as HTMLInputElement
+        ).value;
+        const confirm = (
+          document.getElementById("new-password-confirm") as HTMLInputElement
+        ).value;
 
-  // ── Seguridad: contraseña y sesión ───────────────────────────────────────
-  document.getElementById('save-password')?.addEventListener('click', async () => {
-    const btn = document.getElementById('save-password') as HTMLButtonElement;
-    const pass = (document.getElementById('new-password') as HTMLInputElement).value;
-    const confirm = (document.getElementById('new-password-confirm') as HTMLInputElement).value;
+        const strong =
+          pass.length >= 8 && /[a-zA-Záéíóúüñ]/.test(pass) && /\d/.test(pass);
+        if (!strong) {
+          msgBox(
+            "password-msg",
+            false,
+            "La contraseña debe tener 8+ caracteres con letra y número.",
+            { title: "Contraseña no válida" },
+          );
+          return;
+        }
+        if (pass !== confirm) {
+          msgBox("password-msg", false, "Las contraseñas no coinciden.", {
+            title: "Contraseña",
+          });
+          return;
+        }
 
-    const strong = pass.length >= 8 && /[a-zA-Záéíóúüñ]/.test(pass) && /\d/.test(pass);
-    if (!strong) { msgBox('password-msg', false, 'La contraseña debe tener 8+ caracteres con letra y número.'); return; }
-    if (pass !== confirm) { msgBox('password-msg', false, 'Las contraseñas no coinciden.'); return; }
+        btn.disabled = true;
+        btn.textContent = "Actualizando…";
+        const { error } = await supabase.auth.updateUser({ password: pass });
+        btn.disabled = false;
+        btn.textContent = "Actualizar contraseña";
 
-    btn.disabled = true; btn.textContent = 'Actualizando…';
-    const { error } = await supabase.auth.updateUser({ password: pass });
-    btn.disabled = false; btn.textContent = 'Actualizar contraseña';
+        if (error) {
+          msgBox(
+            "password-msg",
+            false,
+            error.message.includes("rate limit")
+              ? "Demasiados intentos; espera un momento."
+              : "No se pudo actualizar la contraseña.",
+            { title: "No se pudo cambiar la contraseña" },
+          );
+          return;
+        }
+        (document.getElementById("new-password") as HTMLInputElement).value =
+          "";
+        (
+          document.getElementById("new-password-confirm") as HTMLInputElement
+        ).value = "";
+        msgBox("password-msg", true, "Contraseña actualizada correctamente.", {
+          title: "Contraseña actualizada",
+        });
+      });
 
-    if (error) {
-      msgBox('password-msg', false, error.message.includes('rate limit')
-        ? 'Demasiados intentos; espera un momento.'
-        : 'No se pudo actualizar la contraseña.');
-      return;
-    }
-    (document.getElementById('new-password') as HTMLInputElement).value = '';
-    (document.getElementById('new-password-confirm') as HTMLInputElement).value = '';
-    msgBox('password-msg', true, 'Contraseña actualizada correctamente.');
-  });
+    document
+      .getElementById("logout-btn")
+      ?.addEventListener("click", async () => {
+        toast.info("Cerrando sesión…", "Nos vemos pronto.");
+        await supabase.auth.signOut();
+        window.location.assign("/");
+      });
 
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    window.location.assign('/');
-  });
+    // ── Eliminar cuenta (solo RaidDominion; no toca auth ni otras apps) ────
+    const delBtn = document.getElementById(
+      "delete-account-btn",
+    ) as HTMLButtonElement;
+    const delConfirm = document.getElementById(
+      "delete-account-confirm",
+    ) as HTMLElement;
+    const delInput = document.getElementById(
+      "delete-account-input",
+    ) as HTMLInputElement;
+    const delConfirmBtn = document.getElementById(
+      "delete-account-confirm-btn",
+    ) as HTMLButtonElement;
+    const delCancel = document.getElementById(
+      "delete-account-cancel",
+    ) as HTMLButtonElement;
+    const delMsg = document.getElementById("delete-account-msg") as HTMLElement;
 
-  // ── Eliminar cuenta (solo RaidDominion; no toca auth ni otras apps) ────
-  const delBtn = document.getElementById('delete-account-btn') as HTMLButtonElement;
-  const delConfirm = document.getElementById('delete-account-confirm') as HTMLElement;
-  const delInput = document.getElementById('delete-account-input') as HTMLInputElement;
-  const delConfirmBtn = document.getElementById('delete-account-confirm-btn') as HTMLButtonElement;
-  const delCancel = document.getElementById('delete-account-cancel') as HTMLButtonElement;
-  const delMsg = document.getElementById('delete-account-msg') as HTMLElement;
+    delBtn.addEventListener("click", () => {
+      delConfirm.classList.toggle("hidden");
+      if (delConfirm.classList.contains("hidden")) {
+        delInput.value = "";
+        delMsg.classList.add("hidden");
+      }
+      delConfirmBtn.disabled = true;
+    });
 
-  delBtn.addEventListener('click', () => {
-    delConfirm.classList.toggle('hidden');
-    if (delConfirm.classList.contains('hidden')) {
-      delInput.value = '';
-      delMsg.classList.add('hidden');
-    }
-    delConfirmBtn.disabled = true;
-  });
+    delCancel.addEventListener("click", () => {
+      delConfirm.classList.add("hidden");
+      delInput.value = "";
+      delConfirmBtn.disabled = true;
+      delMsg.classList.add("hidden");
+    });
 
-  delCancel.addEventListener('click', () => {
-    delConfirm.classList.add('hidden');
-    delInput.value = '';
-    delConfirmBtn.disabled = true;
-    delMsg.classList.add('hidden');
-  });
+    delInput.addEventListener("input", () => {
+      delConfirmBtn.disabled =
+        delInput.value.trim().toUpperCase() !== "ELIMINAR";
+    });
 
-  delInput.addEventListener('input', () => {
-    delConfirmBtn.disabled = delInput.value.trim().toUpperCase() !== 'ELIMINAR';
-  });
+    delConfirmBtn.addEventListener("click", async () => {
+      delConfirmBtn.disabled = true;
+      delConfirmBtn.textContent = "Eliminando…";
+      const res = await deleteMyAccount();
+      if (!res.ok) {
+        delConfirmBtn.disabled = false;
+        delConfirmBtn.textContent = "Confirmar eliminación";
+        msgBox(
+          "delete-account-msg",
+          false,
+          "No se pudo eliminar la cuenta: " + (res.error || ""),
+          { title: "Eliminar cuenta" },
+        );
+        return;
+      }
+      msgBox("delete-account-msg", true, "Cuenta eliminada. Cerrando sesión…", {
+        toast: false,
+      });
+      toast.info(
+        "Cuenta eliminada",
+        "Tu cuenta de RaidDominion fue eliminada. Cerrando sesión…",
+      );
+      await supabase.auth.signOut();
+      window.location.assign("/");
+    });
 
-  delConfirmBtn.addEventListener('click', async () => {
-    delConfirmBtn.disabled = true;
-    delConfirmBtn.textContent = 'Eliminando…';
-    const res = await deleteMyAccount();
-    if (!res.ok) {
-      delConfirmBtn.disabled = false;
-      delConfirmBtn.textContent = 'Confirmar eliminación';
-      msgBox('delete-account-msg', false, 'No se pudo eliminar la cuenta: ' + (res.error || ''));
-      return;
-    }
-    msgBox('delete-account-msg', true, 'Cuenta eliminada. Cerrando sesión…');
-    await supabase.auth.signOut();
-    window.location.assign('/');
-  });
+    // ── Resetear datos del flujo SV (uploads, personajes, hermandad) ───────
+    const resetBtn = document.getElementById(
+      "reset-data-btn",
+    ) as HTMLButtonElement;
+    const resetConfirm = document.getElementById(
+      "reset-data-confirm",
+    ) as HTMLElement;
+    const resetInput = document.getElementById(
+      "reset-data-input",
+    ) as HTMLInputElement;
+    const resetConfirmBtn = document.getElementById(
+      "reset-data-confirm-btn",
+    ) as HTMLButtonElement;
+    const resetCancel = document.getElementById(
+      "reset-data-cancel",
+    ) as HTMLButtonElement;
+    const resetMsg = document.getElementById("reset-data-msg") as HTMLElement;
 
-  // ── Resetear datos del flujo SV (uploads, personajes, hermandad) ───────
-  const resetBtn = document.getElementById('reset-data-btn') as HTMLButtonElement;
-  const resetConfirm = document.getElementById('reset-data-confirm') as HTMLElement;
-  const resetInput = document.getElementById('reset-data-input') as HTMLInputElement;
-  const resetConfirmBtn = document.getElementById('reset-data-confirm-btn') as HTMLButtonElement;
-  const resetCancel = document.getElementById('reset-data-cancel') as HTMLButtonElement;
-  const resetMsg = document.getElementById('reset-data-msg') as HTMLElement;
+    resetBtn.addEventListener("click", () => {
+      resetConfirm.classList.toggle("hidden");
+      if (resetConfirm.classList.contains("hidden")) {
+        resetInput.value = "";
+        resetMsg.classList.add("hidden");
+      }
+      resetConfirmBtn.disabled = true;
+    });
 
-  resetBtn.addEventListener('click', () => {
-    resetConfirm.classList.toggle('hidden');
-    if (resetConfirm.classList.contains('hidden')) {
-      resetInput.value = '';
-      resetMsg.classList.add('hidden');
-    }
-    resetConfirmBtn.disabled = true;
-  });
+    resetCancel.addEventListener("click", () => {
+      resetConfirm.classList.add("hidden");
+      resetInput.value = "";
+      resetConfirmBtn.disabled = true;
+      resetMsg.classList.add("hidden");
+    });
 
-  resetCancel.addEventListener('click', () => {
-    resetConfirm.classList.add('hidden');
-    resetInput.value = '';
-    resetConfirmBtn.disabled = true;
-    resetMsg.classList.add('hidden');
-  });
+    resetInput.addEventListener("input", () => {
+      resetConfirmBtn.disabled =
+        resetInput.value.trim().toUpperCase() !== "RESETEAR";
+    });
 
-  resetInput.addEventListener('input', () => {
-    resetConfirmBtn.disabled = resetInput.value.trim().toUpperCase() !== 'RESETEAR';
-  });
-
-  resetConfirmBtn.addEventListener('click', async () => {
-    resetConfirmBtn.disabled = true;
-    resetConfirmBtn.textContent = 'Reseteando…';
-    const res = await resetMyData();
-    if (!res.ok) {
-      resetConfirmBtn.disabled = false;
-      resetConfirmBtn.textContent = 'Confirmar reseteo';
-      msgBox('reset-data-msg', false, 'No se pudo resetear: ' + (res.error || ''));
-      return;
-    }
-    msgBox('reset-data-msg', true, 'Datos reseteados. Recargando tu espacio…');
-    resetConfirm.classList.add('hidden');
-    resetInput.value = '';
-    resetConfirmBtn.disabled = true;
-    resetConfirmBtn.textContent = 'Confirmar reseteo';
-    void loadProfile();
-    void loadCharacters();
-    void loadHistory();
-    void loadGuilds();
-    void loadBands();
-  });
-</script>
+    resetConfirmBtn.addEventListener("click", async () => {
+      resetConfirmBtn.disabled = true;
+      resetConfirmBtn.textContent = "Reseteando…";
+      const res = await resetMyData();
+      if (!res.ok) {
+        resetConfirmBtn.disabled = false;
+        resetConfirmBtn.textContent = "Confirmar reseteo";
+        msgBox(
+          "reset-data-msg",
+          false,
+          "No se pudo resetear: " + (res.error || ""),
+          { title: "Resetear datos" },
+        );
+        return;
+      }
+      msgBox(
+        "reset-data-msg",
+        true,
+        "Datos reseteados. Recargando tu espacio…",
+        { toast: false },
+      );
+      toast.success(
+        "Datos reseteados",
+        "Tu historial, personajes y hermandades fueron eliminados. Recargando…",
+      );
+      resetConfirm.classList.add("hidden");
+      resetInput.value = "";
+      resetConfirmBtn.disabled = true;
+      resetConfirmBtn.textContent = "Confirmar reseteo";
+      void loadProfile();
+      void loadCharacters();
+      void loadHistory();
+      void loadGuilds();
+      void loadBands();
+    });
+  </script>
+</Layout>

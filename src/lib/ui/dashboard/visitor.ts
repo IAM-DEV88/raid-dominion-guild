@@ -119,10 +119,31 @@ export function renderRegistryGuildCards(wrap: HTMLElement, guilds: RegistryGuil
 // name-reino y renderizados con la card de personaje estandarizada.
 // `slugs` (opcional) cruza con las fichas públicas: si el personaje tiene
 // ficha pública, la card enlaza a /personaje/:slug (flecha); si no, card plana.
-export function renderCharactersMerged(d: ParsedSavedVariables, slugs?: Map<string, string>): void {
+// `owned` (opcional) son los personajes REALES de la cuenta en BD: los
+// personajes del archivo que NO están entre ellos se marcan como "No
+// registrado · otra cuenta" (p. ej. tras subir un SV de otra cuenta). Con
+// `undefined` (sin referencia) no se marca nada; con array vacío se marca todo.
+export function renderCharactersMerged(
+  d: ParsedSavedVariables,
+  slugs?: Map<string, string>,
+  owned?: Array<{ name: string; realm?: string | null }>,
+): void {
   const wrap = document.getElementById('viewer-characters') as HTMLElement;
   const cnt = document.getElementById('cnt-viewer-chars') as HTMLElement;
   wrap.innerHTML = '';
+
+  const isOwned = (name: string, realm?: string | null): boolean => {
+    if (owned === undefined) return true;
+    if (owned.length === 0) return false;
+    const n = name.trim().toLowerCase();
+    const r = (realm ?? '').trim().toLowerCase();
+    return owned.some((o) => {
+      const on = (o.name ?? '').trim().toLowerCase();
+      const or = (o.realm ?? '').trim().toLowerCase();
+      if (on !== n) return false;
+      return r === '' || or === '' || r === or;
+    });
+  };
 
   const byKey = new Map<string, CharacterCardInput>();
   const add = (patch: Partial<CharacterCardInput>): void => {
@@ -134,14 +155,9 @@ export function renderCharactersMerged(d: ParsedSavedVariables, slugs?: Map<stri
     byKey.set(key, merged);
   };
 
-  // Config compartida de la cuenta (characters): base de nombres.
-  d.characters.forEach((c) => add({
-    name: c.name,
-    realm: c.realm ?? null,
-    class: c.class,
-    class_file: c.classFile,
-    level: c.level,
-  }));
+  // Config compartida de la cuenta (characters): NO se tiene en cuenta como
+  // fuente de registro (regla 20260925): solo registries/player muestran
+  // personajes en el visor.
 
   // Snapshots por personaje (registries): equipamiento y hermandad.
   d.registries.forEach((reg) => {
@@ -185,5 +201,9 @@ export function renderCharactersMerged(d: ParsedSavedVariables, slugs?: Map<stri
     wrap.appendChild(el('p', 'text-[11px] text-gray-600 italic', 'Sin personajes en el registro.'));
     return;
   }
-  items.forEach((c) => wrap.appendChild(renderCharacterCard(c, { forcePlain: true })));
+  items.forEach((c) =>
+    wrap.appendChild(
+      renderCharacterCard(c, { forcePlain: true, unregistered: !isOwned(c.name, c.realm) }),
+    ),
+  );
 }

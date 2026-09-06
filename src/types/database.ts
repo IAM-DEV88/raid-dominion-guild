@@ -175,6 +175,7 @@ type PublicSchema = {
 // retorno tipo TABLE se tipan como Record<string, unknown> para que el
 // consumidor (api.ts) caste a su interfaz verificada.
 type PublicFunctions = {
+  raiddominion_check_character_owner: { Args: { p_name: string; p_realm: string | null }; Returns: string };
   raiddominion_claim_from_sv: { Args: { p_sv_id: string }; Returns: string };
   raiddominion_ensure_profile_slug: { Args: Record<string, never>; Returns: string };
   raiddominion_upsert_bands: {

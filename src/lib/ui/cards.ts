@@ -11,6 +11,7 @@ import { classIconEl } from '@/lib/ui/classIcon';
 import { cardLink, card as cardBox, cardTitle, iconTile, arrowIcon } from '@/lib/ui/card';
 import { ui } from '@/lib/ui/design';
 import { chip, el } from '@/lib/ui/dom';
+import { toast } from '@/lib/ui/toast';
 import type { GuildRow, BandRow } from '@/types/database';
 
 // ── Card de hermandad (directorio /hermandades, reino, perfil) ──────────────
@@ -102,18 +103,22 @@ interface CharacterCardCtx {
   // Sin degradado "Privado": card plana sin enlace (visor interno del
   // dashboard), conserva ícono+nombre+stats y NO muestra la etiqueta.
   forcePlain?: boolean;
+  // El personaje NO pertenece a la cuenta (bloqueado por conflicto al subir un
+  // SV de otra cuenta): card plana atenuada con chip rojo "No registrado".
+  unregistered?: boolean;
 }
 
 export function renderCharacterCard(c: CharacterCardInput, ctx: CharacterCardCtx = {}): HTMLElement {
   const profile = c.user_id ? ctx.profiles?.get(c.user_id) : undefined;
   const charHref = c.slug ? `/personaje/${c.slug}` : null;
   const profHref = profile?.slug ? `/jugador/${profile.slug}` : null;
-  const href = charHref ?? profHref;
+  const href = ctx.unregistered ? null : (charHref ?? profHref);
   const color = classColor(c.class, c.class_file);
   const link: HTMLElement = href
     ? cardLink(href, 'px-4 py-3 group')
-    : cardBox(ctx.forcePlain ? 'px-4 py-3' : 'px-4 py-3 opacity-80');
-  if (!href && !ctx.forcePlain) link.title = 'El jugador mantiene su perfil privado';
+    : cardBox(ctx.forcePlain || ctx.unregistered ? 'px-4 py-3' : 'px-4 py-3 opacity-80');
+  if (!href && !ctx.forcePlain && !ctx.unregistered) link.title = 'El jugador mantiene su perfil privado';
+  if (ctx.unregistered) link.title = 'Pertenece a otra cuenta o no se registró en tu historial';
 
   const accent = el('div', 'absolute top-0 left-0 w-1 h-full');
   accent.style.backgroundColor = color;
@@ -171,11 +176,18 @@ export function renderCharacterCard(c: CharacterCardInput, ctx: CharacterCardCtx
           c.is_public = visCheck.checked;
           visStatus.textContent = '✓ guardado';
           visStatus.className = 'text-emerald-400';
+          toast.success(
+            visCheck.checked ? 'Personaje publicado' : 'Personaje ocultado',
+            visCheck.checked
+              ? `${c.name} ahora es visible en el directorio público.`
+              : `${c.name} ya no aparece en el directorio público.`,
+          );
           ctx.onSaved?.();
         } else {
           visCheck.checked = !visCheck.checked;
           visStatus.textContent = '✗ error';
           visStatus.className = 'text-red-400';
+          toast.error('No se pudo actualizar la visibilidad', 'Reintenta o recarga el portal.');
         }
         window.setTimeout(() => { visStatus.textContent = ''; }, 2500);
       });
@@ -193,6 +205,8 @@ export function renderCharacterCard(c: CharacterCardInput, ctx: CharacterCardCtx
     // Indicador con ICONO (no texto): la card ya enlaza, la flecha lo hace
     // explícito (mismo lenguaje que el core de banda).
     right.appendChild(arrowIcon());
+  } else if (ctx.unregistered) {
+    right.appendChild(chip('No registrado · otra cuenta', '!text-red-300 !border-red-500/40'));
   } else if (!ctx.forcePlain) {
     right.appendChild(el('span', 'text-[10px] text-gray-600', 'Privado'));
   }

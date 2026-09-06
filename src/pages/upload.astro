@@ -107,6 +107,7 @@ import { ui } from '@/lib/ui/design';
   import type { ParsedSavedVariables, GuildMember } from '@/types/parser';
   import { el } from '@/lib/ui/preview';
   import { supabase } from '@/lib/supabase';
+  import { toast } from '@/lib/ui/toast';
   import {
     saveUpload,
     getMyProfile,
@@ -117,6 +118,7 @@ import { ui } from '@/lib/ui/design';
     claimGuildFromSV,
     upsertBands,
     ensureMyCharacterSlugs,
+    checkCharacterOwner,
   } from '@/lib/api';
 
   const fileInput = document.getElementById('sv-file') as HTMLInputElement;
@@ -131,10 +133,11 @@ import { ui } from '@/lib/ui/design';
     statusEl.textContent = msg;
   }
 
-  function showError(msg: string): void {
+  function showError(msg: string, title?: string): void {
     errorEl.classList.remove('hidden');
     errorMsg.textContent = msg;
     resultEl.classList.add('hidden');
+    toast.error(title ?? 'No se pudo procesar el archivo', msg);
   }
 
   function clearWarnings(): void {
@@ -191,8 +194,10 @@ import { ui } from '@/lib/ui/design';
       });
   }
 
-  function addWarning(msg: string): void {
+  function addWarning(msg: string, opts?: { toast?: boolean }): void {
     warningsEl.appendChild(el('div', 'text-xs text-amber-200/80 bg-amber-900/20 border-l-2 border-amber-500/50 px-4 py-2 rounded-md', '⚠ ' + msg));
+    if (opts?.toast === false) return;
+    toast.warning('Atención', msg);
   }
 
   // Persiste el parseo si hay sesión activa; si no, invita a iniciar sesión
@@ -209,30 +214,50 @@ import { ui } from '@/lib/ui/design';
       return;
     }
 
+    // Pre-check (20260925, "a toda costa"): si el personaje PRINCIPAL del
+    // archivo ya pertenece a OTRA cuenta, el SV es ajeno → NO se guarda nada
+    // (ni historial, ni personajes, ni evidencia). Un SV ajeno no debe
+    // persistir datos ni ensuciar el dashboard de esta cuenta.
+    if (data.player?.name) {
+      const ownerCheck = await checkCharacterOwner(data.player.name, data.player.realm ?? '');
+      if (ownerCheck.ok && ownerCheck.result === 'other') {
+        const msg = `El personaje principal (${data.player.name}) ya está registrado en otra cuenta. No se guardó ningún dato en tu historial.`;
+        setStatus('Archivo de otra cuenta: no se guardó nada.');
+        toast.warning('No se guardó', msg);
+        addWarning(msg + ' Si es tuyo, contacta a un moderador para resolverlo.');
+        enableDashboardLink();
+        return;
+      }
+      if (!ownerCheck.ok) {
+        addWarning('No se pudo verificar la propiedad del archivo: ' + (ownerCheck.error || '') + '. Contacta a soporte si persiste.');
+      }
+    }
+
     setStatus('Guardando en tu historial…');
     const saved = await saveUpload(data);
     if (!saved.ok) {
-      setStatus('Archivo procesado, pero no se pudo guardar en el historial: ' + (saved.error || 'error desconocido'));
+      const msg = 'Archivo procesado, pero no se pudo guardar en el historial: ' + (saved.error || 'error desconocido');
+      setStatus(msg);
+      toast.error('Historial no guardado', saved.error || 'Error desconocido');
       enableDashboardLink();
       return;
     }
     if (!saved.id) {
-      setStatus('Archivo procesado, pero el historial quedó incompleto. Vuelve a subir tu archivo.');
+      const msg = 'Archivo procesado, pero el historial quedó incompleto. Vuelve a subir tu archivo.';
+      setStatus(msg);
+      toast.warning('Historial incompleto', 'Vuelve a subir tu SavedVariables.');
       enableDashboardLink();
       return;
     }
 
-    // Registro por personaje usando SU snapshot del registry (equipo incluido);
-    // fallback: roster de cuenta para quienes no tienen entrada propia.
+    // Registro por personaje usando SU snapshot del registry (equipo incluido).
+    // REGLA (20260925): registry es la ÚNICA fuente de registro de personajes;
+    // la tabla `characters` del archivo NO registra nada.
     let charStatus: string | null = null;
     const conflicts: string[] = [];
-    const handledKeys = new Set<string>();
-    const normKey = (name: string, realm?: string): string =>
-      `${name.toLowerCase()}|${(realm ?? '').toLowerCase()}`;
 
     for (const reg of data.registries) {
       if (!reg.player) continue;
-      handledKeys.add(normKey(reg.player.name, reg.player.realm));
       const up = await upsertMyCharacter(saved.id, reg.player, reg.savedAt, reg.guild);
       const isActiveReg = Boolean(data.player &&
         reg.player.name.toLowerCase() === data.player.name.toLowerCase() &&
@@ -244,26 +269,11 @@ import { ui } from '@/lib/ui/design';
         charStatus = up.result ?? 'updated';
       }
     }
-
-    if (data.characters.length > 0) {
-      for (const ch of data.characters) {
-        const key = normKey(ch.name, ch.realm);
-        if (handledKeys.has(key)) continue;
-        const up = await upsertMyCharacter(saved.id, {
-          name: ch.name,
-          realm: ch.realm ?? '',
-          class: ch.class,
-          classFile: ch.classFile,
-          race: ch.race,
-          level: ch.level,
-          equipment: [],
-        });
-        if (!up.ok || up.result === 'conflict') conflicts.push(ch.name);
-      }
-    }
+    const conflictNames = new Set(conflicts.map((c) => c.trim().toLowerCase()));
     if (conflicts.length > 0) {
-      addWarning(`Sin registrar por estar vinculados a otra cuenta: ${Array.from(new Set(conflicts)).join(', ')}. Contacta a un moderador si son tuyos.`);
-      if (data.player && conflicts.some((c) => c.toLowerCase() === data.player!.name.toLowerCase())) charStatus = charStatus === 'conflict' ? 'conflict' : 'conflict';
+      const msg = `No se registraron por pertenecer a otra cuenta: ${Array.from(new Set(conflicts)).join(', ')}. No se guardaron sus datos en tu cuenta. Contacta a un moderador si son tuyos.`;
+      addWarning(msg);
+      if (data.player && conflictNames.has(data.player.name.trim().toLowerCase())) charStatus = 'conflict';
     }
     if (data.player && !charStatus) charStatus = 'updated';
 
@@ -277,6 +287,9 @@ import { ui } from '@/lib/ui/design';
     const pushEvidence = (m: GuildMember): void => {
       const key = m.name.trim().toLowerCase();
       if (!key || seenNames.has(key)) return;
+      // Evidencia de personajes de OTRA cuenta: nunca se guarda a nombre de
+      // esta cuenta (evita que un SV ajeno acredite membresía propia).
+      if (conflictNames.has(key)) return;
       seenNames.add(key);
       evidenceRoster.push(m);
     };
@@ -311,6 +324,12 @@ import { ui } from '@/lib/ui/design';
 
     // Bandas + reglas → raiddominion_bands (personales o de hermandad, con
     // guild_id NULLABLE y visibilidad espejo). Re-subir el SV las actualiza.
+    // Si el personaje PRINCIPAL del archivo pertenece a otra cuenta, el SV no
+    // es tuyo: no se sincronizan sus bandas ni reglas a esta cuenta.
+    const mainBlocked = Boolean(data.player && conflictNames.has(data.player.name.trim().toLowerCase()));
+    if (mainBlocked) {
+      addWarning('Bandas y reglas no sincronizadas: el personaje principal de este archivo pertenece a otra cuenta.');
+    } else {
     setStatus('Sincronizando tus bandas y reglas…');
     const bandsSync = await upsertBands(
       saved.id, data.bands ?? [], data.rules ?? [],
@@ -319,10 +338,14 @@ import { ui } from '@/lib/ui/design';
     );
     if (bandsSync.ok) {
       if (bandsSync.count && bandsSync.count > 0) {
-        setStatus(`${bandsSync.count} banda${bandsSync.count === 1 ? '' : 's'} sincronizada${bandsSync.count === 1 ? '' : 's'}.`);
+        const msg = `${bandsSync.count} banda${bandsSync.count === 1 ? '' : 's'} sincronizada${bandsSync.count === 1 ? '' : 's'}.`;
+        setStatus(msg);
+        toast.success('Bandas sincronizadas', msg);
       }
     } else {
-      addWarning('No se pudieron sincronizar tus bandas: ' + (bandsSync.error || '') + '. Reintenta subiendo el SV de nuevo.');
+      const msg = 'No se pudieron sincronizar tus bandas: ' + (bandsSync.error || '') + '. Reintenta subiendo el SV de nuevo.';
+      addWarning(msg);
+    }
     }
 
     // Slug legible de personajes (name-reino): la migración v4 lo asigna en
@@ -335,9 +358,10 @@ import { ui } from '@/lib/ui/design';
     // Onboarding visitante → member.
     // Regla (20260830): una cuenta con DOS O MÁS personajes registrados en su
     // historial (sin importar si son de la misma hermandad o no) valida TODOS
-    // sus personajes y pasa a 'member'. Los personajes que entren después
-    // heredan la validación (conteo acumulado). Jamás degrada a quien ya es
-    // member/guild_master.
+    // sus personajes y pasa a 'member'. Regla GM (20260925): si el SV acredita
+    // maestría (isGM), UN personaje registrado basta para validar la cuenta.
+    // Los personajes que entren después heredan la validación (conteo
+    // acumulado). Jamás degrada a quien ya es member/guild_master.
     let role: string | null = null;
     const profRes = await getMyProfile();
     role = profRes.ok ? profRes.profile?.role ?? null : null;
@@ -347,15 +371,18 @@ import { ui } from '@/lib/ui/design';
       const promo = await tryPromoteMember(saved.id);
       if (promo.ok && promo.data?.promoted) {
         const wasVisitante = role === 'visitante';
-        renderOnboardingBanner('success', wasVisitante
-          ? '¡Bienvenido, Miembro! Tu cuenta quedó validada con dos o más personajes registrados. Con al menos tres podrás reclamar tu hermandad.'
-          : 'Registro actualizado. Tu cuenta ya estaba validada como Miembro.');
+        const msg = wasVisitante
+          ? '¡Bienvenido, Miembro! Tu cuenta quedó validada. Con tu SV de maestro (isGM) podrás reclamar tu hermandad.'
+          : 'Registro actualizado. Tu cuenta ya estaba validada como Miembro.';
+        renderOnboardingBanner('success', msg);
+        toast.success(wasVisitante ? '¡Cuenta validada como Miembro!' : 'Registro actualizado', msg);
         if (wasVisitante) role = 'member';
       } else if (promo.ok) {
         // Sin auto-validación: se queda Visitante, sin pedir validación externa
         if (role === 'visitante') {
-          renderOnboardingBanner('visitor',
-            'Registrado como Visitante. Para ser Miembro, registra al menos dos personajes en tu SavedVariables.');
+          const msg = 'Registrado como Visitante. Para ser Miembro, registra al menos dos personajes en tu SavedVariables.';
+          renderOnboardingBanner('visitor', msg);
+          toast.info('Sigue como Visitante', msg);
         }
       } else {
         addWarning('No se pudo validar tu personaje: ' + (promo.error || 'error desconocido') + '. Contacta a soporte si persiste.');
@@ -367,20 +394,27 @@ import { ui } from '@/lib/ui/design';
     // Funciona para member validado y para guild_master en re-uploads.
     const isGmInSV = Boolean(data.registryGuild?.isGM) ||
       data.registries.some((r) => r.guild?.isGM === true);
-    if (saved.id && isGmInSV) {
+    if (saved.id && isGmInSV && charStatus !== 'conflict') {
       setStatus('El addon te reporta como Maestro: reclamando hermandades desde el SV…');
       const claimRes = await claimGuildFromSV(saved.id);
       if (claimRes.ok) {
         role = 'guild_master';
-        renderOnboardingBanner('success', '¡Hermandad(es) reclamada(s) desde tu SavedVariables! Ya eres Maestro; revisa la pestaña Hermandad.');
-      } else if (claimRes.error?.includes('3 personajes validados')) {
-        // El reclamo exige evidencia reforzada (>= 3 validados): se activa "con
-        // la llegada de un tercero".
-        addWarning('Tu SV indica maestría de hermandad, pero el reclamo requiere al menos 3 personajes validados. Registra otro personaje y vuelve a subir tu SV.');
+        const msg = '¡Hermandad(es) reclamada(s) desde tu SavedVariables! Ya eres Maestro; revisa la pestaña Hermandad.';
+        renderOnboardingBanner('success', msg);
+        toast.success('Maestro de hermandad confirmado', msg, { duration: 6000 });
+      } else if (claimRes.error?.includes('personaje validado')) {
+        // El reclamo (20260925) exige al menos UN personaje validado: el SV
+        // con isGM valida con un personaje.
+        addWarning('Tu SV acredita maestría, pero el reclamo requiere al menos un personaje validado. Registra tu personaje y vuelve a subir tu SV.');
+      } else if (claimRes.error?.includes('otra cuenta')) {
+        // Guard (20260925): el personaje principal del SV pertenece a otra
+        // cuenta → jamás se reclama su hermandad.
+        addWarning('Este SavedVariables pertenece a otra cuenta; no puedes reclamar su hermandad desde aquí.');
       } else if (claimRes.error?.includes('Requiere ser Miembro')) {
-        // La cuenta aún no está validada como Miembro (visitarante con menos de
-        // dos personajes): el reclamo se completará cuando quede validada.
-        addWarning('Tu SV indica maestría de hermandad, pero el reclamo requiere estar validado como Miembro. Registra al menos dos personajes y vuelve a subir tu SV.');
+        // La cuenta aún no está validada como Miembro: el reclamo se
+        // completará cuando quede validada (un personaje registrado basta si
+        // el SV acredita maestría).
+        addWarning('Tu SV indica maestría de hermandad, pero el reclamo requiere estar validado como Miembro. Registra tu personaje y vuelve a subir tu SV.');
       } else {
         addWarning('No se pudo reclamar la hermandad desde el SV: ' + (claimRes.error || ''));
       }
@@ -392,16 +426,28 @@ import { ui } from '@/lib/ui/design';
     if (role === 'guild_master' && data.registryGuild?.isGM === true) {
       setStatus('Actualizando tu(s) portal(es)…');
       const snap = await saveMyGuildSnapshotsFromSV(data);
-      setStatus(snap.ok
-        ? (snap.updated > 0
-          ? 'Archivo procesado y guardado. Portal(es) de tu hermandad actualizado(s).'
-          : 'Archivo procesado y guardado. El SV no coincide con tus hermandades registradas; usa el personaje maestro para actualizar el portal.')
-        : 'Archivo procesado y guardado, pero no se pudo actualizar el portal: ' + (snap.error || ''));
+      if (snap.ok) {
+        if (snap.updated > 0) {
+          const msg = `Archivo procesado y guardado. ${snap.updated} portal(es) de tu hermandad actualizado(s).`;
+          setStatus(msg);
+          toast.success('Portal(es) actualizado(s)', msg, { duration: 5500 });
+        } else {
+          const msg = 'Archivo procesado y guardado. El SV no coincide con tus hermandades registradas; usa el personaje maestro para actualizar el portal.';
+          setStatus(msg);
+          toast.info('Portal no actualizado', msg);
+        }
+      } else {
+        const msg = 'Archivo procesado y guardado, pero no se pudo actualizar el portal: ' + (snap.error || '');
+        setStatus(msg);
+        toast.warning('Portal sin actualizar', snap.error || 'Error desconocido');
+      }
       enableDashboardLink();
       return;
     }
 
-    setStatus('Archivo procesado y guardado en tu historial.');
+    const doneMsg = 'Archivo procesado y guardado en tu historial.';
+    setStatus(doneMsg);
+    toast.success('SavedVariables procesado', doneMsg);
     enableDashboardLink();
   }
 
@@ -423,7 +469,11 @@ import { ui } from '@/lib/ui/design';
       if (reg.guild?.name) guildNames.add(reg.guild!.name.trim().toLowerCase());
     });
     (document.getElementById('stat-guilds') as HTMLElement).textContent = String(guildNames.size);
-    (document.getElementById('stat-characters') as HTMLElement).textContent = String(data.characters.length);
+    // Personajes = los que trae registry (única fuente de registro: las
+    // entradas de registry con ficha de jugador). La tabla `characters` del
+    // archivo NO se cuenta ni se registra.
+    const regCharCount = data.registries.filter((r) => r.player).length;
+    (document.getElementById('stat-characters') as HTMLElement).textContent = String(regCharCount);
     (document.getElementById('stat-bands') as HTMLElement).textContent = String(data.bands.length);
     (document.getElementById('stat-rules') as HTMLElement).textContent = String(data.rules.length);
 
@@ -448,7 +498,7 @@ import { ui } from '@/lib/ui/design';
   function handleFile(file: File): Promise<void> {
     clearWarnings();
     if (file.size > 2 * 1024 * 1024) {
-      showError('El archivo supera el límite de 2 MB.');
+      showError(`"${file.name}" supera el límite de 2 MB.`, 'Archivo demasiado grande');
       return Promise.resolve();
     }
     setStatus('Leyendo archivo…');
@@ -463,17 +513,21 @@ import { ui } from '@/lib/ui/design';
             showError(result.errors.join(' '));
             return;
           }
-          result.warnings.forEach(addWarning);
+          if (result.warnings.length > 0) {
+            toast.warning(`El SV tiene ${result.warnings.length} advertencia${result.warnings.length === 1 ? '' : 's'}`, 'Revisa el bloque superior de advertencias para más detalle.');
+          }
+          result.warnings.forEach((w) => addWarning(w, { toast: false }));
           renderResult(result.data as ParsedSavedVariables);
           await persistIfLoggedIn(result.data as ParsedSavedVariables);
         } catch (e) {
-          showError('Error inesperado al parsear: ' + String(e));
+          const err = 'Error inesperado al parsear: ' + String(e);
+          showError(err, 'Error inesperado');
         } finally {
           resolve();
         }
       };
       reader.onerror = () => {
-        showError('No se pudo leer el archivo.');
+        showError(`No se pudo leer "${file.name}".`, 'Lectura fallida');
         resolve();
       };
       reader.readAsText(file);

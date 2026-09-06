@@ -79,7 +79,7 @@ Definidos en `src/lib/roles.ts`. Comparar por índice (`ROLES.indexOf`).
 |---|---|---|---|
 | `visitante` | 0 | ✅ (toda cuenta nueva) | Landing, directorio público, `/upload`, dashboard básico |
 | `member` | 1 | ✅ (≥2 personajes registrados, sin importar hermandad) | Todo lo anterior + personaje validado, visibilidad pública |
-| `guild_master` | 2 | ✅ (vía RPC: SV con isGM + ≥3 personajes validados) | Dashboard de su hermandad, portal público en `/hermandad/:slug` |
+| `guild_master` | 2 | ✅ (vía RPC: SV con isGM + ≥1 personaje validado) | Dashboard de su hermandad, portal público en `/hermandad/:slug` |
 | `moderator` | 3 | ❌ (solo admin) | Revisar claims/verificaciones, moderar públicos |
 | `admin` | 4 | ❌ (solo admin, seed manual por email) | Gestión de usuarios, moderación total |
 
@@ -91,7 +91,7 @@ visitante / member
   ├─ /dashboard → toggle perfil público → página viva en /jugador/:slug
   ├─ "Mi Hermandad": SIN formularios. El SV es la única vía:
   │    a) Formato nuevo: registry.guild.isGM=true + Miembro validado
-  │       (≥3 personajes validados) → raiddominion_claim_from_sv al subir (auto GM)
+  │       (≥1 personaje validado con SV isGM, regla 20260925) → raiddominion_claim_from_sv al subir (auto GM)
   │    └─ slug autogenerado + dashboard /dashboard/guild
   │         └─ toggle is_public → portal vivo en /hermandad/:slug
   └─ Re-subir SV actualiza roster/bandas del portal

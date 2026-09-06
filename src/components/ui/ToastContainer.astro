@@ -1,0 +1,244 @@
+---
+---
+
+<div
+  id="rd-toast-container"
+  role="region"
+  aria-label="Notificaciones"
+  aria-live="polite"
+  class="fixed bottom-24 left-2 z-[55] flex flex-col gap-2 w-[min(22rem,calc(100vw-1rem))] pointer-events-none"
+>
+</div>
+
+<style>
+  @keyframes rd-toast-in {
+    from {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes rd-toast-out {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+      max-height: 240px;
+      margin-bottom: 0.5rem;
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-100%);
+      max-height: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  @keyframes rd-toast-progress {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+
+  .rd-toast {
+    animation: rd-toast-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    pointer-events: auto;
+  }
+
+  .rd-toast.rd-toast-leaving {
+    animation: rd-toast-out 0.28s cubic-bezier(0.55, 0, 0.68, 0.53) both;
+    overflow: hidden;
+  }
+
+  .rd-toast-progress {
+    transform-origin: left;
+    animation-name: rd-toast-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+</style>
+
+<script>
+  import { TOAST_EVENT, TOAST_DISMISS_EVENT, type ToastItem, type ToastVariant } from '@/lib/ui/toast';
+  import { ui } from '@/lib/ui/design';
+
+  const VARIANT_STYLES: Record<ToastVariant, { wrap: string; bar: string; icon: string }> = {
+    success: {
+      wrap: 'bg-gray-900/95 backdrop-blur border border-emerald-600/40 text-emerald-200 shadow-lg shadow-emerald-900/30',
+      bar: 'bg-gradient-to-r from-emerald-400 to-emerald-600',
+      icon:
+        '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>',
+    },
+    error: {
+      wrap: 'bg-gray-900/95 backdrop-blur border border-red-600/50 text-red-200 shadow-lg shadow-red-900/30',
+      bar: 'bg-gradient-to-r from-red-400 to-red-600',
+      icon:
+        '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>',
+    },
+    warning: {
+      wrap: 'bg-gray-900/95 backdrop-blur border border-amber-600/50 text-amber-200 shadow-lg shadow-amber-900/30',
+      bar: 'bg-gradient-to-r from-amber-400 to-amber-600',
+      icon:
+        '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+    },
+    info: {
+      wrap: 'bg-gray-900/95 backdrop-blur border border-sky-600/40 text-sky-100 shadow-lg shadow-sky-900/30',
+      bar: 'bg-gradient-to-r from-sky-400 to-sky-600',
+      icon:
+        '<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+    },
+  };
+
+  const MAX_TOASTS = 4;
+  const container = document.getElementById('rd-toast-container') as HTMLDivElement;
+  const active = new Map<string, { el: HTMLDivElement; timer: number | null }>();
+  const queue: ToastItem[] = [];
+
+  function variantWrap(v: ToastVariant): string {
+    return VARIANT_STYLES[v].wrap;
+  }
+
+  function variantBar(v: ToastVariant): string {
+    return VARIANT_STYLES[v].bar;
+  }
+
+  function variantIcon(v: ToastVariant): string {
+    return VARIANT_STYLES[v].icon;
+  }
+
+  function roleFor(variant: ToastVariant): 'status' | 'alert' {
+    return variant === 'error' ? 'alert' : 'status';
+  }
+
+  function removeToast(id: string): void {
+    const entry = active.get(id);
+    if (!entry) return;
+    const { el, timer } = entry;
+    if (timer != null) window.clearTimeout(timer);
+    el.classList.add('rd-toast-leaving');
+    void el.offsetWidth;
+    window.setTimeout(() => {
+      el.remove();
+      active.delete(id);
+      pumpQueue();
+    }, 280);
+  }
+
+  function renderToast(toast: ToastItem): void {
+    const el = document.createElement('div');
+    el.className = `rd-toast relative rounded-md overflow-hidden ${variantWrap(toast.variant)} ${ui.transition}`;
+    el.dataset.toastId = toast.id;
+    el.setAttribute('role', roleFor(toast.variant));
+
+    const progress = document.createElement('div');
+    progress.className = `rd-toast-progress absolute bottom-0 left-0 h-0.5 ${variantBar(toast.variant)}`;
+    const durationMs = Math.max(600, toast.duration);
+    progress.style.animationDuration = `${durationMs}ms`;
+
+    const body = document.createElement('div');
+    body.className = 'flex items-start gap-2.5 px-3 py-2.5';
+
+    const iconWrap = document.createElement('div');
+    iconWrap.className = 'shrink-0 pt-0.5';
+    iconWrap.innerHTML = variantIcon(toast.variant);
+
+    const content = document.createElement('div');
+    content.className = 'flex-1 min-w-0';
+
+    const title = document.createElement('p');
+    title.className = 'text-sm font-bold leading-tight';
+    title.textContent = toast.title;
+    content.appendChild(title);
+
+    if (toast.description) {
+      const desc = document.createElement('p');
+      desc.className = 'text-xs mt-0.5 opacity-90 leading-snug';
+      desc.textContent = toast.description;
+      content.appendChild(desc);
+    }
+
+    if (toast.action) {
+      const actionBtn = document.createElement('button');
+      actionBtn.type = 'button';
+      actionBtn.className =
+        'mt-2 inline-flex items-center text-[11px] font-black uppercase tracking-widest underline underline-offset-2 hover:opacity-100 opacity-80';
+      actionBtn.textContent = toast.action.label;
+      actionBtn.addEventListener('click', () => {
+        try {
+          toast.action?.onClick();
+        } finally {
+          removeToast(toast.id);
+        }
+      });
+      content.appendChild(actionBtn);
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className =
+      'shrink-0 -mr-1 -mt-0.5 p-1 rounded-md opacity-60 hover:opacity-100 hover:bg-white/10 transition-opacity';
+    closeBtn.setAttribute('aria-label', 'Cerrar notificación');
+    closeBtn.innerHTML =
+      '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>';
+    closeBtn.addEventListener('click', () => removeToast(toast.id));
+
+    body.appendChild(iconWrap);
+    body.appendChild(content);
+    body.appendChild(closeBtn);
+    el.appendChild(body);
+    el.appendChild(progress);
+
+    container.appendChild(el);
+
+    let timer: number | null = null;
+    if (durationMs > 0) {
+      timer = window.setTimeout(() => removeToast(toast.id), durationMs);
+    }
+    el.addEventListener('mouseenter', () => {
+      if (timer != null) {
+        window.clearTimeout(timer);
+        timer = null;
+      }
+      progress.style.animationPlayState = 'paused';
+    });
+    el.addEventListener('mouseleave', () => {
+      if (durationMs > 0) {
+        const remaining =
+          durationMs - Math.min(durationMs, Date.now() - toast.createdAt);
+        const remain = Math.max(400, remaining);
+        progress.style.animationDuration = `${remain}ms`;
+        progress.style.animationPlayState = 'running';
+        timer = window.setTimeout(() => removeToast(toast.id), remain);
+      }
+    });
+
+    active.set(toast.id, { el, timer });
+  }
+
+  function pumpQueue(): void {
+    while (active.size < MAX_TOASTS && queue.length > 0) {
+      const next = queue.shift()!;
+      renderToast(next);
+    }
+  }
+
+  function enqueue(toast: ToastItem): void {
+    if (active.size >= MAX_TOASTS) {
+      queue.push(toast);
+      return;
+    }
+    renderToast(toast);
+  }
+
+  window.addEventListener(TOAST_EVENT, ((e: CustomEvent<ToastItem>) => {
+    enqueue(e.detail);
+  }) as EventListener);
+
+  window.addEventListener(TOAST_DISMISS_EVENT, ((e: CustomEvent<{ id: string }>) => {
+    removeToast(e.detail.id);
+    const idx = queue.findIndex((t) => t.id === e.detail.id);
+    if (idx >= 0) queue.splice(idx, 1);
+  }) as EventListener);
+</script>

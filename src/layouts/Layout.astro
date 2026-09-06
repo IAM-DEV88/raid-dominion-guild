@@ -1,6 +1,7 @@
 ---
 import Footer from "@/sections/Footer.astro";
 import ChatWidget from "@/components/features/ChatWidget.astro";
+import ToastContainer from "@/components/ui/ToastContainer.astro";
 import "@fontsource-variable/jost";
 import "@/styles/material.css";
 
@@ -171,6 +172,8 @@ const rdEnvKey = (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined) 
     </div>
     <!-- inserta el footer -->
     <Footer />
+    <!-- Contenedor global de toasts (esquina inferior-izquierda, sobre el botón Guía RD) -->
+    <ToastContainer />
     <!-- Guía flotante de RaidDominion (abajo-izquierda), disponible en todas las páginas -->
     <ChatWidget />
   </body>
