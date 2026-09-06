@@ -1064,6 +1064,118 @@ export async function adminSetRole(userId: string, role: RaiddominionRole): Prom
   return { ok: true };
 }
 
+// ─── Admin: gestión de entidades de un usuario (migración 20260906) ──────
+
+export interface AdminEntityCharacter {
+  id: string;
+  name: string;
+  realm: string | null;
+  server: string | null;
+  class: string | null;
+  level: number | null;
+  avg_ilvl: number | null;
+  slug: string | null;
+  is_public: boolean;
+  member_verified: boolean;
+  sv_is_gm: boolean;
+  sv_guild_name: string | null;
+  created_at: string;
+}
+
+export interface AdminEntityGuild {
+  id: string;
+  slug: string;
+  name: string;
+  realm: string | null;
+  server: string | null;
+  faction: string | null;
+  claim_status: 'pending' | 'verified' | 'rejected';
+  is_public: boolean;
+  created_at: string;
+}
+
+export interface AdminEntityBand {
+  id: string;
+  slug: string;
+  name: string;
+  icon: string | null;
+  schedule: string | null;
+  guild_id: string | null;
+  integration_target_guild_id: string | null;
+  is_public: boolean;
+  integration_status: 'none' | 'pending' | 'approved' | 'rejected';
+  character_name: string | null;
+  character_realm: string | null;
+  created_at: string;
+}
+
+export interface AdminUserEntities {
+  profile: {
+    id: string;
+    display_name: string | null;
+    character_name: string | null;
+    realm: string | null;
+    slug: string | null;
+    role: RaiddominionRole;
+    is_public: boolean;
+    created_at: string | null;
+  };
+  characters: AdminEntityCharacter[];
+  guilds: AdminEntityGuild[];
+  bands: AdminEntityBand[];
+}
+
+// Perfil + personajes + hermandades + bandas de un usuario en un solo RPC
+export async function adminGetUserEntities(userId: string): Promise<{ ok: boolean; entities?: AdminUserEntities; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_admin_get_user_entities', { p_user_id: userId });
+  if (rpc.error) return { ok: false, error: friendlyStaffError(rpc.error.message) };
+  return { ok: true, entities: (rpc.data as unknown as AdminUserEntities) ?? undefined };
+}
+
+// Cambia un campo del perfil de otro usuario (display_name/character_name/realm/is_public)
+export async function adminSetProfileField(userId: string, field: string, value: string): Promise<{ ok: boolean; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_admin_set_profile_field', {
+    p_user_id: userId,
+    p_field: field,
+    p_value: value,
+  });
+  if (rpc.error) return { ok: false, error: friendlyStaffError(rpc.error.message) };
+  return { ok: true };
+}
+
+// Cambia visibilidad/verificación de un personaje de cualquier usuario
+export async function adminSetCharacterStatus(characterId: string, isPublic: boolean, memberVerified: boolean): Promise<{ ok: boolean; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_admin_set_character_status', {
+    p_character_id: characterId,
+    p_is_public: isPublic,
+    p_member_verified: memberVerified,
+  });
+  if (rpc.error) return { ok: false, error: friendlyStaffError(rpc.error.message) };
+  return { ok: true };
+}
+
+// Cambia visibilidad/claim_status de una hermandad de cualquier usuario
+export async function adminSetGuildStatus(guildId: string, isPublic: boolean, claimStatus: string | null): Promise<{ ok: boolean; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_admin_set_guild_status', {
+    p_guild_id: guildId,
+    p_is_public: isPublic,
+    p_claim_status: claimStatus,
+  });
+  if (rpc.error) return { ok: false, error: friendlyStaffError(rpc.error.message) };
+  return { ok: true };
+}
+
+// Cambia visibilidad/estado de integración de una banda de cualquier usuario
+export async function adminSetBandStatus(bandId: string, isPublic: boolean, integrationStatus: string | null): Promise<{ ok: boolean; error?: string }> {
+  const rpc = await supabase.rpc('raiddominion_admin_set_band_status', {
+    p_band_id: bandId,
+    p_is_public: isPublic,
+    p_integration_status: integrationStatus,
+  });
+  if (rpc.error) return { ok: false, error: friendlyStaffError(rpc.error.message) };
+  return { ok: true };
+}
+
 // ─── Personajes y onboarding visitante → member ─────────────────────────
 
 export interface CharacterRow {

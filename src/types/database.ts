@@ -202,6 +202,11 @@ type PublicFunctions = {
   raiddominion_staff_set_guild_public: { Args: { p_guild_id: string; p_is_public: boolean }; Returns: undefined };
   raiddominion_admin_list_users: { Args: Record<string, never>; Returns: Record<string, unknown>[] };
   raiddominion_admin_set_role: { Args: { p_user_id: string; p_role: string }; Returns: undefined };
+  raiddominion_admin_get_user_entities: { Args: { p_user_id: string }; Returns: Record<string, unknown> };
+  raiddominion_admin_set_profile_field: { Args: { p_user_id: string; p_field: string; p_value: string }; Returns: undefined };
+  raiddominion_admin_set_character_status: { Args: { p_character_id: string; p_is_public: boolean; p_member_verified: boolean }; Returns: undefined };
+  raiddominion_admin_set_guild_status: { Args: { p_guild_id: string; p_is_public: boolean; p_claim_status: string | null }; Returns: undefined };
+  raiddominion_admin_set_band_status: { Args: { p_band_id: string; p_is_public: boolean; p_integration_status: string | null }; Returns: undefined };
   raiddominion_upsert_character: {
     Args: {
       p_sv_id: string;

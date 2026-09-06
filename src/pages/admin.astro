@@ -90,11 +90,28 @@ import { ui } from '@/lib/ui/design';
                 <p class="text-[10px] font-black uppercase tracking-widest text-amber-500 mb-1">Detalle de usuario</p>
                 <h2 id="detail-name" class={`${ui.text.h1} text-amber-200`}></h2>
                 <p id="detail-email" class={`${ui.text.bodyMuted} mt-1`}></p>
+                <p id="detail-id" class="text-xs font-mono text-gray-500 mt-1 truncate"></p>
               </div>
               <span id="detail-role-badge" class={`${ui.badge} ${ui.badgeMd}`}></span>
             </div>
 
             <dl id="detail-fields" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm"></dl>
+          </section>
+
+          <!-- Estado del perfil (editable por admin) -->
+          <section class="bg-gray-900/60 backdrop-blur-sm border border-amber-600/25 rounded-md p-4 sm:p-6">
+            <h2 class="text-lg font-bold text-amber-200 flex items-center mb-4">
+              <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 leading-[1.3] pb-[0.1em] font-black italic">Estado del perfil</span>
+            </h2>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <p class="text-sm text-gray-300">
+                Visibilidad pública: <span id="detail-profile-vis-label" class="font-bold text-gray-100">—</span>
+              </p>
+              <div id="detail-profile-toggle"></div>
+            </div>
+            <div id="detail-profile-fields" class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+            <p id="detail-profile-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
           </section>
 
           <!-- Gestión de rol (solo admin) -->
@@ -110,6 +127,36 @@ import { ui } from '@/lib/ui/design';
               </button>
             </div>
             <p id="detail-role-msg" class="hidden mt-3 text-sm rounded-md px-4 py-2.5" role="status"></p>
+          </section>
+
+          <!-- Personajes del usuario -->
+          <section class="bg-gray-900/60 backdrop-blur-sm border border-amber-600/25 rounded-md p-4 sm:p-6">
+            <h2 class="text-lg font-bold text-amber-200 flex items-center mb-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 leading-[1.3] pb-[0.1em] font-black italic">Personajes</span>
+            </h2>
+            <p id="detail-chars-status" class="text-sm text-gray-400 italic mb-3" aria-live="polite">Cargando…</p>
+            <ul id="detail-chars-list" class="space-y-2"></ul>
+          </section>
+
+          <!-- Hermandades del usuario -->
+          <section class="bg-gray-900/60 backdrop-blur-sm border border-amber-600/25 rounded-md p-4 sm:p-6">
+            <h2 class="text-lg font-bold text-amber-200 flex items-center mb-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 leading-[1.3] pb-[0.1em] font-black italic">Hermandades</span>
+            </h2>
+            <p id="detail-guilds-status" class="text-sm text-gray-400 italic mb-3" aria-live="polite">Cargando…</p>
+            <ul id="detail-guilds-list" class="space-y-2"></ul>
+          </section>
+
+          <!-- Bandas del usuario -->
+          <section class="bg-gray-900/60 backdrop-blur-sm border border-amber-600/25 rounded-md p-4 sm:p-6">
+            <h2 class="text-lg font-bold text-amber-200 flex items-center mb-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500 mr-3 shadow-[0_0_8px_rgba(245,158,11,0.5)]"></span>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-400 to-amber-600 leading-[1.3] pb-[0.1em] font-black italic">Bandas</span>
+            </h2>
+            <p id="detail-bands-status" class="text-sm text-gray-400 italic mb-3" aria-live="polite">Cargando…</p>
+            <ul id="detail-bands-list" class="space-y-2"></ul>
           </section>
 
           <!-- Historial de auditoría del usuario -->
@@ -128,7 +175,23 @@ import { ui } from '@/lib/ui/design';
 </Layout>
 
 <script>
-  import { getMyProfile, adminListUsers, adminSetRole, listAuditLog, type AdminUserRow, type AuditRow } from '@/lib/api';
+  import {
+    getMyProfile,
+    adminListUsers,
+    adminSetRole,
+    listAuditLog,
+    adminGetUserEntities,
+    adminSetProfileField,
+    adminSetCharacterStatus,
+    adminSetGuildStatus,
+    adminSetBandStatus,
+    type AdminUserRow,
+    type AuditRow,
+    type AdminEntityCharacter,
+    type AdminEntityGuild,
+    type AdminEntityBand,
+    type AdminUserEntities,
+  } from '@/lib/api';
   import { ROLES } from '@/lib/roles';
   import { supabase } from '@/lib/supabase';
   import { ADMIN_PANELS, ADMIN_TABS, tabFromHash, resolveAdminHash } from '@/lib/ui/tabs';
@@ -149,6 +212,10 @@ import { ui } from '@/lib/ui/design';
     guild_published: 'Portal republicado',
     guild_takedown: 'Portal retirado',
     user_role_changed: 'Rol cambiado',
+    profile_field_changed: 'Perfil editado',
+    character_status_changed: 'Personaje gestionado',
+    guild_status_changed: 'Hermandad gestionada',
+    band_status_changed: 'Banda gestionada',
   };
 
   let users: AdminUserRow[] = [];
@@ -373,15 +440,27 @@ import { ui } from '@/lib/ui/design';
   function renderDetailMissing(): void {
     (document.getElementById('detail-name') as HTMLElement).textContent = 'Usuario no encontrado';
     (document.getElementById('detail-email') as HTMLElement).textContent = '';
+    (document.getElementById('detail-id') as HTMLElement).textContent = '';
     (document.getElementById('detail-fields') as HTMLElement).innerHTML = '';
     (document.getElementById('detail-role-select') as HTMLSelectElement).innerHTML = '';
     (document.getElementById('detail-audit-list') as HTMLElement).innerHTML = '';
     (document.getElementById('detail-audit-status') as HTMLElement).textContent = 'Sin historial.';
+    (document.getElementById('detail-chars-list') as HTMLElement).innerHTML = '';
+    (document.getElementById('detail-chars-status') as HTMLElement).textContent = 'Sin personajes.';
+    (document.getElementById('detail-guilds-list') as HTMLElement).innerHTML = '';
+    (document.getElementById('detail-guilds-status') as HTMLElement).textContent = 'Sin hermandades.';
+    (document.getElementById('detail-bands-list') as HTMLElement).innerHTML = '';
+    (document.getElementById('detail-bands-status') as HTMLElement).textContent = 'Sin bandas.';
+    (document.getElementById('detail-profile-toggle') as HTMLElement).innerHTML = '';
+    (document.getElementById('detail-profile-fields') as HTMLElement).innerHTML = '';
+    (document.getElementById('detail-profile-vis-label') as HTMLElement).textContent = '—';
+    (document.getElementById('detail-profile-msg') as HTMLElement).classList.add('hidden');
   }
 
   function renderDetail(u: AdminUserRow): void {
     (document.getElementById('detail-name') as HTMLElement).textContent = u.display_name || u.character_name || u.email || 'Sin nombre';
     (document.getElementById('detail-email') as HTMLElement).textContent = u.email ?? u.id;
+    (document.getElementById('detail-id') as HTMLElement).textContent = u.id;
 
     const badge = document.getElementById('detail-role-badge') as HTMLElement;
     badge.textContent = ROLE_LABELS[u.role];
@@ -390,22 +469,37 @@ import { ui } from '@/lib/ui/design';
     // Perfil completo (los datos provienen de adminListUsers).
     const fields = document.getElementById('detail-fields') as HTMLElement;
     fields.innerHTML = '';
-    const rows: Array<[string, string]> = [
-      ['Correo', u.email ?? '—'],
-      ['Nombre visible', u.display_name ?? '—'],
-      ['Personaje principal', u.character_name ?? '—'],
-      ['Reino', u.realm ?? '—'],
-      ['Slug público', u.slug ?? '—'],
-      ['Estado del perfil', u.is_public ? 'Público' : 'Privado'],
-      ['Registro', new Date(u.created_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' })],
+    const rows: Array<{ k: string; v: string; mono?: boolean }> = [
+      { k: 'ID (hex)', v: u.id, mono: true },
+      { k: 'Correo', v: u.email ?? '—' },
+      { k: 'Nombre visible', v: u.display_name ?? '—' },
+      { k: 'Personaje principal', v: u.character_name ?? '—' },
+      { k: 'Reino', v: u.realm ?? '—' },
+      { k: 'Slug público', v: u.slug ?? '—' },
+      { k: 'Estado del perfil', v: u.is_public ? 'Público' : 'Privado' },
+      { k: 'Registro', v: new Date(u.created_at).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) },
     ];
-    rows.forEach(([k, v]) => {
+    rows.forEach(({ k, v, mono }) => {
       const dt = document.createElement('dt');
       dt.className = 'text-[10px] font-black uppercase tracking-widest text-gray-500';
       dt.textContent = k;
       const dd = document.createElement('dd');
-      dd.className = 'text-sm text-gray-200';
-      dd.textContent = v;
+      dd.className = mono ? 'text-sm font-mono text-amber-200/90 truncate' : 'text-sm text-gray-200';
+      if (mono) {
+        const copy = document.createElement('button');
+        copy.type = 'button';
+        copy.className = 'inline-flex items-center gap-1.5 ml-2 px-1.5 py-0.5 text-[10px] font-black uppercase tracking-widest rounded border border-amber-600/30 text-amber-300/80 hover:bg-amber-900/30 hover:border-amber-500/50 transition-colors';
+        copy.textContent = 'copiar';
+        copy.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(v).catch(() => undefined);
+          copy.textContent = '✓ copiado';
+          window.setTimeout(() => { copy.textContent = 'copiar'; }, 2000);
+        });
+        dd.textContent = v;
+        dd.appendChild(copy);
+      } else {
+        dd.textContent = v;
+      }
       fields.append(dt, dd);
     });
     // Enlace al perfil público si está publicado
@@ -434,6 +528,443 @@ import { ui } from '@/lib/ui/design';
     (document.getElementById('detail-role-msg') as HTMLElement).classList.add('hidden');
 
     renderAudit(u.id);
+    loadEntities(u.id);
+  }
+
+  // ── Entidades del usuario (personajes · hermandades · bandas) ────────
+  async function loadEntities(userId: string): Promise<void> {
+    const charsStatus = document.getElementById('detail-chars-status') as HTMLElement;
+    const guildsStatus = document.getElementById('detail-guilds-status') as HTMLElement;
+    const bandsStatus = document.getElementById('detail-bands-status') as HTMLElement;
+
+    const r = await adminGetUserEntities(userId);
+    if (!r.ok || !r.entities) {
+      charsStatus.textContent = r.error || 'No se pudo cargar los datos.';
+      guildsStatus.textContent = '';
+      bandsStatus.textContent = '';
+      return;
+    }
+
+    const { characters, guilds, bands, profile } = r.entities;
+
+    renderProfile(userId, profile);
+    renderCharacters(characters);
+    renderGuilds(guilds);
+    renderBands(bands);
+
+    const listChars = characters.length;
+    const listGuilds = guilds.length;
+    const listBands = bands.length;
+    charsStatus.textContent = listChars === 0 ? 'Sin personajes registrados.' : '';
+    guildsStatus.textContent = listGuilds === 0 ? 'Sin hermandades.' : '';
+    bandsStatus.textContent = listBands === 0 ? 'Sin bandas.' : '';
+  }
+
+  // ── Estado del perfil (visibilidad + campos editables) ───────────────
+  function renderProfile(userId: string, p: NonNullable<AdminUserEntities['profile']>): void {
+    const visLabel = document.getElementById('detail-profile-vis-label') as HTMLElement;
+    visLabel.textContent = p.is_public ? 'público' : 'privado';
+    visLabel.className = p.is_public ? 'font-bold text-emerald-300' : 'font-bold text-gray-400';
+
+    const toggleWrap = document.getElementById('detail-profile-toggle') as HTMLElement;
+    toggleWrap.innerHTML = '';
+    toggleWrap.appendChild(makeAdminSwitch(p.is_public, 'Público', (input, status) =>
+      runToggle(input, status, () => adminSetProfileField(userId, 'is_public', String(input.checked)), () => {
+        p.is_public = input.checked;
+        visLabel.textContent = p.is_public ? 'público' : 'privado';
+        visLabel.className = p.is_public ? 'font-bold text-emerald-300' : 'font-bold text-gray-400';
+      }),
+    ));
+
+    const fieldsWrap = document.getElementById('detail-profile-fields') as HTMLElement;
+    fieldsWrap.innerHTML = '';
+    const defs: Array<{ key: 'display_name' | 'character_name' | 'realm'; label: string; value: string | null }> = [
+      { key: 'display_name', label: 'Nombre visible', value: p.display_name },
+      { key: 'character_name', label: 'Personaje principal', value: p.character_name },
+      { key: 'realm', label: 'Reino', value: p.realm },
+    ];
+    defs.forEach((d) => {
+      const box = document.createElement('div');
+      const lbl = document.createElement('label');
+      lbl.className = `${ui.form.label} block`;
+      lbl.textContent = d.label;
+      lbl.htmlFor = `pf-${d.key}`;
+      const input = document.createElement('input');
+      input.id = `pf-${d.key}`;
+      input.type = 'text';
+      input.value = d.value ?? '';
+      input.placeholder = '—';
+      input.className = `${ui.form.input} ${ui.focusRing}`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `${ui.btnBase} ${ui.btnSecondary} w-full mt-2 px-3 py-1.5 text-[11px] font-black uppercase tracking-widest`;
+      btn.textContent = 'Guardar';
+      const status = document.createElement('span');
+      status.className = 'text-[10px] font-bold uppercase tracking-widest mt-1 block text-center';
+      status.setAttribute('aria-live', 'polite');
+      input.addEventListener('input', () => {
+        const changed = (input.value.trim() || null) !== (d.value ?? null);
+        btn.disabled = !changed;
+      });
+      btn.disabled = (input.value.trim() || null) === (d.value ?? null);
+      btn.addEventListener('click', async () => {
+        const newVal = input.value.trim();
+        btn.disabled = true;
+        status.textContent = 'guardando…';
+        status.className = 'text-[10px] font-bold uppercase tracking-widest mt-1 block text-center text-amber-300';
+        const r = await adminSetProfileField(userId, d.key, newVal);
+        if (r.ok) {
+          d.value = newVal || null;
+          input.value = newVal;
+          status.textContent = '✓ guardado';
+          status.className = 'text-[10px] font-bold uppercase tracking-widest mt-1 block text-center text-emerald-400';
+        } else {
+          status.textContent = '✗ error';
+          status.className = 'text-[10px] font-bold uppercase tracking-widest mt-1 block text-center text-red-400';
+          btn.disabled = false;
+        }
+        window.setTimeout(() => { status.textContent = ''; }, 2500);
+      });
+      box.append(lbl, input, btn, status);
+      fieldsWrap.appendChild(box);
+    });
+  }
+
+  // Toggle pill ON/OFF del dashboard (makeSwitch) vía token del design.
+  function makeAdminSwitch(
+    checked: boolean,
+    text: string,
+    onChange: (input: HTMLInputElement, status: HTMLElement) => Promise<void>,
+  ): HTMLElement {
+    const label = document.createElement('label');
+    label.className = `${ui.toggleLabel} shrink-0`;
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.className = 'peer sr-only';
+    input.checked = checked;
+    const track = document.createElement('span');
+    track.className = ui.toggleTrack;
+    const textEl = document.createElement('span');
+    textEl.textContent = text;
+    const status = document.createElement('span');
+    status.className = 'text-[10px] font-bold uppercase tracking-widest';
+    status.setAttribute('aria-live', 'polite');
+    label.append(input, track, textEl, status);
+    input.addEventListener('change', () => onChange(input, status));
+    return label;
+  }
+
+  async function runToggle(
+    input: HTMLInputElement,
+    status: HTMLElement,
+    fn: () => Promise<{ ok: boolean; error?: string }>,
+    onSuccess: () => void,
+  ): Promise<void> {
+    input.disabled = true;
+    status.textContent = 'guardando…';
+    status.className = 'text-[10px] font-bold uppercase tracking-widest text-amber-300';
+    const r = await fn();
+    input.disabled = false;
+    if (r.ok) {
+      onSuccess();
+      status.textContent = '✓ hecho';
+      status.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+    } else {
+      input.checked = !input.checked;
+      status.textContent = '✗ error';
+      status.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+    }
+    window.setTimeout(() => { status.textContent = ''; }, 2500);
+  }
+
+  // ── Personajes ────────────────────────────────────────────────────────
+  function renderCharacters(chars: AdminEntityCharacter[]): void {
+    const listEl = document.getElementById('detail-chars-list') as HTMLElement;
+    listEl.innerHTML = '';
+    chars.forEach((c) => {
+      const li = document.createElement('li');
+      li.className = 'flex flex-wrap items-center justify-between gap-3 bg-gray-800/40 border border-amber-700/30 rounded-md px-4 py-3';
+
+      const info = document.createElement('div');
+      info.className = 'min-w-0';
+      const name = document.createElement('p');
+      name.className = 'text-sm font-bold text-white truncate';
+      name.textContent = `${c.name}${c.sv_is_gm ? ' ★' : ''}`;
+      const meta = document.createElement('p');
+      meta.className = 'text-xs text-gray-500 mt-0.5 flex flex-wrap items-center gap-1.5';
+      const parts: Array<string | null> = [c.realm, c.server, c.class, c.level != null ? `Nv ${c.level}` : null, c.avg_ilvl != null ? `ilvl ${c.avg_ilvl}` : null, c.sv_guild_name];
+      parts.forEach((p, i) => {
+        if (!p) return;
+        if (i > 0) {
+          const sep = document.createElement('span');
+          sep.textContent = '·';
+          sep.className = 'text-gray-600';
+          meta.appendChild(sep);
+        }
+        const span = document.createElement('span');
+        span.textContent = p;
+        meta.appendChild(span);
+      });
+      info.append(name, meta);
+      li.appendChild(info);
+
+      const right = document.createElement('div');
+      right.className = 'flex flex-wrap items-center gap-3 shrink-0';
+
+      const pubStatus = c.is_public ? 'pública' : 'privada';
+      const pubBadge = document.createElement('span');
+      pubBadge.className = `${ui.badge} ${ui.badgeMd} ${c.is_public ? 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40' : 'text-gray-400 bg-gray-950/50 border-gray-700/50'}`;
+      pubBadge.textContent = pubStatus;
+
+      const verStatus = c.member_verified ? 'verificado' : 'sin verificar';
+      const verBadge = document.createElement('span');
+      verBadge.className = `${ui.badge} ${ui.badgeMd} ${c.member_verified ? 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40' : 'text-amber-300 bg-amber-950/30 border-amber-500/40'}`;
+      verBadge.textContent = verStatus;
+
+      right.append(pubBadge, verBadge);
+
+      right.appendChild(makeAdminSwitch(c.is_public, 'Público', (input, status) =>
+        runToggle(input, status, () => adminSetCharacterStatus(c.id, input.checked, c.member_verified), () => {
+          c.is_public = input.checked;
+          pubBadge.textContent = c.is_public ? 'pública' : 'privada';
+          pubBadge.className = `${ui.badge} ${ui.badgeMd} ${c.is_public ? 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40' : 'text-gray-400 bg-gray-950/50 border-gray-700/50'}`;
+        }),
+      ));
+
+      right.appendChild(makeAdminSwitch(c.member_verified, 'Verificado', (input, status) =>
+        runToggle(input, status, () => adminSetCharacterStatus(c.id, c.is_public, input.checked), () => {
+          c.member_verified = input.checked;
+          verBadge.textContent = c.member_verified ? 'verificado' : 'sin verificar';
+          verBadge.className = `${ui.badge} ${ui.badgeMd} ${c.member_verified ? 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40' : 'text-amber-300 bg-amber-950/30 border-amber-500/40'}`;
+        }),
+      ));
+
+      li.append(info, right);
+      listEl.appendChild(li);
+    });
+  }
+
+  // ── Hermandades ───────────────────────────────────────────────────────
+  function renderGuilds(guilds: AdminEntityGuild[]): void {
+    const listEl = document.getElementById('detail-guilds-list') as HTMLElement;
+    listEl.innerHTML = '';
+    guilds.forEach((g) => {
+      const li = document.createElement('li');
+      li.className = 'flex flex-wrap items-center justify-between gap-3 bg-gray-800/40 border border-amber-700/30 rounded-md px-4 py-3';
+
+      const info = document.createElement('div');
+      info.className = 'min-w-0';
+      const name = document.createElement('p');
+      name.className = 'text-sm font-bold text-white truncate';
+      name.textContent = g.name;
+      const meta = document.createElement('p');
+      meta.className = 'text-xs text-gray-500 mt-0.5 truncate';
+      meta.textContent = [g.realm, g.server, g.faction].filter(Boolean).join(' · ') || 'sin datos';
+      info.append(name, meta);
+      li.appendChild(info);
+
+      const right = document.createElement('div');
+      right.className = 'flex flex-wrap items-center gap-3 shrink-0';
+
+      const claimBadge = document.createElement('span');
+      claimBadge.className = `${ui.badge} ${ui.badgeMd} ${claimColor(g.claim_status)}`;
+      claimBadge.textContent = claimLabel(g.claim_status);
+
+      right.appendChild(claimBadge);
+      right.appendChild(makeAdminSwitch(g.is_public, 'Público', (input, status) =>
+        runToggle(input, status, () => adminSetGuildStatus(g.id, input.checked, g.claim_status), () => {
+          g.is_public = input.checked;
+        }),
+      ));
+
+      // Selector de estado de claim con doble confirmación en el propio botón
+      const right2 = document.createElement('div');
+      right2.className = 'flex flex-wrap items-center gap-2';
+
+      const claimSel = document.createElement('select');
+      claimSel.className = `${ui.form.input} ${ui.focusRing} !w-auto text-xs`;
+      ['pending', 'verified', 'rejected'].forEach((v) => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = claimLabel(v as AdminEntityGuild['claim_status']);
+        opt.selected = v === g.claim_status;
+        claimSel.appendChild(opt);
+      });
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'button';
+      saveBtn.className = `${ui.btnBase} ${ui.btnSecondary} px-3 py-1.5 text-[11px] font-black uppercase tracking-widest`;
+      saveBtn.textContent = 'Guardar estado';
+      const msg = document.createElement('span');
+      msg.className = 'text-[10px] font-bold uppercase tracking-widest';
+      msg.setAttribute('aria-live', 'polite');
+
+      saveBtn.addEventListener('click', async () => {
+        const newStatus = claimSel.value as AdminEntityGuild['claim_status'];
+        if (newStatus === g.claim_status) {
+          msg.textContent = 'sin cambios';
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-gray-500';
+          return;
+        }
+        if (saveBtn.dataset.confirm !== 'yes') {
+          saveBtn.dataset.confirm = 'yes';
+          saveBtn.textContent = '¿Confirmar?';
+          msg.textContent = `Se marcará «${claimLabel(newStatus)}».`;
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-amber-300';
+          window.setTimeout(() => {
+            if (saveBtn.dataset.confirm === 'yes') {
+              saveBtn.dataset.confirm = '';
+              saveBtn.textContent = 'Guardar estado';
+              msg.textContent = '';
+            }
+          }, 4000);
+          return;
+        }
+        saveBtn.disabled = true;
+        saveBtn.dataset.confirm = '';
+        const r = await adminSetGuildStatus(g.id, g.is_public, newStatus);
+        saveBtn.disabled = false;
+        if (r.ok) {
+          g.claim_status = newStatus;
+          saveBtn.textContent = 'Guardar estado';
+          claimBadge.textContent = claimLabel(newStatus);
+          claimBadge.className = `${ui.badge} ${ui.badgeMd} ${claimColor(newStatus)}`;
+          msg.textContent = '✓ guardado';
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+        } else {
+          msg.textContent = '✗ ' + (r.error || 'error');
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+          saveBtn.textContent = 'Guardar estado';
+        }
+        window.setTimeout(() => { msg.textContent = ''; }, 2500);
+      });
+
+      right2.append(claimSel, saveBtn, msg);
+      li.append(info, right, right2);
+      listEl.appendChild(li);
+    });
+  }
+
+  function claimLabel(s: AdminEntityGuild['claim_status']): string {
+    if (s === 'verified') return '✓ verificada';
+    if (s === 'rejected') return '✗ rechazada';
+    return '⏳ pendiente';
+  }
+  function claimColor(s: AdminEntityGuild['claim_status']): string {
+    if (s === 'verified') return 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40';
+    if (s === 'rejected') return 'text-red-300 bg-red-950/30 border-red-600/40';
+    return 'text-amber-300 bg-amber-950/30 border-amber-500/40';
+  }
+
+  // ── Bandas ────────────────────────────────────────────────────────────
+  function renderBands(bands: AdminEntityBand[]): void {
+    const listEl = document.getElementById('detail-bands-list') as HTMLElement;
+    listEl.innerHTML = '';
+    bands.forEach((b) => {
+      const li = document.createElement('li');
+      li.className = 'flex flex-wrap items-center justify-between gap-3 bg-gray-800/40 border border-amber-700/30 rounded-md px-4 py-3';
+
+      const info = document.createElement('div');
+      info.className = 'min-w-0';
+      const name = document.createElement('p');
+      name.className = 'text-sm font-bold text-white truncate';
+      name.textContent = b.name;
+      const meta = document.createElement('p');
+      meta.className = 'text-xs text-gray-500 mt-0.5 truncate';
+      const sub = [b.icon, b.schedule, b.character_name ? `por ${b.character_name}` : null].filter(Boolean).join(' · ');
+      meta.textContent = sub || (b.integration_status !== 'none' ? 'integrada' : 'sin integración');
+      info.append(name, meta);
+      li.appendChild(info);
+
+      const right = document.createElement('div');
+      right.className = 'flex flex-wrap items-center gap-3 shrink-0';
+
+      const integrationBadge = document.createElement('span');
+      integrationBadge.className = `${ui.badge} ${ui.badgeMd} ${integrationColor(b.integration_status)}`;
+      integrationBadge.textContent = integrationLabel(b, true);
+      right.appendChild(integrationBadge);
+
+      right.appendChild(makeAdminSwitch(b.is_public, 'Público', (input, status) =>
+        runToggle(input, status, () => adminSetBandStatus(b.id, input.checked, b.integration_status), () => {
+          b.is_public = input.checked;
+        }),
+      ));
+
+      const integSel = document.createElement('select');
+      integSel.className = `${ui.form.input} ${ui.focusRing} !w-auto text-xs`;
+      ['none', 'pending', 'approved', 'rejected'].forEach((v) => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = integrationLabel({ ...b, integration_status: v as AdminEntityBand['integration_status'] }, false);
+        opt.selected = v === b.integration_status;
+        integSel.appendChild(opt);
+      });
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'button';
+      saveBtn.className = `${ui.btnBase} ${ui.btnSecondary} px-3 py-1.5 text-[11px] font-black uppercase tracking-widest`;
+      saveBtn.textContent = 'Guardar integración';
+      const msg = document.createElement('span');
+      msg.className = 'text-[10px] font-bold uppercase tracking-widest';
+      msg.setAttribute('aria-live', 'polite');
+
+      saveBtn.addEventListener('click', async () => {
+        const newStatus = integSel.value as AdminEntityBand['integration_status'];
+        if (newStatus === b.integration_status) {
+          msg.textContent = 'sin cambios';
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-gray-500';
+          return;
+        }
+        if (saveBtn.dataset.confirm !== 'yes') {
+          saveBtn.dataset.confirm = 'yes';
+          saveBtn.textContent = '¿Confirmar?';
+          msg.textContent = `Se marcará «${integrationLabel({ ...b, integration_status: newStatus }, false)}».`;
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-amber-300';
+          window.setTimeout(() => {
+            if (saveBtn.dataset.confirm === 'yes') {
+              saveBtn.dataset.confirm = '';
+              saveBtn.textContent = 'Guardar integración';
+              msg.textContent = '';
+            }
+          }, 4000);
+          return;
+        }
+        saveBtn.disabled = true;
+        saveBtn.dataset.confirm = '';
+        const r = await adminSetBandStatus(b.id, b.is_public, newStatus);
+        saveBtn.disabled = false;
+        if (r.ok) {
+          b.integration_status = newStatus;
+          saveBtn.textContent = 'Guardar integración';
+          integrationBadge.textContent = integrationLabel(b, true);
+          integrationBadge.className = `${ui.badge} ${ui.badgeMd} ${integrationColor(newStatus)}`;
+          msg.textContent = '✓ guardado';
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-emerald-400';
+        } else {
+          msg.textContent = '✗ ' + (r.error || 'error');
+          msg.className = 'text-[10px] font-bold uppercase tracking-widest text-red-400';
+          saveBtn.textContent = 'Guardar integración';
+        }
+        window.setTimeout(() => { msg.textContent = ''; }, 2500);
+      });
+
+      right.append(integSel, saveBtn, msg);
+      li.append(info, right);
+      listEl.appendChild(li);
+    });
+  }
+
+  function integrationLabel(b: AdminEntityBand, full: boolean): string {
+    if (b.integration_status === 'approved') return full ? '✓ integrada' : 'integrada';
+    if (b.integration_status === 'pending') return full ? '⏳ pendiente' : 'propuesta';
+    if (b.integration_status === 'rejected') return full ? '✗ rechazada' : 'rechazada';
+    return full ? 'sin integración' : 'sin integración';
+  }
+  function integrationColor(s: AdminEntityBand['integration_status']): string {
+    if (s === 'approved') return 'text-emerald-300 bg-emerald-950/30 border-emerald-600/40';
+    if (s === 'rejected') return 'text-red-300 bg-red-950/30 border-red-600/40';
+    if (s === 'pending') return 'text-amber-300 bg-amber-950/30 border-amber-500/40';
+    return 'text-gray-400 bg-gray-950/50 border-gray-700/50';
   }
 
   // Confirmación explícita antes de cambiar el rol

@@ -127,6 +127,16 @@ export const ui = {
     info: 'text-sky-200 bg-gray-900/60 border border-sky-600/30',
   },
 
+  // ── Switch ON/OFF tipo pill (toggles de visibilidad/estado) ─────────────
+  // Patrón replicado del dashboard (bands.ts makeSwitch): input peer sr-only
+  // + track con knob deslizante vía after:. El label provee layout
+  // (flex/gap/cursor/texto); aquí van SOLO las clases del track y su knob.
+  // Uso: label → input.checkbox.peer.sr-only + span con toggleTrack.
+  toggleTrack:
+    'relative w-9 h-5 rounded-full bg-gray-700/80 border border-gray-600/60 transition-colors after:content-[""] after:absolute after:top-0.5 after:left-0.5 after:w-4 after:h-4 after:rounded-full after:bg-gray-300 after:shadow after:transition-transform after:duration-200 peer-checked:bg-amber-600/70 peer-checked:border-amber-500/60 peer-checked:after:translate-x-4 peer-checked:after:bg-white',
+  // Label estándar de un toggle pill (layout + cursor).
+  toggleLabel: 'flex items-center gap-2.5 cursor-pointer select-none text-xs text-gray-400',
+
   // ── Formularios (design.md §5/R8, P011) ─────────────────────────────────
   // label: siempre <label for> con este estilo; jamás placeholder-como-label.
   // input: base; en error sumar inputError (importante para vencer a input)
