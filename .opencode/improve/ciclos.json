@@ -336,24 +336,37 @@
       "aplicada_por": "usuario (manual, sin CLI)",
       "project_ref_verificado": true,
       "notas": "Aplicada (2026-09-04). Evidencia: motor dev devuelve 11 objetivos (incluye visits_weekly/visitors_30d/visits_upload_7d/visits_directory_7d) y stats con métricas de visitas reales (4→30 visitas semanales)."
-    }
-  ],
-  "migraciones_pendientes_confirmacion": [
+    },
+    {
+      "archivo": "20260903_delete_upload.sql",
+      "fecha_aplicacion": "2026-09-05",
+      "aplicada_por": "usuario (manual, sin CLI)",
+      "project_ref_verificado": true,
+      "notas": "Aplicada (2026-09-05) tras el error PGRST202/42883 al eliminar un análisis ('function public.raiddominion_delete_upload no existe'): la función no existía en el proyecto. Verificado al poder borrar el análisis desde el dashboard."
+    },
+    {
+      "archivo": "20260925_claim_one_char_and_character_reconcile.sql",
+      "fecha_aplicacion": "2026-09-05",
+      "aplicada_por": "usuario (manual, sin CLI)",
+      "project_ref_verificado": true,
+      "notas": "Aplicada (2026-09-05). Reclamo GM/media con 1 personaje validado si el SV acredita isGM (try_promote_member y claim_from_sv), reconciliación de reino en upsert_character (X/'' vs X/Reino = mismo personaje) y RPC nuevo raiddominion_check_character_owner para el pre-check de SV ajeno en el upload."
+    },
     {
       "archivo": "20260925_cron_dedupe.sql",
-      "fecha_redaccion": "2026-09-05",
+      "fecha_aplicacion": "2026-09-05",
       "aplicada_por": "usuario (manual, sin CLI)",
-      "project_ref_verificado": false,
-      "notas": "Pendiente de aplicar. Tabla raiddominion_cron_slots + RPC raiddominion_cron_claim_slot para idempotencia del cron de Discord: garantiza un solo mensaje por ventana horaria aunque Netlify reintente la función (se recibían duplicados)."
+      "project_ref_verificado": true,
+      "notas": "Aplicada (2026-09-05), confirmado por el usuario. Tabla raiddominion_cron_slots + RPC raiddominion_cron_claim_slot para idempotencia del cron de Discord: garantiza un solo mensaje por ventana horaria aunque Netlify reintente la función."
     },
     {
       "archivo": "20260925_marketing_images.sql",
-      "fecha_redaccion": "2026-09-05",
+      "fecha_aplicacion": "2026-09-05",
       "aplicada_por": "usuario (manual, sin CLI)",
-      "project_ref_verificado": false,
-      "notas": "Pendiente de aplicar. Tabla raiddominion_marketing_images + RPC raiddominion_marketing_pick_image para rotar de forma balanceada las capturas del addon (public/images/addon) en los embeds de mercadeo según el eje del mensaje. Aplicar también 20260925_cron_dedupe.sql."
+      "project_ref_verificado": true,
+      "notas": "Aplicada (2026-09-05), confirmado por el usuario. Tabla raiddominion_marketing_images + RPC raiddominion_marketing_pick_image para rotar de forma balanceada las capturas del addon en los embeds de mercadeo según el eje del mensaje."
     }
   ],
+  "migraciones_pendientes_confirmacion": [],
   "resumen": {
     "total_ciclos": 0,
     "exitosos": 0,
